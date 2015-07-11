@@ -72,14 +72,20 @@ namespace Crosschat.Client.Views
             AuthenticationResponseType result;
             try
             {
-                result = await _applicationManager.AccountManager.ValidateAccount();
+                //result = await _applicationManager.AccountManager.ValidateAccount();
             }
             catch (System.Exception)
             {
                 DisplayAlert(";(", "Server is not available", "Ok", null);
                 return;
             }
-            if (result == AuthenticationResponseType.Success)
+            
+			//ALEXTEST
+			await Navigation.PushAsync(new LoginPage(new LoginViewModel(_applicationManager)));
+
+			/*
+			if(true)
+			//if (result == AuthenticationResponseType.Success)
             {
                 await Navigation.PushAsync(new HomePage(new HomeViewModel(_applicationManager)));
             }
@@ -87,6 +93,7 @@ namespace Crosschat.Client.Views
             {
                 await Navigation.PushAsync(new RegistrationPage(new RegistrationViewModel(_applicationManager)));
             }
+			*/
 
             base.OnAppearing();
         }

@@ -1,4 +1,6 @@
-﻿using Crosschat.Client.Model.Contracts;
+﻿#define ALEXMOCK
+
+using Crosschat.Client.Model.Contracts;
 using Crosschat.Client.Model.Proxies;
 using Crosschat.Server.Application.DataTransferObjects.Utils;
 using Crosschat.Server.Infrastructure.Protocol;
@@ -20,11 +22,26 @@ namespace Crosschat.Client.Model.Managers
             var commandParser = new CommandParser();
             var connectionManager = new ConnectionManager(transportResource, new CommandBuffer(commandParser), commandParser, new RequestsHandler(), dtoSerializer);
             
+			//ALEXTEST
+			#if ALEXMOCK
+			var loginServiceProxy = new FakeLoginServiceProxy(connectionManager);
+			#else
+			var loginServiceProxy = new ??;
+			#endif
+
             AccountManager = new AccountManager(storage, deviceInfo, connectionManager, 
                 new ProfileServiceProxy(connectionManager), 
                 new RegistrationServiceProxy(connectionManager), 
-                new AuthenticationServiceProxy(connectionManager));
-            ChatManager = new ChatManager(connectionManager, new ChatServiceProxy(connectionManager), AccountManager);
+                new AuthenticationServiceProxy(connectionManager),
+				loginServiceProxy);
+
+			//ALEXTEST
+			#if ALEXMOCK
+			var chatServiceProxy = new FakeChatServiceProxy(connectionManager);
+			#else
+			var chatServiceProxy = new ChatServiceProxy(connectionManager);
+			#endif
+			ChatManager = new ChatManager(connectionManager, chatServiceProxy, AccountManager);
             FriendsManager = new FriendsManager(connectionManager, new FriendsServiceProxy(connectionManager));
             SearchManager = new SearchManager(connectionManager, new UsersSearchServiceProxy(connectionManager));
             ConnectionManager = connectionManager;

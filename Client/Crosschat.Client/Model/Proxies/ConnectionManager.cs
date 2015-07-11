@@ -10,7 +10,7 @@ using Crosschat.Utils.Tasking;
 
 namespace Crosschat.Client.Model.Proxies
 {
-    public class ConnectionManager
+	public class ConnectionManager
     {
         private readonly CommandBuffer _commandBuffer;
         private readonly CommandParser _commandParser;

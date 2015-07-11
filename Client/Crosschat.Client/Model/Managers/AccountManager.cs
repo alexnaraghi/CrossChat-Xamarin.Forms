@@ -13,6 +13,7 @@ namespace Crosschat.Client.Model.Managers
         private readonly ProfileServiceProxy _profileServiceProxy;
         private readonly AuthenticationServiceProxy _authenticationServiceProxy;
         private readonly RegistrationServiceProxy _registrationServiceProxy;
+		private readonly ILoginServiceProxy _loginServiceProxy;
         private readonly IStorage _storage;
         private UserDto _currentUser = null;
         private bool _deviceInfoInitialized = false;
@@ -21,21 +22,35 @@ namespace Crosschat.Client.Model.Managers
             IDeviceInfo deviceInfo,
             ConnectionManager connectionManager,
             ProfileServiceProxy profileServiceProxy,
-            RegistrationServiceProxy registrationServiceProxy,
-            AuthenticationServiceProxy authenticationServiceProxy)
+			RegistrationServiceProxy registrationServiceProxy,
+            AuthenticationServiceProxy authenticationServiceProxy,
+			ILoginServiceProxy loginServiceProxy)
             : base(connectionManager)
         {
             _deviceInfo = deviceInfo;
             _profileServiceProxy = profileServiceProxy;
             _authenticationServiceProxy = authenticationServiceProxy;
             _registrationServiceProxy = registrationServiceProxy;
+			_loginServiceProxy = loginServiceProxy;
             _storage = storage;
         }
 
+		//ALEXTEST
         //yeah, I didn't create an entity representing User and let managers expose DTO instead. I'm lazy :(
         public UserDto CurrentUser
         {
-            get { return _currentUser ?? (_currentUser = _storage.Get<UserDto>()); }
+            get { 
+				return new UserDto {
+					Id = 1,
+					Name = "alex",
+					Sex = true,
+					Age = 12,
+					Country = "USA",
+					Role = UserRoleEnum.User
+				};
+
+
+				return _currentUser ?? (_currentUser = _storage.Get<UserDto>()); }
             private set
             {
                 _currentUser = value;
@@ -43,23 +58,34 @@ namespace Crosschat.Client.Model.Managers
             }
         }
 
+		//ALEXTEST
         public bool IsRegistered
         {
-            get { return _storage.Get<bool>(); }
+			get { return true; return _storage.Get<bool>(); }
             private set { _storage.Set(value); }
         }
 
+		//ALEXTEST
         public string AccountName
         {
-            get { return _storage.Get<string>(); }
+			get { return "alex"; return _storage.Get<string>(); }
             private set { _storage.Set(value); }
         }
 
+		//ALEXTEST
         public string AccountPassword
         {
-            get { return _storage.Get<string>(); }
+			get { return "password"; return _storage.Get<string>(); }
             private set { _storage.Set(value); }
         }
+
+		//This is the current session id of the login
+		private int _ssid;
+		public int SSID
+		{
+			get { return _ssid; }
+			private set { _ssid = value; }
+		}
 
         public async Task<AuthenticationResponseType> ValidateAccount(string name, string password)
         {
@@ -89,10 +115,36 @@ namespace Crosschat.Client.Model.Managers
             return await ValidateAccount(AccountName, AccountPassword);
         }
 
+		public async Task<bool> Login(string username, string password)
+		{
+			//ALEXTEST
+			//await InitDeviceInfo();
+			//await ConnectionManager.ConnectAsync();
+			var result = await _loginServiceProxy.Login(
+				new LoginRequest
+				{
+					Name = username,
+					Password = password
+				});
+
+			if (result.RequestResult == true)
+			{
+				IsRegistered = true;
+				//ALEXTEST
+				//CurrentUser = result.Name;
+				AccountName = result.U.FN + " " + result.U.LN;
+				AccountPassword = password;
+				SSID = result.U.SSID;
+			}
+
+			return result.RequestResult;
+		}
+
         public async Task<RegistrationResponseType> Register(string name, string password, int age, bool sex, string country, string platform)
         {
             await InitDeviceInfo();
-            await ConnectionManager.ConnectAsync();
+			//ALEXTEST
+            //await ConnectionManager.ConnectAsync();
             var result = await _registrationServiceProxy.RegisterNewUser(
                 new RegistrationRequest
                 {

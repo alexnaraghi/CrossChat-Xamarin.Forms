@@ -10,7 +10,7 @@ namespace Crosschat.Client.Seedwork.Controls
         {
             _viewModel = viewModel;
             BindingContext = viewModel;
-            Title = "Cross chat";
+            Title = "SharedSquawk";
         }
 
         protected override void OnAppearing()

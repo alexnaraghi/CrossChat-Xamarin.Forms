@@ -14,12 +14,13 @@ namespace Crosschat.Client.Model.Managers
     public class ChatManager : ManagerBase
     {
         private readonly AccountManager _accountManager;
-        private readonly ChatServiceProxy _chatServiceProxy = null;
+
+		private readonly IChatServiceProxy _chatServiceProxy = null;
         private string _subject;
 
         public ChatManager(
             ConnectionManager connectionManager,
-            ChatServiceProxy chatServiceProxy,
+			IChatServiceProxy chatServiceProxy,
             AccountManager accountManager)
             : base(connectionManager)
         {
@@ -57,11 +58,13 @@ namespace Crosschat.Client.Model.Managers
             }
 
             //for screenshots ;)
-            /*OnlineUsers.Add(new UserDto { Name = "Tim Cook", Country = "United States", Platform = "iOS" });
+			/*
+            OnlineUsers.Add(new UserDto { Name = "Tim Cook", Country = "United States", Platform = "iOS" });
             OnlineUsers.Add(new UserDto { Name = "Eric Schmidt", Country = "United States", Platform = "Android" });
             OnlineUsers.Add(new UserDto { Name = "Satya Nadella", Country = "United States", Platform = "WP8" });
             OnlineUsers.Add(new UserDto { Name = "Miguel de Icaza", Country = "United States", Platform = "iOS" });
-            OnlineUsers.Add(new UserDto { Name = "Egor Bogatov", Country = "Belarus", Platform = "Nokia 3310" });*/
+            OnlineUsers.Add(new UserDto { Name = "Egor Bogatov", Country = "Belarus", Platform = "Nokia 3310" });
+            */
         }
 
         /// <summary>

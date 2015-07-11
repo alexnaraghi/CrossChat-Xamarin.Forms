@@ -94,18 +94,22 @@
     <Compile Include="Views\SettingsPage.cs" />
     <Compile Include="Views\SplashscreenPage.cs" />
     <Compile Include="Views\ValueConverters\InverterConverter.cs" />
+    <Compile Include="Model\Proxies\MockProxies.cs" />
+    <Compile Include="Views\LoginPage.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="Model\Proxies\ProxyInterfaces.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Crosschat.Server.Application.DataTransferObjects\Crosschat.Server.Application.DataTransferObjects.csproj">
-      <Project>{5b665c38-2c1f-4b21-947b-ed54e5c4abbc}</Project>
+      <Project>{5B665C38-2C1F-4B21-947B-ED54E5C4ABBC}</Project>
       <Name>Crosschat.Server.Application.DataTransferObjects</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\Crosschat.Server.Infrastructure.Protocol\Crosschat.Server.Infrastructure.Protocol.csproj">
-      <Project>{5763956e-f7e1-4dd4-91b9-1f4438961311}</Project>
+      <Project>{5763956E-F7E1-4DD4-91B9-1F4438961311}</Project>
       <Name>Crosschat.Server.Infrastructure.Protocol</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\Crosschat.Utils\Crosschat.Utils.csproj">
-      <Project>{3b0cea1f-3936-4bb0-9889-d7c14617fd6d}</Project>
+      <Project>{3B0CEA1F-3936-4BB0-9889-D7C14617FD6D}</Project>
       <Name>Crosschat.Utils</Name>
     </ProjectReference>
   </ItemGroup>
