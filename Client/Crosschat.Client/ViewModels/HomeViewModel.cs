@@ -36,7 +36,7 @@ namespace Crosschat.Client.ViewModels
             Subject = _appManager.ChatManager.Subject;
 
             _appManager.ChatManager.OnlineUsers.SynchronizeWith(Users, u => new UserViewModel(u));
-            _appManager.ChatManager.Messages.SynchronizeWith(Events, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.AccountName));
+			_appManager.ChatManager.Messages.SynchronizeWith(Events, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.CurrentUser.UserId));
             IsBusy = false;
         }
 
@@ -83,7 +83,7 @@ namespace Crosschat.Client.ViewModels
         {
             var imageData = await _photoPicker.PickPhoto();
             IsBusy = true;
-            await _appManager.ChatManager.SendImage(imageData);
+            //await _appManager.ChatManager.SendImage(imageData);
             IsBusy = false;
         }
 
@@ -93,7 +93,19 @@ namespace Crosschat.Client.ViewModels
                 return;
             string text = InputText;
             InputText = string.Empty;
-            _appManager.ChatManager.SendMessage(text);
+            //_appManager.ChatManager.SendMessage(text);
         }
+
+		#if DEBUG
+		public string User
+		{
+			get{ return "User : " + _appManager.AccountManager.CurrentUser.ToString(); }
+		}
+
+		public string SSID
+		{
+			get{ return "Session ID : " + _appManager.AccountManager.SSID.ToString(); }
+		}
+		#endif
     }
 }

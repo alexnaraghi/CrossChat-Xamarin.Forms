@@ -2,6 +2,7 @@
 
 namespace Crosschat.Server.Infrastructure.Protocol
 {
+	/*
     public class CommandBuffer
     {
         private readonly CommandParser _commandParser;
@@ -130,5 +131,7 @@ namespace Crosschat.Server.Infrastructure.Protocol
             _currentCommandExpectedLength = 0;
             _currentCommandName = CommandNames.Unknown;
         }
+
     }
+    */
 }

@@ -5,24 +5,21 @@ using System;
 
 namespace Crosschat.Server.Application.DataTransferObjects.Requests
 {
+	[XmlType(TypeName = "LI", Namespace = "")]
     public class LoginRequest : RequestBase
     {
-		[XmlAttribute]
-        public string Name { get; set; }
-		[XmlAttribute]
+		[XmlAttribute("PW")]
         public string Password { get; set; }
-    }
-	public class LoginResponse : ResponseBase
-    {
-		[XmlAttribute("U")]
-		public U U;
+		[XmlAttribute("UN")]
+		public string Name { get; set; }
     }
 
-	public class U
-	{
+	[XmlType(TypeName="U", Namespace = "")]
+	public class LoginResponse : ResponseBase
+    {
 		// ATTRIBUTES
 		[XmlAttribute("SSID")]
-		public int SSID  { get; set; }
+		public long SSID  { get; set; }
 
 		[XmlIgnore]
 		public bool RWorldIsOn { get; set; }
@@ -34,7 +31,7 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
 		}
 
 		[XmlAttribute("UID")]
-		public int UID  { get; set; }
+		public int UserId  { get; set; }
 
 		[XmlAttribute("US")]
 		public int US  { get; set; }
@@ -43,52 +40,58 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
 		public string IS { get; set; }
 
 		[XmlAttribute("UN")]
-		public string UN { get; set; }
+		public string Username { get; set; }
 
 		[XmlAttribute("RD")]
-		public string RD { get; set; }
+		public string RegistrationDate { get; set; }
 
 		[XmlAttribute("PW")]
-		public string PW { get; set; }
+		public string Password { get; set; }
 
 		[XmlAttribute("KLs")]
-		public int KLs  { get; set; }
+		public string KnownLanguages  { get; set; }
 
 		[XmlAttribute("PLs")]
-		public int PLs  { get; set; }
+		public string PracticingLanguages  { get; set; }
 
 		[XmlAttribute("E")]
-		public string E { get; set; }
+		public string Email { get; set; }
 
 		[XmlAttribute("FN")]
-		public string FN { get; set; }
+		public string FirstName { get; set; }
 
 		[XmlAttribute("LN")]
-		public string LN { get; set; }
+		public string LastName { get; set; }
 
 		[XmlAttribute("L")]
 		public string L { get; set; }
 
 		[XmlAttribute("LID")]
-		public int LID  { get; set; }
-
-		[XmlAttribute("G")]
-		public int G  { get; set; }
+		public int LocaleID  { get; set; }
 
 		[XmlIgnore]
-		public DateTime BD { get; set; }
-		[XmlAttribute("BD")]
-		public string BDString
+		public Gender Gender
 		{
-			get { return BD.ToString("yyyy-MM-dd"); }
-			set { BD = DateTime.ParseExact(value, "yyyy-MM-dd", null); }
+			get{return (Gender)GenderInt;}
+			set{ GenderInt = (int)value; }
+		}
+		[XmlAttribute("G")]
+		public int GenderInt  { get; set; }
+
+		[XmlIgnore]
+		public DateTime Birthday { get; set; }
+		[XmlAttribute("BD")]
+		public string BirthdayString
+		{
+			get { return Birthday.ToString("yyyy-MM-dd"); }
+			set { Birthday = DateTime.ParseExact(value, "yyyy-MM-dd", null); }
 		}
 
 		[XmlAttribute("A")]
-		public int A  { get; set; }
+		public int Age  { get; set; }
 
 		[XmlAttribute("D")]
-		public string D { get; set; }
+		public string Description { get; set; }
 
 		[XmlAttribute("XCM")]
 		public int XCM  { get; set; }
@@ -98,6 +101,6 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
 
 		[XmlAttribute("NM")]
 		public int NM  { get; set; }
-	}
+    }
 
 }

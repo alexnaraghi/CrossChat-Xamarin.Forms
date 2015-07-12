@@ -2,6 +2,7 @@
 
 namespace Crosschat.Server.Application.DataTransferObjects.Messages
 {
+	/*
     public class UserDto : BaseDto
     {
         public int Id { get; set; }
@@ -23,5 +24,5 @@ namespace Crosschat.Server.Application.DataTransferObjects.Messages
         public UserRoleEnum Role { get; set; }
 
         public int PhotoId { get; set; }
-    }
+    }*/
 }

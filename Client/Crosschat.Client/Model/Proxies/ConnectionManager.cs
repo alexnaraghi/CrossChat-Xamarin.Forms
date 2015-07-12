@@ -12,8 +12,6 @@ namespace Crosschat.Client.Model.Proxies
 {
 	public class ConnectionManager
     {
-        private readonly CommandBuffer _commandBuffer;
-        private readonly CommandParser _commandParser;
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1);
         private readonly ITransportResource _transport;
         private readonly RequestsHandler _requestsHandler;
@@ -22,40 +20,22 @@ namespace Crosschat.Client.Model.Proxies
 
         public ConnectionManager(
             ITransportResource transport,
-            CommandBuffer commandBuffer,
-            CommandParser commandParser,
             RequestsHandler requestsHandler,
             IDtoSerializer serializer)
         {
             _transport = transport;
-            _commandBuffer = commandBuffer;
-            _commandParser = commandParser;
             _requestsHandler = requestsHandler;
             _serializer = serializer;
 
-            _commandBuffer.CommandAssembled += CommandBuffer_CommandAssembled;
-            _transport.DataReceived += data => _commandBuffer.AppendBytes(data);
+			_transport.DataReceived += DataReceived;
             _transport.ConnectionError += Transport_ConnectionError;
-        }
 
-        private void CommandBuffer_CommandAssembled(Command cmd)
-        {
-            if (cmd.Name == CommandNames.Response)
-            {
-                var response = _serializer.Deserialize<ResponseBase>(cmd.Data);
-                _requestsHandler.AppendResponse(response);
-            }
-            else if (cmd.Name == CommandNames.Request)
-            {
-                var request = _serializer.Deserialize<RequestBase>(cmd.Data);
-                RequestReceived(this, new RequestEventArgs(request));
-            }
-            else if (cmd.Name == CommandNames.Data)
-            {
-                var dto = _serializer.Deserialize<BaseDto>(cmd.Data);
-                DtoReceived(this, new DtoEventArgs(dto));
-            }
-        }
+		}
+
+		private void DataReceived(ResponseBase response)
+		{
+			_requestsHandler.AppendResponse (response);
+		}
 
         private void Transport_ConnectionError()
         {
@@ -68,7 +48,8 @@ namespace Crosschat.Client.Model.Proxies
 
         public event EventHandler<DtoEventArgs> DtoReceived = delegate { };
 
-        public event EventHandler<RequestEventArgs> RequestReceived = delegate { };
+		//AlexTest
+        //public event EventHandler<RequestEventArgs> RequestReceived = delegate { };
 
         public async Task ConnectAsync()
         {
@@ -94,23 +75,26 @@ namespace Crosschat.Client.Model.Proxies
 
         public bool IsConnected { get; private set; }
 
-        internal Task<TResponse> SendRequestAndWaitResponse<TResponse>(RequestBase request) where TResponse : ResponseBase
+		internal Task<TResponse> SendRequestAndWaitResponse<TRequest, TResponse>(TRequest request)
+			where TRequest : RequestBase
+			where TResponse : ResponseBase
         {
             Interlocked.Increment(ref _lastToken);
             request.Token = _lastToken;
-            var requestBytes = _serializer.Serialize(request);
-            var command = new Command(CommandNames.Request, requestBytes);
-            return _requestsHandler.WaitForResponse<TResponse>(request, () => _transport.SendData(_commandParser.ToBytes(command)));
+			var endpoint = EndpointFinder.Get (request.GetType ());
+			return _requestsHandler.WaitForResponse<TResponse>(request, () => _transport.SendData<TRequest, TResponse>(endpoint, request, request.Token));
         }
 
+		/*
         internal void SendRequest(RequestBase request)
         {
             Interlocked.Increment(ref _lastToken);
             request.Token = _lastToken;
             var requestBytes = _serializer.Serialize(request);
-            var command = new Command(CommandNames.Request, requestBytes);
-            _transport.SendData(_commandParser.ToBytes(command));
+			var endpoint = EndpointFinder.Get (request.GetType ());
+			_transport.SendData(endpoint, request, request.Token);
         }
+        */
 
         public async Task DisconnectAsync()
         {
@@ -123,9 +107,13 @@ namespace Crosschat.Client.Model.Proxies
 
         public void SendResponse(ResponseBase response)
         {
+			//ALEXTEST
+			//Do we need to send responses in this application?
+			/*
             var requestBytes = _serializer.Serialize(response);
             var command = new Command(CommandNames.Response, requestBytes);
             _transport.SendData(_commandParser.ToBytes(command));
+            */
         }
     }
 

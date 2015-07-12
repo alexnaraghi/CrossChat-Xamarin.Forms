@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading;
+using System.Xml.Serialization;
 
 namespace Crosschat.Server.Application.DataTransferObjects.Requests
 {
     public class RequestBase
     {
         //In order to associate Request with response
+		[XmlIgnore]
         public long Token { get; set; }
 
         private static long _lastToken = 0;

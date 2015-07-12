@@ -6,12 +6,14 @@ using Crosschat.Client.Model.Contracts;
 using Crosschat.Server.Infrastructure;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(TransportResource))]
+
 
 namespace Crosschat.Client.iOS.Infrastructure
 {
-    public class TransportResource : ITransportResource
+	/*
+	public class TransportResource : ITransportResource
     {
+
         private TcpClient _tcpClient = null;
         private bool _isConnected;
         private const int BufferSize = 8 * 1024;
@@ -130,4 +132,5 @@ namespace Crosschat.Client.iOS.Infrastructure
             }
         }
     }
+    */
 }

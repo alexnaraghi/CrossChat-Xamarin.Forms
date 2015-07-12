@@ -98,6 +98,11 @@
     <Compile Include="Views\LoginPage.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="Model\Proxies\ProxyInterfaces.cs" />
+    <Compile Include="Model\Proxies\EndpointFinder.cs" />
+    <Compile Include="Model\Proxies\SquawkProxies\SquawkLoginServiceProxy.cs" />
+    <Compile Include="Model\Proxies\SquawkProxies\SquawkChatServiceProxy.cs" />
+    <Compile Include="Model\Helpers\ChatUpdateBuilder.cs" />
+    <Compile Include="Model\Helpers\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Crosschat.Server.Application.DataTransferObjects\Crosschat.Server.Application.DataTransferObjects.csproj">
@@ -140,4 +145,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Model\Proxies\SquawkProxies\" />
+    <Folder Include="Model\Factories\" />
+  </ItemGroup>
 </Project>

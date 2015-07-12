@@ -1,4 +1,6 @@
-﻿namespace Crosschat.Server.Application.DataTransferObjects.Requests
+﻿using System.Xml.Serialization;
+
+namespace Crosschat.Server.Application.DataTransferObjects.Requests
 {
     public class ResponseBase
     {
@@ -8,11 +10,14 @@
         }
 
         //In order to associate Request with response
+		[XmlIgnore]
         public long Token { get; set; }
 
         //false means timeout or connection close
+		[XmlIgnore]
         public bool RequestResult { get; set; }
 
+		[XmlIgnore]
         public CommonErrors Error { get; set; }
     }
 

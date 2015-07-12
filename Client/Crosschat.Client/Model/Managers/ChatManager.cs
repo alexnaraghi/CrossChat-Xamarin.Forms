@@ -17,6 +17,24 @@ namespace Crosschat.Client.Model.Managers
 
 		private readonly IChatServiceProxy _chatServiceProxy = null;
         private string _subject;
+		private string _sessionGuid;
+		private ChatUpdateBuilder _updateBuilder;
+
+		public int CurrentUpdateRequestCount {
+			get;
+			private set;
+		}
+
+		public int LastServerUpdateId {
+			get;
+			private set;
+		}
+
+		public int UpdateObjectsReceivedCount {
+			get;
+			private set;
+		}
+
 
         public ChatManager(
             ConnectionManager connectionManager,
@@ -31,18 +49,32 @@ namespace Crosschat.Client.Model.Managers
             OnlineUsers = new ObservableCollection<UserDto>();
         }
 
+
+		//Keep requesting chat updates as long as we are logged in and have a valid state
+		//TODO: unify the login state somehow so we don't have to do so many disparate checks
+		//for the same general idea of a user being able to chat.
+		public async void SpinOnChatUpdate()
+		{
+			const int chatUpdateIntervalMs = 8000;
+			while (_accountManager.IsLoggedIn && _sessionGuid != null)
+			{
+				GetChatUpdate ();
+				await Task.Delay(chatUpdateIntervalMs);
+			}
+		}
+
         /// <summary>
         /// Reloads only messages and subject
         /// </summary>
         public async Task ReloadChat()
         {
-            var chatStatus = await _chatServiceProxy.GetLastMessages(new LastMessageRequest());
-            Subject = chatStatus.Subject;
-            Messages.Clear();
-            if (chatStatus.Messages != null)
-            {
-                Messages.AddRange(chatStatus.Messages.Select(ToEntity<TextMessage>));
-            }
+            //var chatStatus = await _chatServiceProxy.GetLastMessages(new LastMessageRequest());
+            //Subject = chatStatus.Subject;
+            //Messages.Clear();
+            //if (chatStatus.Messages != null)
+            //{
+                //Messages.AddRange(chatStatus.Messages.Select(ToEntity<TextMessage>));
+            //}
         }
 
         /// <summary>
@@ -50,23 +82,108 @@ namespace Crosschat.Client.Model.Managers
         /// </summary>
         public async Task ReloadUsers()
         {
-            var chatStatus = await _chatServiceProxy.GetOnlineUsers(new GetOnlineUsersRequest());
+			var chatStatus = await _chatServiceProxy.GetConnectedMembers(new ConnectedMembersRequest()
+				{
+					SSID = _accountManager.SSID,
+					PracticingLanguages = _accountManager.CurrentUser.PracticingLanguages,
+					KnownLanguages = _accountManager.CurrentUser.KnownLanguages,
+					LocaleID = _accountManager.CurrentUser.LocaleID,
+					Age = _accountManager.CurrentUser.Age,
+					Gender = _accountManager.CurrentUser.Gender,
+					LastName = _accountManager.CurrentUser.LastName,
+					FirstName = _accountManager.CurrentUser.FirstName,
+					UserID = _accountManager.CurrentUser.UserId
+				});
             OnlineUsers.Clear();
-            if (chatStatus.Users != null)
-            {
-                OnlineUsers.AddRange(chatStatus.Users);
-            }
-
-            //for screenshots ;)
-			/*
-            OnlineUsers.Add(new UserDto { Name = "Tim Cook", Country = "United States", Platform = "iOS" });
-            OnlineUsers.Add(new UserDto { Name = "Eric Schmidt", Country = "United States", Platform = "Android" });
-            OnlineUsers.Add(new UserDto { Name = "Satya Nadella", Country = "United States", Platform = "WP8" });
-            OnlineUsers.Add(new UserDto { Name = "Miguel de Icaza", Country = "United States", Platform = "iOS" });
-            OnlineUsers.Add(new UserDto { Name = "Egor Bogatov", Country = "Belarus", Platform = "Nokia 3310" });
-            */
+            
+			_sessionGuid = chatStatus.GUID;
+			OnlineUsers.AddRange(chatStatus.Users);
         }
 
+		public async Task GetChatUpdate()
+		{
+			if (_sessionGuid != null && _accountManager.IsLoggedIn)
+			{
+			
+				//Send a chat update request
+				var chatStatus = await _chatServiceProxy.GetChatUpdate (_updateBuilder.ToRequest ());
+
+				//Client update count increments by one every time we send a request
+				CurrentUpdateRequestCount++; 
+
+				//Do some quick checks to make sure we are still logged in and ready for a message
+				if (_sessionGuid != null && !_accountManager.IsLoggedIn && _updateBuilder != null && chatStatus != null)
+				{
+					//Clear out our update buffer and increment our packet id's
+
+					//Update our received count by the count in the response
+					UpdateObjectsReceivedCount += chatStatus.Updates.Count;
+
+					//Clear out our buffer so we can start a new update request
+					_updateBuilder.Clear (UpdateObjectsReceivedCount, CurrentUpdateRequestCount);
+
+					//Consume the response
+					LastServerUpdateId = chatStatus.ServerUpdateId;
+					foreach (var update in chatStatus.Updates)
+					{
+						//Parse the update type
+						if (update.User != null)
+						{
+							OnlineUsers.Add (update.User);
+						}
+						else if (update.DisconnectedUser != null)
+						{
+							OnlineUsers.RemoveAll (t => t.UserID == update.DisconnectedUser.UserId);	
+						}
+						else if (update.FP != null)
+						{
+							//Is this for typing?
+						}
+						else if (update.Message != null)
+						{
+							var message = update.Message;
+							//Just throw everything in the same lobby for now, no filtering
+							Messages.Add(new TextMessage()
+								{
+									Body = message.Text,
+									UserId = message.UserId,
+									Timestamp = DateTime.Now
+								});
+						}
+						else if (update.EnteredRoom != null)
+						{
+							//do something				
+						}
+						else
+						{
+							throw new InvalidOperationException ("An update was sent with no parameter");
+						}
+					}
+
+				}
+			}
+			
+		}
+
+		public void OnLoggedIn(object sender, EventArgs e)
+		{
+			_updateBuilder = new ChatUpdateBuilder (
+				//What is this?  ping Last packet delay?
+				"182.4189453125",
+				_accountManager.CurrentUser.UserId,
+				_sessionGuid,
+				UpdateObjectsReceivedCount,
+				CurrentUpdateRequestCount);
+			UpdateObjectsReceivedCount = 0;
+		}
+
+		public void OnLoggedOut(object sender, EventArgs e)
+		{
+			_updateBuilder = null;
+			_sessionGuid = null;
+		}
+
+		/*
         /// <summary>
         /// Kick & ban (only for admins)
         /// </summary>
@@ -124,6 +241,7 @@ namespace Crosschat.Client.Model.Managers
         {
             return _chatServiceProxy.SendImage(new SendImageRequest { Image = image });
         }
+		*/
 
         /// <summary>
         /// Fires on subject change
@@ -147,6 +265,7 @@ namespace Crosschat.Client.Model.Managers
 
         public ObservableCollection<UserDto> OnlineUsers { get; private set; }
 
+		/*
         protected override void OnUnknownDtoReceived(BaseDto dto)
         {
             //messages:
@@ -174,6 +293,7 @@ namespace Crosschat.Client.Model.Managers
                 UpdatePropertiesForList(OnlineUsers, p => p.Id == playerProfileChanges.UserId, playerProfileChanges.Properties);
             }
 
+			
             //update property IsDevoiced for players
             var devoiceNotification = dto as DevoiceNotification;
             if (devoiceNotification != null)
@@ -182,6 +302,7 @@ namespace Crosschat.Client.Model.Managers
                 if (player != null)
                     player.IsDevoiced = devoiceNotification.Devoice;
             }
+			
 
             var youAreDevoicedNotification = dto as YouAreDevoicedNotification;
             if (youAreDevoicedNotification != null)
@@ -189,5 +310,6 @@ namespace Crosschat.Client.Model.Managers
                 //TODO: Notify current user
             }
         }
+		*/
     }
 }

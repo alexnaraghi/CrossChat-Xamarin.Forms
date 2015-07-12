@@ -1,4 +1,6 @@
-﻿namespace Crosschat.Server.Application.DataTransferObjects.Messages
+﻿using Crosschat.Server.Application.DataTransferObjects.Requests;
+
+namespace Crosschat.Server.Application.DataTransferObjects.Messages
 {
     public class JoinedUserInfo : BaseDto
     {

@@ -15,11 +15,22 @@ namespace Crosschat.Client.Views
             inviteButton.Text = "Invite contacts";
             inviteButton.SetBinding(Button.CommandProperty, new Binding("InviteCommand"));
 
+			#if DEBUG
+			var userLabel = new Label();
+			userLabel.SetBinding(Label.TextProperty, new Binding("User"));
+			var ssidLabel = new Label();
+			ssidLabel.SetBinding(Label.TextProperty, new Binding("SSID"));
+			#endif
+
             Content = new StackLayout
             {
                 Children =
                 {
                     inviteButton
+#if DEBUG
+					,userLabel
+					,ssidLabel
+#endif
                 }
             };
         }

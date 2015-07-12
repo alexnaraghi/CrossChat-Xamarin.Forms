@@ -6,13 +6,13 @@ namespace Crosschat.Client.ViewModels
 {
     public class TextMessageViewModel : EventViewModel
     {
-        public TextMessageViewModel(TextMessage textMessage, string currentUserName) : base(textMessage)
+		public TextMessageViewModel(TextMessage textMessage, int currentUserId) : base(textMessage)
         {
             AuthorName = textMessage.AuthorName;
             Text = textMessage.Body;
             Timestamp = textMessage.Timestamp;
-            IsMine = textMessage.AuthorName == currentUserName;
-            ImageId = textMessage.ImageId;
+			IsMine = textMessage.UserId == currentUserId;
+            //ImageId = textMessage.ImageId;
             if (ImageId.HasValue)
             {
                 ImageUrl = string.Format("http://{0}/cc/l/{1}.jpg", GlobalConfig.IpAddress, ImageId.Value);

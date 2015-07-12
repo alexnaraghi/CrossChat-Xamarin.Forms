@@ -17,7 +17,7 @@ namespace Crosschat.Client.Model.Managers
             {
                 ConnectionManager = connectionManager;
                 ConnectionManager.DtoReceived += ConnectionManager_OnDtoReceived;
-                ConnectionManager.RequestReceived += ConnectionManager_OnRequestReceived;
+                //ConnectionManager.RequestReceived += ConnectionManager_OnRequestReceived;
             }
         }
 
@@ -93,10 +93,12 @@ namespace Crosschat.Client.Model.Managers
             OnUnknownDtoReceived(e.Dto);
         }
 
+		/*
         private async void ConnectionManager_OnRequestReceived(object sender, RequestEventArgs e)
         {
             var response = await OnRequest(e.Request);
             ConnectionManager.SendResponse(response);
         }
+        */
     }
 }

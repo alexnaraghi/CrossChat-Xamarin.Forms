@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Crosschat.Server.Application.DataTransferObjects.Requests;
 
 namespace Crosschat.Client.Model.Contracts
 {
@@ -11,8 +12,22 @@ namespace Crosschat.Client.Model.Contracts
 
         event Action ConnectionError;
 
-        event Action<byte[]> DataReceived;
+		event Action<ResponseBase> DataReceived;
 
-        void SendData(byte[] data);
+		void SendData<TRequest, TResponse>(TransportEndpoint endpoint, TRequest data, long token) 
+			where TRequest : RequestBase
+			where TResponse : ResponseBase;
     }
+
+	public enum TransportMethod
+	{
+		POST,
+		GET
+	}
+
+	public struct TransportEndpoint
+	{
+		public TransportMethod TransportMethod;
+		public string Address;
+	}
 }

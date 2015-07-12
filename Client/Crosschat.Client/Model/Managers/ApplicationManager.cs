@@ -18,13 +18,13 @@ namespace Crosschat.Client.Model.Managers
             IStorage storage,
             IDeviceInfo deviceInfo)
         {
-            //we don't have autofac so let's build the tree 
-            var commandParser = new CommandParser();
-            var connectionManager = new ConnectionManager(transportResource, new CommandBuffer(commandParser), commandParser, new RequestsHandler(), dtoSerializer);
+            //we don't have autofac so let's build the tree
+            var connectionManager = new ConnectionManager(transportResource, new RequestsHandler(), dtoSerializer);
             
 			//ALEXTEST
 			#if ALEXMOCK
-			var loginServiceProxy = new FakeLoginServiceProxy(connectionManager);
+			var loginServiceProxy = new SquawkLoginServiceProxy(connectionManager);
+			//var loginServiceProxy = new FakeLoginServiceProxy(connectionManager);
 			#else
 			var loginServiceProxy = new ??;
 			#endif
@@ -37,7 +37,7 @@ namespace Crosschat.Client.Model.Managers
 
 			//ALEXTEST
 			#if ALEXMOCK
-			var chatServiceProxy = new FakeChatServiceProxy(connectionManager);
+			var chatServiceProxy = new SquawkChatServiceProxy(connectionManager);
 			#else
 			var chatServiceProxy = new ChatServiceProxy(connectionManager);
 			#endif

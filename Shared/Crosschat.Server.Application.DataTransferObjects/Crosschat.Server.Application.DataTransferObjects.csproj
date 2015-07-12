@@ -79,6 +79,10 @@
     <Compile Include="Requests\UsersSearchRequest.cs" />
     <Compile Include="Utils\RequestsHandler.cs" />
     <Compile Include="SquawkRequests\LoginRequest.cs" />
+    <Compile Include="SquawkRequests\ConnectedMembersRequest.cs" />
+    <Compile Include="SquawkRequests\Enums.cs" />
+    <Compile Include="SquawkRequests\ChatUpdateRequest.cs" />
+    <Compile Include="SquawkRequests\Dto\UserDto.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -90,5 +94,6 @@
   -->
   <ItemGroup>
     <Folder Include="SquawkRequests\" />
+    <Folder Include="SquawkRequests\Dto\" />
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@ using Crosschat.Client.Model.Proxies;
 using Crosschat.Server.Application.DataTransferObjects.Enums;
 using Crosschat.Server.Application.DataTransferObjects.Messages;
 using Crosschat.Server.Application.DataTransferObjects.Requests;
+using System;
 
 namespace Crosschat.Client.Model.Managers
 {
@@ -15,8 +16,10 @@ namespace Crosschat.Client.Model.Managers
         private readonly RegistrationServiceProxy _registrationServiceProxy;
 		private readonly ILoginServiceProxy _loginServiceProxy;
         private readonly IStorage _storage;
-        private UserDto _currentUser = null;
+		private LoginResponse _currentUser = null;
         private bool _deviceInfoInitialized = false;
+
+		public event EventHandler LoggedIn = delegate { };
 
         public AccountManager(IStorage storage,
             IDeviceInfo deviceInfo,
@@ -35,53 +38,50 @@ namespace Crosschat.Client.Model.Managers
             _storage = storage;
         }
 
+		public bool IsLoggedIn
+		{
+			get{return CurrentUser != null;}
+		}
+
 		//ALEXTEST
         //yeah, I didn't create an entity representing User and let managers expose DTO instead. I'm lazy :(
-        public UserDto CurrentUser
+		public LoginResponse CurrentUser
         {
-            get { 
-				return new UserDto {
-					Id = 1,
-					Name = "alex",
-					Sex = true,
-					Age = 12,
-					Country = "USA",
-					Role = UserRoleEnum.User
-				};
-
-
-				return _currentUser ?? (_currentUser = _storage.Get<UserDto>()); }
+            get {
+				return _currentUser;
+			}
             private set
             {
                 _currentUser = value;
-                _storage.Set(value);
             }
         }
 
+		/*
 		//ALEXTEST
         public bool IsRegistered
         {
 			get { return true; return _storage.Get<bool>(); }
             private set { _storage.Set(value); }
         }
+		*/
 
 		//ALEXTEST
-        public string AccountName
+        public string AccountUsername
         {
-			get { return "alex"; return _storage.Get<string>(); }
+			get { return _storage.Get<string>(); }
             private set { _storage.Set(value); }
         }
 
 		//ALEXTEST
         public string AccountPassword
         {
-			get { return "password"; return _storage.Get<string>(); }
+			get { return _storage.Get<string>(); }
             private set { _storage.Set(value); }
         }
 
 		//This is the current session id of the login
-		private int _ssid;
-		public int SSID
+		private long _ssid;
+		public long SSID
 		{
 			get { return _ssid; }
 			private set { _ssid = value; }
@@ -99,10 +99,10 @@ namespace Crosschat.Client.Model.Managers
 
             if (authResult.Result == AuthenticationResponseType.Success)
             {
-                AccountName = name;
+                AccountUsername = name;
                 AccountPassword = password;
-                CurrentUser = authResult.User;
-                IsRegistered = true;
+                //CurrentUser = authResult.User;
+                //IsRegistered = true;
             }
 
             return authResult.Result;
@@ -110,9 +110,9 @@ namespace Crosschat.Client.Model.Managers
 
         public async Task<AuthenticationResponseType> ValidateAccount()
         {
-            if (!IsRegistered)
+            //if (!IsRegistered)
                 return AuthenticationResponseType.InvalidNameOrPassword;
-            return await ValidateAccount(AccountName, AccountPassword);
+            return await ValidateAccount(AccountUsername, AccountPassword);
         }
 
 		public async Task<bool> Login(string username, string password)
@@ -129,13 +129,14 @@ namespace Crosschat.Client.Model.Managers
 
 			if (result.RequestResult == true)
 			{
-				IsRegistered = true;
 				//ALEXTEST
 				//CurrentUser = result.Name;
-				AccountName = result.U.FN + " " + result.U.LN;
+				CurrentUser = result;
+				AccountUsername = username;
 				AccountPassword = password;
-				SSID = result.U.SSID;
+				SSID = result.SSID;
 			}
+			LoggedIn(this, EventArgs.Empty);
 
 			return result.RequestResult;
 		}
@@ -160,9 +161,9 @@ namespace Crosschat.Client.Model.Managers
 
             if (result.Result == RegistrationResponseType.Success)
             {
-                IsRegistered = true;
-                CurrentUser = result.User;
-                AccountName = name;
+                //IsRegistered = true;
+                //CurrentUser = result.User;
+                AccountUsername = name;
                 AccountPassword = password;
             }
 
@@ -174,7 +175,7 @@ namespace Crosschat.Client.Model.Managers
             var response = await _profileServiceProxy.ChangePhoto(new ChangePhotoRequest { PhotoData = photoData });
             if (response.Success)
             {
-                CurrentUser.PhotoId = response.PhotoId;
+                //CurrentUser.PhotoId = response.PhotoId;
             }
             return response.Success;
         }
@@ -182,8 +183,8 @@ namespace Crosschat.Client.Model.Managers
         public async Task Deactivate()
         {
             var response = await _registrationServiceProxy.Deactivate(new DeactivationRequest());
-            IsRegistered = false;
-            AccountName = "";
+            //IsRegistered = false;
+            AccountUsername = "";
             AccountPassword = "";
             CurrentUser = null;
         }

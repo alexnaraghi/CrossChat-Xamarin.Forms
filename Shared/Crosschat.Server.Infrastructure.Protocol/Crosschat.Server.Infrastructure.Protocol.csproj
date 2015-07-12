@@ -36,7 +36,6 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command.cs" />
     <Compile Include="CommandBuffer.cs" />
     <Compile Include="CommandNames.cs" />
     <Compile Include="CommandParser.cs" />

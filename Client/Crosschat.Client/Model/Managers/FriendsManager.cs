@@ -36,6 +36,7 @@ namespace Crosschat.Client.Model.Managers
             }
         }
 
+		/*
         /// <summary>
         /// Adds specified player to friends list
         /// </summary>
@@ -74,5 +75,6 @@ namespace Crosschat.Client.Model.Managers
 
             base.OnUnknownDtoReceived(dto);
         }
+		*/
     }
 }

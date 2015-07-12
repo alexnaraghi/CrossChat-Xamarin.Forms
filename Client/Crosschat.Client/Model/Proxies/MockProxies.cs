@@ -25,6 +25,16 @@ namespace Crosschat.Client
 
 	public class FakeChatServiceProxy : FakeServiceProxyBase, IChatServiceProxy
 	{
+		public Task<ChatUpdateResponse> GetChatUpdate (ChatUpdateRequest request)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public Task<ConnectedMembersResponse> GetConnectedMembers (ConnectedMembersRequest request)
+		{
+			throw new NotImplementedException ();
+		}
+
 		public FakeChatServiceProxy(ConnectionManager connectionManager) : base(connectionManager)
 		{
 		}
@@ -102,39 +112,6 @@ namespace Crosschat.Client
 			return GetFakeTask(response);
 		}
 
-		public Task<GetOnlineUsersResponse> GetOnlineUsers(GetOnlineUsersRequest request)
-		{
-			var rand = new Random ();
-			var response = request.CreateResponse<GetOnlineUsersResponse> ();
-			response.Users = new UserDto[] {
-				new UserDto {
-					Id = 1,
-					Name = "alex",
-					Sex = true,
-					Age = 12,
-					Country = "USA",
-					Role = UserRoleEnum.User
-				},
-				new UserDto {
-					Id = 2,
-					Name = "bennett",
-					Sex = true,
-					Age = 12,
-					Country = "USA",
-					Role = UserRoleEnum.User
-				},
-				new UserDto {
-					Id = 3,
-					Name = "justin",
-					Sex = true,
-					Age = 12,
-					Country = "USA",
-					Role = UserRoleEnum.User
-				}
-			};
-
-			return GetFakeTask(response);
-		}
 
 	}
 
@@ -147,11 +124,11 @@ namespace Crosschat.Client
 		public Task<LoginResponse> Login (LoginRequest request)
 		{
 			var response = request.CreateResponse<LoginResponse> ();
-			response.U = new U {
-				SSID = 1234,
-				FN = "Alex",
-				LN = "Fish"
-			};
+			{
+				response.SSID = 1234;
+				response.FirstName = "Alex";
+				response.LastName = "Fish";
+			}
 
 			return GetFakeTask(response);
 		}

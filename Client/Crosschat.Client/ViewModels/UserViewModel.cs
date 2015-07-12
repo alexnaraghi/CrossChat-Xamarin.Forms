@@ -1,5 +1,6 @@
 ﻿using Crosschat.Client.Seedwork;
 using Crosschat.Server.Application.DataTransferObjects.Messages;
+using Crosschat.Server.Application.DataTransferObjects.Requests;
 
 namespace Crosschat.Client.ViewModels
 {
@@ -12,8 +13,8 @@ namespace Crosschat.Client.ViewModels
         public UserViewModel(UserDto userDto)
         {
             _userDto = userDto;
-            Name = userDto.Name;
-            Description = string.Format("{0}, {1}", userDto.Country, userDto.Platform);
+			Name = userDto.LastName + " " + userDto.FirstName;
+			Description = string.Format("{0}, {1} years old, Country: {2}", userDto.Gender.ToString(), userDto.Age, userDto.LocaleID);
         }
 
         public string Description

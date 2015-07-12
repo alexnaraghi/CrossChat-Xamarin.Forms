@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Crosschat.Server.Infrastructure.Protocol
 {   
+	/*
     /// <summary>
     /// It's a protocol like that:
     /// +-------+--------+-------------------------------+
@@ -75,4 +76,5 @@ namespace Crosschat.Server.Infrastructure.Protocol
             return bytes;
         }
     }
+	*/
 }
