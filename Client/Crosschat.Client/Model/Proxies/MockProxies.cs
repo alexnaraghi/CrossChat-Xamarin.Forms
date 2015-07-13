@@ -114,13 +114,17 @@ namespace Crosschat.Client
 
 
 	}
-
+	/*
 	public class FakeLoginServiceProxy : FakeServiceProxyBase, ILoginServiceProxy
 	{
 		public FakeLoginServiceProxy(ConnectionManager connectionManager) : base(connectionManager)
 		{
+			
 		}
 
+		public Task<MemberStatusResponse> GetMemberStatus (MemberStatusRequest request)
+		{
+		}
 		public Task<LoginResponse> Login (LoginRequest request)
 		{
 			var response = request.CreateResponse<LoginResponse> ();
@@ -132,6 +136,6 @@ namespace Crosschat.Client
 
 			return GetFakeTask(response);
 		}
-	}
+	}*/
 }
 

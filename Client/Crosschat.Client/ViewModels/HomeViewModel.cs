@@ -5,6 +5,9 @@ using Crosschat.Client.Model.Managers;
 using Crosschat.Client.Seedwork;
 using Crosschat.Client.Seedwork.Extensions;
 using Xamarin.Forms;
+using System.Collections.Generic;
+using Crosschat.Client.Model;
+using System;
 
 namespace Crosschat.Client.ViewModels
 {
@@ -14,7 +17,8 @@ namespace Crosschat.Client.ViewModels
         private readonly EventViewModelFactory _eventViewModelFactory;
         private readonly IPhotoPicker _photoPicker;
         private ObservableCollection<UserViewModel> _users;
-        private ObservableCollection<EventViewModel> _events;
+		private ObservableCollection<Room> _publicRooms;
+        //private ObservableCollection<EventViewModel> _events;
         private string _inputText;
         private string _subject;
 
@@ -22,7 +26,7 @@ namespace Crosschat.Client.ViewModels
         {
             _appManager = appManager;
             Users = new ObservableCollection<UserViewModel>();
-            Events = new ObservableCollection<EventViewModel>();
+            //Events = new ObservableCollection<EventViewModel>();
             _eventViewModelFactory = new EventViewModelFactory();
             _photoPicker = DependencyService.Get<IPhotoPicker>();
             LoadData();
@@ -36,8 +40,11 @@ namespace Crosschat.Client.ViewModels
             Subject = _appManager.ChatManager.Subject;
 
             _appManager.ChatManager.OnlineUsers.SynchronizeWith(Users, u => new UserViewModel(u));
-			_appManager.ChatManager.Messages.SynchronizeWith(Events, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.CurrentUser.UserId));
+			//_appManager.ChatManager.Messages.SynchronizeWith(Events, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.CurrentUser.UserId));
             IsBusy = false;
+
+			PublicRooms = new ObservableCollection<Room> ();
+			PublicRooms.AddRange (PublicRoomsRepository.GetAll ());
         }
 
         public ObservableCollection<UserViewModel> Users
@@ -46,17 +53,12 @@ namespace Crosschat.Client.ViewModels
             set { SetProperty(ref _users, value); }
         }
 
-        public ObservableCollection<EventViewModel> Events
-        {
-            get { return _events; }
-            set { SetProperty(ref _events, value); }
-        }
+		public ObservableCollection<Room> PublicRooms
+		{
+			get { return _publicRooms; }
+			set { SetProperty(ref _publicRooms, value); }
+		}
 
-        public string InputText
-        {
-            get { return _inputText; }
-            set { SetProperty(ref _inputText, value); }
-        }
 
         public string Subject
         {
@@ -64,20 +66,39 @@ namespace Crosschat.Client.ViewModels
             set { SetProperty(ref _subject, value); }
         }
 
-        public ICommand SendMessageCommand
-        {
-            get { return new Command(OnSendMessage); }
-        }
 
-        public ICommand InviteCommand
-        {
-            get { return new Command(() => new InviteToAppViewModel().ShowAsync());}
-        }
+		public ICommand SelectRoomCommand
+		{
+			get { return new Command(OnSelectRoom); }
+		}
 
-        public ICommand SendImageCommand
-        {
-            get { return new Command(OnSendImage); }
-        }
+		private async void OnSelectRoom(object roomArg)
+		{
+			var room = roomArg as Room;
+			if (room == null)
+			{
+				throw new Exception ("Selected item was not a room");
+			}
+			await _appManager.ChatManager.JoinRoom (room.RoomId);
+			var model = new ChatViewModel (_appManager, room);
+			await model.ShowAsync ();
+		}
+
+		#if DEBUG
+		public string User
+		{
+			get{ return "User : " + _appManager.AccountManager.CurrentUser.FirstName + " " + _appManager.AccountManager.CurrentUser.LastName; }
+		}
+
+		public string SSID
+		{
+			get{ return "Session ID : " + _appManager.AccountManager.SSID.ToString(); }
+		}
+		#endif
+
+
+		/*
+
 
         private async void OnSendImage()
         {
@@ -86,26 +107,65 @@ namespace Crosschat.Client.ViewModels
             //await _appManager.ChatManager.SendImage(imageData);
             IsBusy = false;
         }
+		public ICommand InviteCommand
+		{
+			get { return new Command(() => new InviteToAppViewModel().ShowAsync());}
+		}
 
-        private void OnSendMessage()
+		public ICommand SendImageCommand
+		{
+			get { return new Command(OnSendImage); }
+		}*/
+		/*
+        private async void OnSendMessage()
         {
             if (string.IsNullOrEmpty(InputText))
                 return;
             string text = InputText;
             InputText = string.Empty;
-            //_appManager.ChatManager.SendMessage(text);
+
+			IsBusy = true;
+            await _appManager.ChatManager.SendMessage(text, "CREn");
+			IsBusy = false;
         }
+        */
 
-		#if DEBUG
-		public string User
+		/*
+		public ICommand UpdateCommand
 		{
-			get{ return "User : " + _appManager.AccountManager.CurrentUser.ToString(); }
+			get{ return new Command (OnForceUpdate); }
 		}
 
-		public string SSID
+		private async void OnForceUpdate()
 		{
-			get{ return "Session ID : " + _appManager.AccountManager.SSID.ToString(); }
+			IsBusy = true;
+			await _appManager.ChatManager.GetChatUpdate ();
+			IsBusy = false;
 		}
-		#endif
+		*/
+
+		/*
+		public ObservableCollection<EventViewModel> Events
+		{
+			get { return _events; }
+			set { SetProperty(ref _events, value); }
+		}
+		*/
+
+		/*
+		public string InputText
+		{
+			get { return _inputText; }
+			set { SetProperty(ref _inputText, value); }
+		}
+		*/
+
+
+		/*
+		public ICommand SendMessageCommand
+		{
+			get { return new Command(OnSendMessage); }
+		}
+		*/
     }
 }

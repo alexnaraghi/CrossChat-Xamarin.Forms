@@ -4,9 +4,9 @@ namespace Crosschat.Client.Model.Entities.Messages
 {
     public class TextMessage : Event
     {
-        public int UserId { get; set; }
+		public string UserName { get; set; }
 
-        public string AuthorName { get; set; }
+        public int? UserId { get; set; }
 
 		public string Body { get; set; }
 

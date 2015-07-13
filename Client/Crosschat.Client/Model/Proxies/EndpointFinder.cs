@@ -13,7 +13,9 @@ namespace Crosschat.Client
 		private static Dictionary<Type, TransportEndpoint> dict = new Dictionary<Type, TransportEndpoint>()
 		{
 			{typeof(LoginRequest), new TransportEndpoint(){TransportMethod = TransportMethod.POST, Address = "Members/Login.ashx"}},
-			{typeof(ConnectedMembersRequest), new TransportEndpoint(){TransportMethod = TransportMethod.POST, Address = "Chat3/JoinTC.ashx"}}
+			{typeof(MemberStatusRequest), new TransportEndpoint(){TransportMethod = TransportMethod.POST, Address = "Members/GetMemberStatus2.ashx"}},
+			{typeof(ConnectedMembersRequest), new TransportEndpoint(){TransportMethod = TransportMethod.POST, Address = "Chat3/JoinTC.ashx"}},
+			{typeof(ChatUpdateRequest), new TransportEndpoint(){TransportMethod = TransportMethod.POST, Address = "Chat3/GetTCUpdate.ashx"}}
 		};
 
 		public static TransportEndpoint Get(Type type)

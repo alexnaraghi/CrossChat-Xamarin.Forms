@@ -18,6 +18,11 @@ namespace Crosschat.Client
 			return ConnectionManager.SendRequestAndWaitResponse<LoginRequest,LoginResponse>(request);
 		}
 
+		public Task<MemberStatusResponse> GetMemberStatus (MemberStatusRequest request)
+		{
+			return ConnectionManager.SendRequestAndWaitResponse<MemberStatusRequest,MemberStatusResponse>(request);
+		}
+
 		#endregion
 
 	}

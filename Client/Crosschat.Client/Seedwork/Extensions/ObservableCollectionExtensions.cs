@@ -49,7 +49,7 @@ namespace Crosschat.Client.Seedwork.Extensions
                     foreach (var item in e.NewItems.OfType<T>())
                     {
                         var projection = creator(item);
-                        destination.Insert(0, projection);
+						destination.Add(projection);
                     }
                 }
                 if (e.Action == NotifyCollectionChangedAction.Remove && sourceKey != null && destKey != null)

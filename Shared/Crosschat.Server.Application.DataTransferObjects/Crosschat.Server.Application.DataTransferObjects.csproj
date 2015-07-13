@@ -83,6 +83,7 @@
     <Compile Include="SquawkRequests\Enums.cs" />
     <Compile Include="SquawkRequests\ChatUpdateRequest.cs" />
     <Compile Include="SquawkRequests\Dto\UserDto.cs" />
+    <Compile Include="SquawkRequests\MemberStatusRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

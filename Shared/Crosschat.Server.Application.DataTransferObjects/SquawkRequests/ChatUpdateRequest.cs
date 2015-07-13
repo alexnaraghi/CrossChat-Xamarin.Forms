@@ -20,9 +20,11 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
 		[XmlAttribute("UPDC")]
 		public int ClientUpdateId  { get; set; }
 		[XmlAttribute("Rs")]
-		public string Rooms  { get; set; }
+		public string ActiveRooms  { get; set; }
 		[XmlElement("M")]
 		public List<MessageDto> Messages{ get; set;}
+		[XmlElement("E")]
+		public List<RoomEntryRequestDto> EnteredRooms  { get; set; }
     }
 
 	[XmlType(TypeName="UPDs", Namespace = "")]
@@ -30,9 +32,16 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
     {
 		[XmlAttribute("LUPD")]
 		public int ServerUpdateId{ get; set;}
-		[XmlElement("UPDs")]
+		[XmlElement("UPD")]
 		public List<UpdateDto> Updates;
     }
+
+	[XmlType(TypeName="E", Namespace = "")]
+	public class RoomEntryRequestDto
+	{
+		[XmlAttribute("R")]
+		public string Room  { get; set; }
+	}
 
 	[XmlType(TypeName="UPD", Namespace = "")]
 	public class UpdateDto
@@ -49,6 +58,8 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
 		public MessageDto Message { get; set;}
 		[XmlElement("ER")]
 		public EnteredRoomDto EnteredRoom { get; set;}
+		[XmlElement("C")]
+		public UserChatDto UserChatRequest { get; set;}
 	}
 
 	[XmlType(TypeName="DU", Namespace = "")]
@@ -85,6 +96,13 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
 		public int UserId { get; set;}
 	}
 
+	[XmlType(TypeName="C", Namespace = "")]
+	public class UserChatDto
+	{
+		[XmlElement("UID")]
+		public int UserId;
+	}
+
 	[XmlType(TypeName="ER", Namespace = "")]
 	public class EnteredRoomDto
 	{
@@ -108,14 +126,14 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
 	[XmlType(TypeName="uN", Namespace = "")]
 	public class UserNameDto
 	{
-		[XmlElement("uN")]
-		public UserNameDto Name;
+		[XmlText]
+		public string Name;
 	}
 
 	[XmlType(TypeName="mO", Namespace = "")]
 	public class MessageBodyDto
 	{
-		[XmlElement("mO")]
-		public UserNameDto Body;
+		[XmlText]
+		public string Body;
 	}
 }

@@ -8,7 +8,8 @@ namespace Crosschat.Client.Views
     {
         public HomePage(ViewModelBase viewModel) : base(viewModel)
         {
-            Children.Add(new ChatPage(viewModel));
+			//Children.Add(new ActiveChatPage(viewModel));
+			Children.Add(new PublicRoomsPage(viewModel));
             Children.Add(new OnlineUsersPage(viewModel));
             Children.Add(new SettingsPage(viewModel));
         }

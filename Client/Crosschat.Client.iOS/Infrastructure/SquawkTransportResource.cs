@@ -10,6 +10,7 @@ using System.IO;
 using System.Xml.Serialization;
 using Crosschat.Server.Application.DataTransferObjects.Requests;
 using System.Xml;
+using System.Reflection;
 
 [assembly: Dependency(typeof(SquawkTransportResource))]
 
@@ -72,6 +73,7 @@ namespace Crosschat.Client.iOS.Infrastructure
 			request.ContentType = "application/x-www-form-urlencoded";
 			request.UserAgent = GlobalConfig.UserAgent;
 			request.Referer = GlobalConfig.Referer;
+
 			request.Headers.Add ("X-Requested-With", GlobalConfig.RequestedWith);
 			request.Headers.Add (HttpRequestHeader.AcceptEncoding, GlobalConfig.AcceptEncoding);
 			//ALEXTEST
@@ -167,13 +169,26 @@ namespace Crosschat.Client.iOS.Infrastructure
 			//We have to read the xml as an element since we don't get a full xml file
 			using(XmlTextReader reader = new XmlTextReader(dataAsString, XmlNodeType.Element, null))
 			{
-				deserializedObject = (T)serializer.Deserialize (reader);
+				try
+				{
+					deserializedObject = (T)serializer.Deserialize (reader);
+				}
+				catch(Exception exc)
+				{
+					throw new DeserializeException ("Deserialize failed, see inner exception");
+				}
 			}
 			return deserializedObject;
 		}
     }
 
-
+	public class DeserializeException : Exception
+	{
+		public DeserializeException(string message):base(message)
+		{
+			
+		}
+	}
 
 
 	public class TokenRequest

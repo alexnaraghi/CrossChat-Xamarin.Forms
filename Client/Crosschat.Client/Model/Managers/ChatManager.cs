@@ -8,6 +8,7 @@ using Crosschat.Client.Seedwork.Extensions;
 using Crosschat.Server.Application.DataTransferObjects.Enums;
 using Crosschat.Server.Application.DataTransferObjects.Messages;
 using Crosschat.Server.Application.DataTransferObjects.Requests;
+using System.Collections.Generic;
 
 namespace Crosschat.Client.Model.Managers
 {
@@ -19,6 +20,7 @@ namespace Crosschat.Client.Model.Managers
         private string _subject;
 		private string _sessionGuid;
 		private ChatUpdateBuilder _updateBuilder;
+		private DateTime _lastUpdateTime;
 
 		public int CurrentUpdateRequestCount {
 			get;
@@ -44,9 +46,12 @@ namespace Crosschat.Client.Model.Managers
         {
             _chatServiceProxy = chatServiceProxy;
             _accountManager = accountManager;
+			_accountManager.LoggedIn += OnLoggedIn;
 
-            Messages = new ObservableCollection<Event>();
+            //Messages = new ObservableCollection<Event>();
             OnlineUsers = new ObservableCollection<UserDto>();
+			UserDirectory = new Dictionary<int, UserDto> ();
+			Rooms = new RoomCollection ();
         }
 
 
@@ -58,8 +63,18 @@ namespace Crosschat.Client.Model.Managers
 			const int chatUpdateIntervalMs = 8000;
 			while (_accountManager.IsLoggedIn && _sessionGuid != null)
 			{
-				GetChatUpdate ();
-				await Task.Delay(chatUpdateIntervalMs);
+				//Make sure that automatic updates only go as fast as the interval,
+				//delay it longer if a manual update occurred between now and the last auto update
+				var timeSinceLastUpdate = DateTime.Now - _lastUpdateTime;
+				if (timeSinceLastUpdate.TotalMilliseconds >= chatUpdateIntervalMs)
+				{
+					await GetChatUpdate ();
+					await Task.Delay (chatUpdateIntervalMs);
+				}
+				else
+				{
+					await Task.Delay (chatUpdateIntervalMs - (int)timeSinceLastUpdate.TotalMilliseconds);
+				}
 			}
 		}
 
@@ -97,22 +112,40 @@ namespace Crosschat.Client.Model.Managers
             OnlineUsers.Clear();
             
 			_sessionGuid = chatStatus.GUID;
+
+			_updateBuilder = new ChatUpdateBuilder (
+				//What is this?  ping Last packet delay?
+				"0",
+				_accountManager.CurrentUser.UserId,
+				_sessionGuid,
+				UpdateObjectsReceivedCount,
+				CurrentUpdateRequestCount);
+			
 			OnlineUsers.AddRange(chatStatus.Users);
+			foreach (var user in chatStatus.Users)
+			{
+				UserDirectory.Add (user.UserID, user);
+			}
+
+			//Get our first update immediately, then start spinning
+			await GetChatUpdate ();
+			SpinOnChatUpdate ();
         }
 
 		public async Task GetChatUpdate()
 		{
 			if (_sessionGuid != null && _accountManager.IsLoggedIn)
 			{
-			
+				_lastUpdateTime = DateTime.Now;
+
 				//Send a chat update request
 				var chatStatus = await _chatServiceProxy.GetChatUpdate (_updateBuilder.ToRequest ());
 
 				//Client update count increments by one every time we send a request
-				CurrentUpdateRequestCount++; 
+				CurrentUpdateRequestCount++;
 
 				//Do some quick checks to make sure we are still logged in and ready for a message
-				if (_sessionGuid != null && !_accountManager.IsLoggedIn && _updateBuilder != null && chatStatus != null)
+				if (_sessionGuid != null && _accountManager.IsLoggedIn && _updateBuilder != null && chatStatus != null)
 				{
 					//Clear out our update buffer and increment our packet id's
 
@@ -120,7 +153,7 @@ namespace Crosschat.Client.Model.Managers
 					UpdateObjectsReceivedCount += chatStatus.Updates.Count;
 
 					//Clear out our buffer so we can start a new update request
-					_updateBuilder.Clear (UpdateObjectsReceivedCount, CurrentUpdateRequestCount);
+					_updateBuilder.NewRequest (UpdateObjectsReceivedCount, CurrentUpdateRequestCount);
 
 					//Consume the response
 					LastServerUpdateId = chatStatus.ServerUpdateId;
@@ -142,17 +175,55 @@ namespace Crosschat.Client.Model.Managers
 						else if (update.Message != null)
 						{
 							var message = update.Message;
-							//Just throw everything in the same lobby for now, no filtering
-							Messages.Add(new TextMessage()
-								{
+							var room = message.Room;
+
+							//group the same user's last chats together
+							var lastMessage = Rooms.Last(room) as TextMessage;
+							if (lastMessage != null && lastMessage.UserId == message.UserId)
+							{
+								Rooms.RemoveMessage(room, lastMessage);
+								lastMessage.Body += "\n\n" + message.Text;
+								lastMessage.Timestamp = DateTime.Now;
+								Rooms.AddMessage (room, lastMessage);
+							}
+							else
+							{
+								//BUG: Sometimes we are getting some users that whose names we aren't sure about...
+								//Need to investigate this.
+								var messageUsername = UserDirectory.ContainsKey (message.UserId) 
+									? UserDirectory [message.UserId].FirstName 
+									: string.Format("Unknown({0})", message.UserId);
+								Rooms.AddMessage (room, new TextMessage () {
+									UserName = messageUsername,
 									Body = message.Text,
 									UserId = message.UserId,
 									Timestamp = DateTime.Now
 								});
+							}
 						}
 						else if (update.EnteredRoom != null)
 						{
+							var enteredRoom = update.EnteredRoom;
+							var room = update.EnteredRoom.Room;
+
+							//Make the room exist, no matter how many messages there are
+							if (!Rooms.ContainsKey (room))
+							{
+								Rooms.Add(room, new ObservableCollection<Event>());
+							}
+
+							Rooms.AddMessageRange(room, enteredRoom.RoomMessages.Select( r =>
+								new TextMessage(){
+									UserName = r.User.Name,
+									Body = r.Message.Body,
+									UserId = null, //How can we get this?  only the first name is sent, so we can't resolve duplicate names
+									Timestamp = DateTime.Now
+								}));
 							//do something				
+						}
+						else if (update.UserChatRequest != null)
+						{
+							//do something
 						}
 						else
 						{
@@ -165,15 +236,45 @@ namespace Crosschat.Client.Model.Managers
 			
 		}
 
+		public async Task SendMessage(string text, string room)
+		{
+			_updateBuilder.AddMessage(new MessageDto
+				{
+					Text = text,
+					Room = room,
+					UserId = _accountManager.CurrentUser.UserId
+				});
+
+			//Manually force update the chat, to send our message asap
+			await GetChatUpdate ();
+
+			//Add our message locally after the update for an accurate ordering
+			Rooms.AddMessage(room, new TextMessage
+				{
+					UserId = _accountManager.CurrentUser.UserId,
+					Body = text,
+					Timestamp = DateTime.Now,
+					UserName = _accountManager.CurrentUser.FirstName + " " + _accountManager.CurrentUser.LastName
+				});
+		}
+
+		public async Task JoinRoom(string roomId)
+		{
+			_updateBuilder.AddRoom (roomId);
+			//Manually force update the chat, to send our message asap
+			await GetChatUpdate ();
+		}
+
+		public async Task LeaveRoom(string roomId)
+		{
+			_updateBuilder.RemoveRoom (roomId);
+			//Manually force update the chat, to send our message asap
+			await GetChatUpdate ();
+		}
+
 		public void OnLoggedIn(object sender, EventArgs e)
 		{
-			_updateBuilder = new ChatUpdateBuilder (
-				//What is this?  ping Last packet delay?
-				"182.4189453125",
-				_accountManager.CurrentUser.UserId,
-				_sessionGuid,
-				UpdateObjectsReceivedCount,
-				CurrentUpdateRequestCount);
+			CurrentUpdateRequestCount = 1;
 			UpdateObjectsReceivedCount = 0;
 		}
 
@@ -182,6 +283,31 @@ namespace Crosschat.Client.Model.Managers
 			_updateBuilder = null;
 			_sessionGuid = null;
 		}
+
+		/// <summary>
+		/// Fires on subject change
+		/// </summary>
+		public event EventHandler SubjectChanged = delegate { };
+
+		/// <summary>
+		/// Chat topic (subject)
+		/// </summary>
+		public string Subject
+		{
+			get { return _subject; }
+			private set
+			{
+				_subject = value;
+				SubjectChanged(this, EventArgs.Empty);
+			}
+		}
+
+		//public ObservableCollection<Event> Messages { get; private set; }
+		public RoomCollection Rooms { get; private set; }
+
+		public ObservableCollection<UserDto> OnlineUsers { get; private set; }
+
+		public Dictionary<int,UserDto> UserDirectory{ get; private set; }
 
 		/*
         /// <summary>
@@ -243,28 +369,7 @@ namespace Crosschat.Client.Model.Managers
         }
 		*/
 
-        /// <summary>
-        /// Fires on subject change
-        /// </summary>
-        public event EventHandler SubjectChanged = delegate { };
-
-        /// <summary>
-        /// Chat topic (subject)
-        /// </summary>
-        public string Subject
-        {
-            get { return _subject; }
-            private set
-            {
-                _subject = value;
-                SubjectChanged(this, EventArgs.Empty);
-            }
-        }
-
-        public ObservableCollection<Event> Messages { get; private set; }
-
-        public ObservableCollection<UserDto> OnlineUsers { get; private set; }
-
+        
 		/*
         protected override void OnUnknownDtoReceived(BaseDto dto)
         {

@@ -16,7 +16,16 @@ namespace Crosschat.Client.iOS.CustomRenderers
             var textVm = item.BindingContext as TextMessageViewModel;
             if (textVm != null)
             {
-                string text = textVm.ImageId.HasValue ? "<IOS client doesn't support image messages yet ;(>" : (textVm.IsMine ? "Me" : textVm.AuthorName) + ": " + textVm.Text;
+				//We know the text is ours if it's on the right, don't print the name out
+				string text;
+				if (textVm.IsMine)
+				{
+					text = textVm.Text;
+				}
+				else
+				{
+					text = textVm.AuthorName + "· " + textVm.Text;
+				}
                 var chatBubble = new ChatBubble(!textVm.IsMine, text);
                 return chatBubble.GetCell(tv);
             }

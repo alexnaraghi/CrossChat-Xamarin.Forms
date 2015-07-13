@@ -12,10 +12,10 @@ namespace Crosschat.Client.Seedwork.Controls
         }
 
         public static BindableProperty ItemsSourceProperty =
-            BindableProperty.Create<BindablePicker, IEnumerable>(o => o.ItemsSource, default(IEnumerable), bindingPropertyChanged: OnItemsSourceChanged);
+			BindableProperty.Create<BindablePicker, IEnumerable>(o => o.ItemsSource, default(IEnumerable), BindingMode.Default, null, OnItemsSourceChanged);
 
         public static BindableProperty SelectedItemProperty =
-            BindableProperty.Create<BindablePicker, object>(o => o.SelectedItem, default(object), bindingPropertyChanged: OnSelectedItemChanged);
+			BindableProperty.Create<BindablePicker, object>(o => o.SelectedItem, default(object), BindingMode.Default, null, OnSelectedItemChanged);
 
 
         public IEnumerable ItemsSource

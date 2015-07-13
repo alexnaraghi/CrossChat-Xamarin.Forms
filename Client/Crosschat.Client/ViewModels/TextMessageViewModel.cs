@@ -8,10 +8,10 @@ namespace Crosschat.Client.ViewModels
     {
 		public TextMessageViewModel(TextMessage textMessage, int currentUserId) : base(textMessage)
         {
-            AuthorName = textMessage.AuthorName;
+			AuthorName = textMessage.UserName;
             Text = textMessage.Body;
             Timestamp = textMessage.Timestamp;
-			IsMine = textMessage.UserId == currentUserId;
+			IsMine = textMessage.UserId.HasValue ? textMessage.UserId.Value == currentUserId : false;
             //ImageId = textMessage.ImageId;
             if (ImageId.HasValue)
             {

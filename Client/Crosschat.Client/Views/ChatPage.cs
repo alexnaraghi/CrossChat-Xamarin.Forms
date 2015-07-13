@@ -9,7 +9,7 @@ namespace Crosschat.Client.Views
     {
         public ChatPage(ViewModelBase viewModel) : base(viewModel)
         {
-            Title = "Chat";
+			SetBinding (ContentPage.TitleProperty, new Binding("RoomName"));
             Icon = "chat.png";
 
             var headerLabel = new Label();
@@ -39,20 +39,29 @@ namespace Crosschat.Client.Views
             messageList.VerticalOptions = LayoutOptions.FillAndExpand;
             messageList.SetBinding(ChatListView.ItemsSourceProperty, new Binding("Events"));
             messageList.ItemTemplate = new DataTemplate(CreateMessageCell);
+
+			var testButton = new Button();
+			testButton.Text = " Update ";
+			testButton.VerticalOptions = LayoutOptions.CenterAndExpand;
+			testButton.SetBinding(Button.CommandProperty, new Binding("UpdateCommand"));
             
             Content = new StackLayout
                 {
                     Padding = Device.OnPlatform(new Thickness(6,6,6,6), new Thickness(0), new Thickness(0)),
                     Children =
                         {
-                            new StackLayout
-                                {
-                                    Children = {inputBox, sendButton},
-                                    Orientation = StackOrientation.Horizontal,
-                                    Padding = new Thickness(0, Device.OnPlatform(0, 20, 0),0,0),
-                                },
+
+							//testButton,
+                            
                             //headerLabel,
                             messageList,
+							new StackLayout
+							{
+								Children = {inputBox, sendButton},
+								Orientation = StackOrientation.Horizontal,
+								Padding = new Thickness(0, Device.OnPlatform(0, 20, 0),0,0),
+								VerticalOptions = LayoutOptions.End
+							}
                         }
                 };
         }
@@ -81,7 +90,7 @@ namespace Crosschat.Client.Views
 
             if (Device.Idiom == TargetIdiom.Tablet)
             {
-                stack.Children.Insert(0, timestampLabel);
+				stack.Children.Insert(0, timestampLabel);
             }
 
             var view = new MessageViewCell

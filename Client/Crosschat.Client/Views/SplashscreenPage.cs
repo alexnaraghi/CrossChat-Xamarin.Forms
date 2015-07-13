@@ -43,7 +43,7 @@ namespace Crosschat.Client.Views
                     var homeVm = ViewModelBase.CurrentViewModel as HomeViewModel;
                     if (homeVm != null)
                     {
-                        homeVm.SendImageCommand.Execute(null);
+                        //homeVm.SendImageCommand.Execute(null);
                     }
                     else if (ViewModelBase.CurrentViewModel != null)
                     {

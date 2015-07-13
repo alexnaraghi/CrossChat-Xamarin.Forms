@@ -31,6 +31,7 @@ namespace Crosschat.Client
 	public interface ILoginServiceProxy
 	{
 		Task<LoginResponse> Login (LoginRequest request);
+		Task<MemberStatusResponse> GetMemberStatus (MemberStatusRequest request);
 	}
 }
 

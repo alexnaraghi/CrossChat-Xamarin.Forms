@@ -136,6 +136,16 @@ namespace Crosschat.Client.Model.Managers
 				AccountPassword = password;
 				SSID = result.SSID;
 			}
+
+			//Do we need to look out for this member status result?
+			var memberStatusResult = await _loginServiceProxy.GetMemberStatus(
+				new MemberStatusRequest
+				{
+					SessionId = result.SSID,
+					UserId = CurrentUser.UserId
+				});
+			//Do something with the member status result.  Not sure what the US codes mean yet.
+
 			LoggedIn(this, EventArgs.Empty);
 
 			return result.RequestResult;
