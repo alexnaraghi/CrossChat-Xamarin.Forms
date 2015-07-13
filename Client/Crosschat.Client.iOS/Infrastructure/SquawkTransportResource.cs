@@ -170,7 +170,6 @@ namespace Crosschat.Client.iOS.Infrastructure
 			{
 				try
 				{
-					throw new Exception("blah");
 					deserializedObject = (T)serializer.Deserialize (reader);
 				}
 				catch(Exception exc)
