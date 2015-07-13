@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 
 
-namespace Crosschat.Client.Model.Proxies
+namespace SharedSquawk.Client.Model.Proxies
 {
 
 	

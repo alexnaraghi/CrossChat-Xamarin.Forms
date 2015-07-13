@@ -1,7 +1,7 @@
 ﻿using System;
-using Crosschat.Server.Application.DataTransferObjects.Enums;
+using SharedSquawk.Server.Application.DataTransferObjects.Enums;
 
-namespace Crosschat.Server.Application.DataTransferObjects.Messages
+namespace SharedSquawk.Server.Application.DataTransferObjects.Messages
 {
     public class PublicMessageDto : BaseDto
     {

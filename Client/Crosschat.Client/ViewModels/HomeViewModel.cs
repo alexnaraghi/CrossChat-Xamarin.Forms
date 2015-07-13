@@ -1,15 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Client.Model.Managers;
-using Crosschat.Client.Seedwork;
-using Crosschat.Client.Seedwork.Extensions;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Client.Model.Managers;
+using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Client.Seedwork.Extensions;
 using Xamarin.Forms;
 using System.Collections.Generic;
-using Crosschat.Client.Model;
+using SharedSquawk.Client.Model;
 using System;
 
-namespace Crosschat.Client.ViewModels
+namespace SharedSquawk.Client.ViewModels
 {
     public class HomeViewModel : ViewModelBase
     {

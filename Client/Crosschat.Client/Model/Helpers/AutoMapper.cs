@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 
-namespace Crosschat.Client.Model.Helpers
+namespace SharedSquawk.Client.Model.Helpers
 {
     public static class AutoMapper
     {

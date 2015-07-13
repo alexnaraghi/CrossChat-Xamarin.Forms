@@ -1,10 +1,10 @@
-﻿using Crosschat.Client.Seedwork;
-using Crosschat.Client.Seedwork.Controls;
-using Crosschat.Client.Views.Controls;
+﻿using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Client.Seedwork.Controls;
+using SharedSquawk.Client.Views.Controls;
 using Xamarin.Forms;
 using System.Linq;
 
-namespace Crosschat.Client.Views
+namespace SharedSquawk.Client.Views
 {
     public class ChatPage : MvvmableContentPage
     {

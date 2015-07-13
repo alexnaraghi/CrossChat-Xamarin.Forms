@@ -1,13 +1,13 @@
-using Crosschat.Client.iOS.CustomRenderers;
-using Crosschat.Client.ViewModels;
-using Crosschat.Client.Views.Controls;
+using SharedSquawk.Client.iOS.CustomRenderers;
+using SharedSquawk.Client.ViewModels;
+using SharedSquawk.Client.Views.Controls;
 using MonoTouch.UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(MessageViewCell), typeof(MessageRenderer))]
 
-namespace Crosschat.Client.iOS.CustomRenderers
+namespace SharedSquawk.Client.iOS.CustomRenderers
 {
     public class MessageRenderer : ViewCellRenderer
     {

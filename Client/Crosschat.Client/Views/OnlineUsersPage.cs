@@ -1,17 +1,14 @@
-﻿using Crosschat.Client.Seedwork;
-using Crosschat.Client.Seedwork.Controls;
+﻿using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Client.Seedwork.Controls;
 using Xamarin.Forms;
 
-namespace Crosschat.Client.Views
+namespace SharedSquawk.Client.Views
 {
     public class OnlineUsersPage : MvvmableContentPage
     {
         public OnlineUsersPage(ViewModelBase viewModel) : base(viewModel)
         {
-            Title = "Participants";
-            Icon = "group.png";
-
-            var usersCountLabel = new Label();
+			var usersCountLabel = new Label();
             usersCountLabel.SetBinding(Label.TextProperty, new Binding("Users.Count", stringFormat: "  {0} users online."));
             
             var listView = new BindableListView

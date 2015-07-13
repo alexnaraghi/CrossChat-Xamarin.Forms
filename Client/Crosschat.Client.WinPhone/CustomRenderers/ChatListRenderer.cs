@@ -1,13 +1,13 @@
 using System.Collections.Specialized;
 using System.Linq;
-using Crosschat.Client.Views.Controls;
-using Crosschat.Client.WinPhone.CustomRenderers;
+using SharedSquawk.Client.Views.Controls;
+using SharedSquawk.Client.WinPhone.CustomRenderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.WinPhone;
 
 [assembly: ExportRenderer(typeof(ChatListView), typeof(ChatListRenderer))]
 
-namespace Crosschat.Client.WinPhone.CustomRenderers
+namespace SharedSquawk.Client.WinPhone.CustomRenderers
 {
     public class ChatListRenderer : ListViewRenderer
     {

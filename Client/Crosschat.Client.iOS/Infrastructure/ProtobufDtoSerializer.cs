@@ -1,14 +1,8 @@
-﻿using System.IO;
-using System.Linq;
-using Crosschat.Client.iOS.Infrastructure;
-using Crosschat.Server.Application.DataTransferObjects.Messages;
-using Crosschat.Server.Infrastructure.Protocol;
-using ProtoBuf.Meta;
-using Xamarin.Forms;
+﻿
 /*
 [assembly: Dependency(typeof(ProtobufSerializer))]
 
-namespace Crosschat.Client.iOS.Infrastructure
+namespace SharedSquawk.Client.iOS.Infrastructure
 {
 	
     public class ProtobufSerializer : IDtoSerializer

@@ -1,13 +1,13 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Client.WinPhone.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Client.WinPhone.Infrastructure;
 using Microsoft.Phone.Tasks;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(PhotoPicker))]
 
-namespace Crosschat.Client.WinPhone.Infrastructure
+namespace SharedSquawk.Client.WinPhone.Infrastructure
 {
     public class PhotoPicker : IPhotoPicker
     {

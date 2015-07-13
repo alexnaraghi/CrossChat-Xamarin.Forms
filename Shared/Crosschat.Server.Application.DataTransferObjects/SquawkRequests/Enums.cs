@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Crosschat.Server.Application.DataTransferObjects
+namespace SharedSquawk.Server.Application.DataTransferObjects
 {
 	public enum Gender
 	{

@@ -1,6 +1,6 @@
-﻿using Crosschat.Client.Model.Entities.Messages;
+﻿using SharedSquawk.Client.Model.Entities.Messages;
 
-namespace Crosschat.Client.ViewModels
+namespace SharedSquawk.Client.ViewModels
 {
     public class EventViewModelFactory
     {

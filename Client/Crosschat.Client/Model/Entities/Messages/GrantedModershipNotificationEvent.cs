@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crosschat.Client.Model.Entities.Messages
+namespace SharedSquawk.Client.Model.Entities.Messages
 {
     public class GrantedModershipNotificationEvent : Event
     {

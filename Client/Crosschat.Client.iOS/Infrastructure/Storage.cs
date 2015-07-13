@@ -1,14 +1,14 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
-using Crosschat.Client.iOS.Infrastructure;
-using Crosschat.Client.Model.Contracts;
+using SharedSquawk.Client.iOS.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
 using MonoTouch.Foundation;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(Storage))]
 
 
-namespace Crosschat.Client.iOS.Infrastructure
+namespace SharedSquawk.Client.iOS.Infrastructure
 {
     public class Storage : IStorage
     {

@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Crosschat.Client.Seedwork.Extensions
+namespace SharedSquawk.Client.Seedwork.Extensions
 {
     public static class ObservableCollectionExtensions
     {

@@ -2,11 +2,11 @@
 
 using Xamarin.Forms;
 using System.Collections.Generic;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 
-namespace Crosschat.Client
+namespace SharedSquawk.Client
 {
 	public class EndpointFinder
 	{

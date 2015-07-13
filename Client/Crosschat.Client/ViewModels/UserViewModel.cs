@@ -1,8 +1,8 @@
-﻿using Crosschat.Client.Seedwork;
-using Crosschat.Server.Application.DataTransferObjects.Messages;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+﻿using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Server.Application.DataTransferObjects.Messages;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 
-namespace Crosschat.Client.ViewModels
+namespace SharedSquawk.Client.ViewModels
 {
     public class UserViewModel : ViewModelBase
     {

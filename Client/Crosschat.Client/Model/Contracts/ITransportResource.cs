@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 
-namespace Crosschat.Client.Model.Contracts
+namespace SharedSquawk.Client.Model.Contracts
 {
     public interface ITransportResource
     {

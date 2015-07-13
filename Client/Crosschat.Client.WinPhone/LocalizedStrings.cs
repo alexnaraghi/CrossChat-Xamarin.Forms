@@ -1,6 +1,6 @@
-﻿using Crosschat.Client.WinPhone.Resources;
+﻿using SharedSquawk.Client.WinPhone.Resources;
 
-namespace Crosschat.Client.WinPhone
+namespace SharedSquawk.Client.WinPhone
 {
     /// <summary>
     /// Provides access to string resources.

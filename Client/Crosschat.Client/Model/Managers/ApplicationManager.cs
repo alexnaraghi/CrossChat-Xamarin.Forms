@@ -1,11 +1,11 @@
 ﻿#define ALEXMOCK
 
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Client.Model.Proxies;
-using Crosschat.Server.Application.DataTransferObjects.Utils;
-using Crosschat.Server.Infrastructure.Protocol;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Client.Model.Proxies;
+using SharedSquawk.Server.Application.DataTransferObjects.Utils;
+using SharedSquawk.Server.Infrastructure.Protocol;
 
-namespace Crosschat.Client.Model.Managers
+namespace SharedSquawk.Client.Model.Managers
 {
     /// <summary>
     /// Managers locator

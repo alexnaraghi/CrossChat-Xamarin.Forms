@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
-using Crosschat.Client.Droid.Infrastructure;
-using Crosschat.Client.Model.Contracts;
+using SharedSquawk.Client.Droid.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(DeviceInfo))]
 
-namespace Crosschat.Client.Droid.Infrastructure
+namespace SharedSquawk.Client.Droid.Infrastructure
 {
     public class DeviceInfo : IDeviceInfo
     {

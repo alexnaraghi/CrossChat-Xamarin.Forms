@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using Crosschat.Client.ViewModels;
+using SharedSquawk.Client.ViewModels;
 
-namespace Crosschat.Client.WinPhone
+namespace SharedSquawk.Client.WinPhone
 {
     public class MessageDataTemplateSelector : ContentControl
     {

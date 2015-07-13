@@ -1,8 +1,8 @@
 ﻿using System;
-using Crosschat.Client.Model.Entities.Messages;
-using Crosschat.Server.Infrastructure;
+using SharedSquawk.Client.Model.Entities.Messages;
+using SharedSquawk.Server.Infrastructure;
 
-namespace Crosschat.Client.ViewModels
+namespace SharedSquawk.Client.ViewModels
 {
     public class TextMessageViewModel : EventViewModel
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
-using Crosschat.Client.Model.Proxies;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Client.Model.Proxies;
 
-namespace Crosschat.Client
+namespace SharedSquawk.Client
 {
 	public class SquawkChatServiceProxy : ServiceProxyBase, IChatServiceProxy
 	{

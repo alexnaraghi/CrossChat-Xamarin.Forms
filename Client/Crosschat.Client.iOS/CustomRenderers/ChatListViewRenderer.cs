@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
-using Crosschat.Client.iOS.CustomRenderers;
-using Crosschat.Client.Views.Controls;
+using SharedSquawk.Client.iOS.CustomRenderers;
+using SharedSquawk.Client.Views.Controls;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using Xamarin.Forms;
@@ -10,7 +10,7 @@ using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(ChatListView), typeof(ChatListViewRenderer))]
 
-namespace Crosschat.Client.iOS.CustomRenderers
+namespace SharedSquawk.Client.iOS.CustomRenderers
 {
     /// <summary>
     /// Thanks to MartinBooth for the example how to create DynamicRowHeightListViewRenderer

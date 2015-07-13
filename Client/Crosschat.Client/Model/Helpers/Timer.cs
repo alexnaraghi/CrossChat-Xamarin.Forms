@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Crosschat.Client
+namespace SharedSquawk.Client
 {
 	public sealed class Timer : CancellationTokenSource {
 		public bool IsDisposed { get; private set; }

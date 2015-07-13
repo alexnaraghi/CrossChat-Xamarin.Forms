@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Crosschat.Client.Properties;
+using SharedSquawk.Client.Properties;
 using Xamarin.Forms;
 
-namespace Crosschat.Client.Seedwork
+namespace SharedSquawk.Client.Seedwork
 {
     public class ViewModelBase : INotifyPropertyChanged
     {
@@ -52,10 +52,26 @@ namespace Crosschat.Client.Seedwork
         public Task ShowAsync()
         {
             //auto-wiring VM with view like MvvmCross and Caliburn do
-            string viewModelName = "Crosschat.Client.Views." + GetType().Name.Replace("ViewModel", "") + "Page";
+            string viewModelName = "SharedSquawk.Client.Views." + GetType().Name.Replace("ViewModel", "") + "Page";
             var page = Activator.CreateInstance(Type.GetType(viewModelName), this) as Page;
             return _currentPage.Navigation.PushAsync(page);
         }
+
+		public Task ShowModalAsync()
+		{
+			//auto-wiring VM with view like MvvmCross and Caliburn do
+			string viewModelName = "SharedSquawk.Client.Views." + GetType().Name.Replace("ViewModel", "") + "Page";
+			var page = Activator.CreateInstance(Type.GetType(viewModelName), this) as Page;
+			return _currentPage.Navigation.PushModalAsync(page);
+		}
+
+		public Task ShowModalAsyncWithNavPage()
+		{
+			//auto-wiring VM with view like MvvmCross and Caliburn do
+			string viewModelName = "SharedSquawk.Client.Views." + GetType().Name.Replace("ViewModel", "") + "Page";
+			var page = Activator.CreateInstance(Type.GetType(viewModelName), this) as Page;
+			return _currentPage.Navigation.PushModalAsync(new NavigationPage(page){Title = page.Title, Icon = page.Icon});
+		}
 
 		public Task PopToRootAsync()
 		{

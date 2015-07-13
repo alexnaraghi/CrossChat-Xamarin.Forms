@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Client.Model.Proxies;
-using Crosschat.Server.Application.DataTransferObjects.Enums;
-using Crosschat.Server.Application.DataTransferObjects.Messages;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Client.Model.Proxies;
+using SharedSquawk.Server.Application.DataTransferObjects.Enums;
+using SharedSquawk.Server.Application.DataTransferObjects.Messages;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 using System;
 
-namespace Crosschat.Client.Model.Managers
+namespace SharedSquawk.Client.Model.Managers
 {
     public class AccountManager : ManagerBase
     {

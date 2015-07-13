@@ -1,16 +1,13 @@
-﻿using Crosschat.Client.Seedwork;
-using Crosschat.Client.Seedwork.Controls;
+﻿using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Client.Seedwork.Controls;
 using Xamarin.Forms;
 
-namespace Crosschat.Client.Views
+namespace SharedSquawk.Client.Views
 {
     public class SettingsPage : MvvmableContentPage
     {
         public SettingsPage(ViewModelBase viewModel) : base(viewModel)
         {
-            Title = "Settings";
-            Icon = "settings.png";
-
             var logoutButton = new Button();
 			logoutButton.Text = "Logout";
 			logoutButton.SetBinding(Button.CommandProperty, new Binding("LogoutCommand"));

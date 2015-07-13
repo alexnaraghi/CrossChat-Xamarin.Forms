@@ -1,4 +1,4 @@
-﻿namespace Crosschat.Server.Infrastructure.Protocol
+﻿namespace SharedSquawk.Server.Infrastructure.Protocol
 {
     public enum CommandNames
     {

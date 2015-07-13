@@ -1,9 +1,9 @@
 ﻿using System;
 using Xamarin.Forms;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 using System.Threading.Tasks;
 
-namespace Crosschat.Client
+namespace SharedSquawk.Client
 {
 	public interface IChatServiceProxy
 	{

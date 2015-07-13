@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.Provider;
-using Crosschat.Client.Droid.Infrastructure;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Client.Model.Entities;
+using SharedSquawk.Client.Droid.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Client.Model.Entities;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: Xamarin.Forms.Dependency(typeof(ContactsRepository))]
 
-namespace Crosschat.Client.Droid.Infrastructure
+namespace SharedSquawk.Client.Droid.Infrastructure
 {
     public class ContactsRepository : IContactsRepository
     {

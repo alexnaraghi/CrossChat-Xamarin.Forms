@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{5d1404ec-45b7-4bfb-94b0-d2f09b4dbc0c}" Title="CrossСhat" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Crosschat.Client.WinPhone author" Description="Cross-platform chat" Publisher="Crosschat.Client.WinPhone" PublisherID="{a4410233-4f22-4a1d-8a14-9762e81c5fc1}">
+  <App xmlns="" ProductID="{5d1404ec-45b7-4bfb-94b0-d2f09b4dbc0c}" Title="CrossСhat" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="SharedSquawk.Client.WinPhone author" Description="Cross-platform chat" Publisher="SharedSquawk.Client.WinPhone" PublisherID="{a4410233-4f22-4a1d-8a14-9762e81c5fc1}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
@@ -20,7 +20,7 @@
           <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
           <Count>0</Count>
           <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
-          <Title>Crosschat.Client.WinPhone</Title>
+          <Title>SharedSquawk.Client.WinPhone</Title>
           <BackContent>
           </BackContent>
           <BackBackgroundImageURI>

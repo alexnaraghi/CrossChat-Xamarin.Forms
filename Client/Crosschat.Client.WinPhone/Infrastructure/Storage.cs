@@ -1,12 +1,12 @@
 ﻿using System.IO.IsolatedStorage;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Client.WinPhone.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Client.WinPhone.Infrastructure;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(Storage))]
 
 
-namespace Crosschat.Client.WinPhone.Infrastructure
+namespace SharedSquawk.Client.WinPhone.Infrastructure
 {
     public class Storage : IStorage
     {

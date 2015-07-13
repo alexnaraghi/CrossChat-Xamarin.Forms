@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 
-namespace Crosschat.Server.Application.DataTransferObjects.Utils
+namespace SharedSquawk.Server.Application.DataTransferObjects.Utils
 {
     public class RequestsHandler
     {

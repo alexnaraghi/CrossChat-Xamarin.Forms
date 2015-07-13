@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crosschat
+namespace SharedSquawk
 {
     public static class StringExtensions
     {

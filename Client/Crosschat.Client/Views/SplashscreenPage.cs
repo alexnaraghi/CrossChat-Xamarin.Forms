@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Client.Model.Managers;
-using Crosschat.Client.Seedwork;
-using Crosschat.Client.ViewModels;
-using Crosschat.Server.Application.DataTransferObjects.Enums;
-using Crosschat.Server.Infrastructure.Protocol;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Client.Model.Managers;
+using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Client.ViewModels;
+using SharedSquawk.Server.Application.DataTransferObjects.Enums;
+using SharedSquawk.Server.Infrastructure.Protocol;
 using Xamarin.Forms;
 
-namespace Crosschat.Client.Views
+namespace SharedSquawk.Client.Views
 {
     public class SplashscreenPage : ContentPage
     {

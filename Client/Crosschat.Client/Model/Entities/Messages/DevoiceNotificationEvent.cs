@@ -1,4 +1,4 @@
-﻿namespace Crosschat.Client.Model.Entities.Messages
+﻿namespace SharedSquawk.Client.Model.Entities.Messages
 {
     public class DevoiceNotificationEvent : Event
     {

@@ -1,12 +1,12 @@
 ﻿using Android.Content;
-using Crosschat.Client.Droid.Infrastructure;
-using Crosschat.Client.Model.Contracts;
+using SharedSquawk.Client.Droid.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(Storage))]
 
 
-namespace Crosschat.Client.Droid.Infrastructure
+namespace SharedSquawk.Client.Droid.Infrastructure
 {
     public class Storage : IStorage
     {

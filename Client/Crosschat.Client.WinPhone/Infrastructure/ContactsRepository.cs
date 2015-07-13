@@ -1,14 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Client.WinPhone.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Client.WinPhone.Infrastructure;
 using Microsoft.Phone.UserData;
 using Xamarin.Forms;
-using Contact = Crosschat.Client.Model.Entities.Contact;
+using Contact = SharedSquawk.Client.Model.Entities.Contact;
 
 [assembly: Dependency(typeof(ContactsRepository))]
 
-namespace Crosschat.Client.WinPhone.Infrastructure
+namespace SharedSquawk.Client.WinPhone.Infrastructure
 {
     public class ContactsRepository : IContactsRepository
     {

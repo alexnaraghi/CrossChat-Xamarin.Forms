@@ -1,11 +1,11 @@
 ﻿using System;
-using Crosschat.Client.Model.Proxies;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Client.Model.Proxies;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 using System.Threading.Tasks;
-using Crosschat.Server.Application.DataTransferObjects.Messages;
-using Crosschat.Server.Application.DataTransferObjects.Enums;
+using SharedSquawk.Server.Application.DataTransferObjects.Messages;
+using SharedSquawk.Server.Application.DataTransferObjects.Enums;
 
-namespace Crosschat.Client
+namespace SharedSquawk.Client
 {
 	public class FakeServiceProxyBase : ServiceProxyBase
 	{

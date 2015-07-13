@@ -1,6 +1,6 @@
-﻿using Crosschat.Client.Model.Entities;
+﻿using SharedSquawk.Client.Model.Entities;
 
-namespace Crosschat.Client.Model
+namespace SharedSquawk.Client.Model
 {
     public class CountriesRepository
     {

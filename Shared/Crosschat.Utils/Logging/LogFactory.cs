@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crosschat.Utils.Logging
+namespace SharedSquawk.Utils.Logging
 {
     public static class LogFactory
     {

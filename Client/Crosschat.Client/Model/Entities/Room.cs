@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crosschat.Client
+namespace SharedSquawk.Client
 {
 	public class Room
 	{

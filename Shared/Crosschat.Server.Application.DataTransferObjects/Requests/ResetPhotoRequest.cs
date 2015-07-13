@@ -1,4 +1,4 @@
-﻿namespace Crosschat.Server.Application.DataTransferObjects.Requests
+﻿namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 {
     public class ResetPhotoRequest : RequestBase
     {

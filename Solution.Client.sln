@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosschat.Client", "Client\Crosschat.Client\Crosschat.Client.csproj", "{DC6F7A4F-F7EA-4ABD-9A30-BED567B4EB22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedSquawk.Client", "Client\Crosschat.Client\SharedSquawk.Client.csproj", "{DC6F7A4F-F7EA-4ABD-9A30-BED567B4EB22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosschat.Client.iOS", "Client\Crosschat.Client.iOS\Crosschat.Client.iOS.csproj", "{52743AE7-E6F5-4AB6-B21A-61B57C3F8C8F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedSquawk.Client.iOS", "Client\Crosschat.Client.iOS\SharedSquawk.Client.iOS.csproj", "{52743AE7-E6F5-4AB6-B21A-61B57C3F8C8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosschat.Client.Android", "Client\Crosschat.Client.Android\Crosschat.Client.Android.csproj", "{CCB8E0FE-478C-4A29-A39E-98DCE66BA5CB}"
 EndProject
@@ -13,11 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosschat.Client.WinPhone",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{B7D4362D-8567-43E2-A4EB-93C1D0585696}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosschat.Utils", "Shared\Crosschat.Utils\Crosschat.Utils.csproj", "{3B0CEA1F-3936-4BB0-9889-D7C14617FD6D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedSquawk.Utils", "Shared\Crosschat.Utils\SharedSquawk.Utils.csproj", "{3B0CEA1F-3936-4BB0-9889-D7C14617FD6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosschat.Server.Application.DataTransferObjects", "Shared\Crosschat.Server.Application.DataTransferObjects\Crosschat.Server.Application.DataTransferObjects.csproj", "{5B665C38-2C1F-4B21-947B-ED54E5C4ABBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedSquawk.Server.Application.DataTransferObjects", "Shared\Crosschat.Server.Application.DataTransferObjects\SharedSquawk.Server.Application.DataTransferObjects.csproj", "{5B665C38-2C1F-4B21-947B-ED54E5C4ABBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosschat.Server.Infrastructure.Protocol", "Shared\Crosschat.Server.Infrastructure.Protocol\Crosschat.Server.Infrastructure.Protocol.csproj", "{5763956E-F7E1-4DD4-91B9-1F4438961311}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedSquawk.Server.Infrastructure.Protocol", "Shared\Crosschat.Server.Infrastructure.Protocol\SharedSquawk.Server.Infrastructure.Protocol.csproj", "{5763956E-F7E1-4DD4-91B9-1F4438961311}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

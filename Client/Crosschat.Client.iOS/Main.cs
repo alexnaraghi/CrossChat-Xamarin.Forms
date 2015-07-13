@@ -1,6 +1,6 @@
 ﻿using MonoTouch.UIKit;
 
-namespace Crosschat.Client.iOS
+namespace SharedSquawk.Client.iOS
 {
     public class Application
     {

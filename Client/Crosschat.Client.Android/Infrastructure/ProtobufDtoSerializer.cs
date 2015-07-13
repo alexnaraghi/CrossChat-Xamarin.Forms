@@ -1,14 +1,14 @@
 ﻿using System.IO;
 using System.Linq;
-using Crosschat.Client.Droid.Infrastructure;
-using Crosschat.Server.Application.DataTransferObjects.Messages;
-using Crosschat.Server.Infrastructure.Protocol;
+using SharedSquawk.Client.Droid.Infrastructure;
+using SharedSquawk.Server.Application.DataTransferObjects.Messages;
+using SharedSquawk.Server.Infrastructure.Protocol;
 using ProtoBuf.Meta;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(ProtobufSerializer))]
 
-namespace Crosschat.Client.Droid.Infrastructure
+namespace SharedSquawk.Client.Droid.Infrastructure
 {
     public class ProtobufSerializer : IDtoSerializer
     {

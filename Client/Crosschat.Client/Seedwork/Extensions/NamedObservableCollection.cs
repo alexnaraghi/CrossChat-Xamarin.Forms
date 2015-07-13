@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Crosschat.Client.Seedwork.Extensions
+namespace SharedSquawk.Client.Seedwork.Extensions
 {
     public class NamedObservableCollection<TItem> : ObservableCollection<TItem>
     {

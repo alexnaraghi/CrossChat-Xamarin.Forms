@@ -1,6 +1,6 @@
-﻿using Crosschat.Server.Application.DataTransferObjects.Messages;
+﻿using SharedSquawk.Server.Application.DataTransferObjects.Messages;
 
-namespace Crosschat.Server.Application.DataTransferObjects.Requests
+namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 {
     public class UsersSearchRequest : RequestBase
     {

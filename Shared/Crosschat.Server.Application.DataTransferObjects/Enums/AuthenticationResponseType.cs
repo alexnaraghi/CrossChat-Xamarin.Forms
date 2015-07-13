@@ -1,4 +1,4 @@
-﻿namespace Crosschat.Server.Application.DataTransferObjects.Enums
+﻿namespace SharedSquawk.Server.Application.DataTransferObjects.Enums
 {
     public enum AuthenticationResponseType
     {

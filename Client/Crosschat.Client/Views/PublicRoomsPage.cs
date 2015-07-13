@@ -1,15 +1,14 @@
-﻿using Crosschat.Client.Seedwork;
-using Crosschat.Client.Seedwork.Controls;
+﻿using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Client.Seedwork.Controls;
 using Xamarin.Forms;
 
-namespace Crosschat.Client.Views
+namespace SharedSquawk.Client.Views
 {
     public class PublicRoomsPage : MvvmableContentPage
     {
 		public PublicRoomsPage(ViewModelBase viewModel) : base(viewModel)
         {
-            Title = "Public Rooms";
-            Icon = "group.png";
+            
 
             var listView = new BindableListView
                 {

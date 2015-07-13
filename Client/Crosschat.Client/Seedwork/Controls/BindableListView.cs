@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace Crosschat.Client.Seedwork.Controls
+namespace SharedSquawk.Client.Seedwork.Controls
 {
     public class BindableListView : ListView
     {

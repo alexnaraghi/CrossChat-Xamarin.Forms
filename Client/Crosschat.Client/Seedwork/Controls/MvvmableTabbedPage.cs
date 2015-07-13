@@ -1,6 +1,6 @@
 using Xamarin.Forms;
 
-namespace Crosschat.Client.Seedwork.Controls
+namespace SharedSquawk.Client.Seedwork.Controls
 {
     public class MvvmableTabbedPage : TabbedPage
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Crosschat.Utils.Tasking
+namespace SharedSquawk.Utils.Tasking
 {
     public static class AsyncExtensions
     {

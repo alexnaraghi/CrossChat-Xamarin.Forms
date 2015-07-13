@@ -11,7 +11,7 @@ using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace Crosschat.Client.iOS.CustomRenderers
+namespace SharedSquawk.Client.iOS.CustomRenderers
 {
     public class BubbleCell : UITableViewCell
     {

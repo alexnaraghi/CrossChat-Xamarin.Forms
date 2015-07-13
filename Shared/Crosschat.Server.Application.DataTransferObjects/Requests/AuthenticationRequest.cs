@@ -1,7 +1,7 @@
-﻿using Crosschat.Server.Application.DataTransferObjects.Enums;
-using Crosschat.Server.Application.DataTransferObjects.Messages;
+﻿using SharedSquawk.Server.Application.DataTransferObjects.Enums;
+using SharedSquawk.Server.Application.DataTransferObjects.Messages;
 
-namespace Crosschat.Server.Application.DataTransferObjects.Requests
+namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 {
     public class AuthenticationRequest : RequestBase
     {

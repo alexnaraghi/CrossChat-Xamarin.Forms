@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Xml.Serialization;
 
-namespace Crosschat.Server.Application.DataTransferObjects.Requests
+namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 {
     public class RequestBase
     {

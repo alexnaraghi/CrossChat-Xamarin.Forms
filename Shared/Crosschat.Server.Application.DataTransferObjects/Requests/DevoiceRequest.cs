@@ -1,6 +1,6 @@
-﻿using Crosschat.Server.Application.DataTransferObjects.Enums;
+﻿using SharedSquawk.Server.Application.DataTransferObjects.Enums;
 
-namespace Crosschat.Server.Application.DataTransferObjects.Requests
+namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 {
     public class DevoiceRequest : RequestBase
     {

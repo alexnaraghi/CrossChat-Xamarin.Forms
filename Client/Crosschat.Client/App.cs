@@ -1,11 +1,11 @@
-﻿using Crosschat.Client.ViewModels;
-using Crosschat.Client.Views;
+﻿using SharedSquawk.Client.ViewModels;
+using SharedSquawk.Client.Views;
 using Xamarin.Forms;
-using Crosschat.Client.Model.Managers;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Server.Infrastructure.Protocol;
+using SharedSquawk.Client.Model.Managers;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Server.Infrastructure.Protocol;
 
-namespace Crosschat.Client
+namespace SharedSquawk.Client
 {
     public class App
     {

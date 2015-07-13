@@ -1,9 +1,9 @@
-﻿using Crosschat.Client.Seedwork;
-using Crosschat.Client.Seedwork.Controls;
-using Crosschat.Client.Views.ValueConverters;
+﻿using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Client.Seedwork.Controls;
+using SharedSquawk.Client.Views.ValueConverters;
 using Xamarin.Forms;
 
-namespace Crosschat.Client.Views
+namespace SharedSquawk.Client.Views
 {
     public class RegistrationPage : MvvmableContentPage
     {

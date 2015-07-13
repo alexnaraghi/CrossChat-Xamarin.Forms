@@ -11,7 +11,7 @@ using MonoTouch.Dialog;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace Crosschat.Client.iOS.CustomRenderers
+namespace SharedSquawk.Client.iOS.CustomRenderers
 {
     public class ChatBubble : Element, IElementSizing
     {

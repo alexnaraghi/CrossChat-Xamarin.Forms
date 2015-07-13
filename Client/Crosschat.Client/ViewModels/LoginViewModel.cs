@@ -1,14 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Crosschat.Client.Model;
-using Crosschat.Client.Model.Managers;
-using Crosschat.Client.Seedwork;
-using Crosschat.Server.Application.DataTransferObjects.Enums;
+using SharedSquawk.Client.Model;
+using SharedSquawk.Client.Model.Managers;
+using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Server.Application.DataTransferObjects.Enums;
 using Xamarin.Forms;
 using System;
 
-namespace Crosschat.Client.ViewModels
+namespace SharedSquawk.Client.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
@@ -66,7 +66,7 @@ namespace Crosschat.Client.ViewModels
 
                 if (registrationResult == true)
                 {
-                    await new HomeViewModel(_appManager).ShowAsync();
+					await new HomeViewModel(_appManager).ShowModalAsyncWithNavPage();
                 }
                 else if (registrationResult == false)
                 {

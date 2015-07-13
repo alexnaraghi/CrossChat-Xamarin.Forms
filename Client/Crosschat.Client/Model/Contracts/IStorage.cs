@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Crosschat.Client.Model.Contracts
+namespace SharedSquawk.Client.Model.Contracts
 {
     public interface IStorage
     {

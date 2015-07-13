@@ -1,9 +1,9 @@
 ﻿using System;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Crosschat.Client
+namespace SharedSquawk.Client
 {
 	public class ChatUpdateBuilder
 	{

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Crosschat.Client.iOS.Infrastructure;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Server.Infrastructure;
+using SharedSquawk.Client.iOS.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Server.Infrastructure;
 using Xamarin.Forms;
 
 
 
-namespace Crosschat.Client.iOS.Infrastructure
+namespace SharedSquawk.Client.iOS.Infrastructure
 {
 	/*
 	public class TransportResource : ITransportResource

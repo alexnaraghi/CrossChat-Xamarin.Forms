@@ -2,7 +2,7 @@
 using System.Globalization;
 using Xamarin.Forms;
 
-namespace Crosschat.Client.Views.ValueConverters
+namespace SharedSquawk.Client.Views.ValueConverters
 {
     public class InverterConverter : IValueConverter
     {

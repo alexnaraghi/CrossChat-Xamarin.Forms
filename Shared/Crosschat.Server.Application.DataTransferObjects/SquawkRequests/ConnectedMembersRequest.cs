@@ -1,10 +1,10 @@
-﻿using Crosschat.Server.Application.DataTransferObjects.Enums;
-using Crosschat.Server.Application.DataTransferObjects.Messages;
+﻿using SharedSquawk.Server.Application.DataTransferObjects.Enums;
+using SharedSquawk.Server.Application.DataTransferObjects.Messages;
 using System.Xml.Serialization;
 using System;
 using System.Collections.Generic;
 
-namespace Crosschat.Server.Application.DataTransferObjects.Requests
+namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 {
 	[XmlType(TypeName = "U", Namespace = "")]
     public class ConnectedMembersRequest : RequestBase

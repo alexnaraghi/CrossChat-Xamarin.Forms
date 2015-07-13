@@ -1,7 +1,7 @@
-﻿using Crosschat.Client.Model.Entities;
-using Crosschat.Client.Seedwork;
+﻿using SharedSquawk.Client.Model.Entities;
+using SharedSquawk.Client.Seedwork;
 
-namespace Crosschat.Client.ViewModels
+namespace SharedSquawk.Client.ViewModels
 {
     public class ContactViewModel : ViewModelBase
     {

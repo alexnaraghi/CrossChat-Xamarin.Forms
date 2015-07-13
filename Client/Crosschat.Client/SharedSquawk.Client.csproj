@@ -8,8 +8,7 @@
     <ProjectGuid>{DC6F7A4F-F7EA-4ABD-9A30-BED567B4EB22}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Crosschat.Client</RootNamespace>
-    <AssemblyName>Crosschat.Client</AssemblyName>
+    <RootNamespace>SharedSquawk.Client</RootNamespace>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -24,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AssemblyName>SharedSquawk.Client</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AssemblyName>SharedSquawk.Client</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -43,6 +44,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <WarningLevel>4</WarningLevel>
     <Optimize>false</Optimize>
+    <AssemblyName>Crosschat.Client</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -53,6 +55,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <WarningLevel>4</WarningLevel>
+    <AssemblyName>Crosschat.Client</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\Server\Crosschat.Server.Infrastructure\GlobalConfig.cs">
@@ -134,17 +137,17 @@
     <Compile Include="Model\Entities\Room.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\Crosschat.Server.Application.DataTransferObjects\Crosschat.Server.Application.DataTransferObjects.csproj">
-      <Project>{5B665C38-2C1F-4B21-947B-ED54E5C4ABBC}</Project>
-      <Name>Crosschat.Server.Application.DataTransferObjects</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Shared\Crosschat.Server.Infrastructure.Protocol\Crosschat.Server.Infrastructure.Protocol.csproj">
-      <Project>{5763956E-F7E1-4DD4-91B9-1F4438961311}</Project>
-      <Name>Crosschat.Server.Infrastructure.Protocol</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Shared\Crosschat.Utils\Crosschat.Utils.csproj">
+    <ProjectReference Include="..\..\Shared\Crosschat.Utils\SharedSquawk.Utils.csproj">
       <Project>{3B0CEA1F-3936-4BB0-9889-D7C14617FD6D}</Project>
-      <Name>Crosschat.Utils</Name>
+      <Name>SharedSquawk.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\Crosschat.Server.Infrastructure.Protocol\SharedSquawk.Server.Infrastructure.Protocol.csproj">
+      <Project>{5763956E-F7E1-4DD4-91B9-1F4438961311}</Project>
+      <Name>SharedSquawk.Server.Infrastructure.Protocol</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\Crosschat.Server.Application.DataTransferObjects\SharedSquawk.Server.Application.DataTransferObjects.csproj">
+      <Project>{5B665C38-2C1F-4B21-947B-ED54E5C4ABBC}</Project>
+      <Name>SharedSquawk.Server.Application.DataTransferObjects</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

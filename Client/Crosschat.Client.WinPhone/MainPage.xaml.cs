@@ -11,7 +11,7 @@ using Microsoft.Phone.Shell;
 using Xamarin.Forms;
 
 
-namespace Crosschat.Client.WinPhone
+namespace SharedSquawk.Client.WinPhone
 {
     public partial class MainPage : PhoneApplicationPage
     {
@@ -20,7 +20,7 @@ namespace Crosschat.Client.WinPhone
             InitializeComponent();
 
             Forms.Init();
-            Content = Crosschat.Client.App.GetMainPage().ConvertPageToUIElement(this);
+            Content = SharedSquawk.Client.App.GetMainPage().ConvertPageToUIElement(this);
         }
     }
 }

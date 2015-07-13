@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace Crosschat.Client.Views.Controls
+namespace SharedSquawk.Client.Views.Controls
 {
     public class MessageViewCell : ViewCell
     {

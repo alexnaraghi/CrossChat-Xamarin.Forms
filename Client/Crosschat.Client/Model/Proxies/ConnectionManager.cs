@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Server.Application.DataTransferObjects.Messages;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
-using Crosschat.Server.Application.DataTransferObjects.Utils;
-using Crosschat.Server.Infrastructure.Protocol;
-using Crosschat.Utils.Tasking;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Server.Application.DataTransferObjects.Messages;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Server.Application.DataTransferObjects.Utils;
+using SharedSquawk.Server.Infrastructure.Protocol;
+using SharedSquawk.Utils.Tasking;
 
-namespace Crosschat.Client.Model.Proxies
+namespace SharedSquawk.Client.Model.Proxies
 {
 	public class ConnectionManager
     {

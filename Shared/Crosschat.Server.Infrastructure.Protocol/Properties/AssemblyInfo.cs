@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Crosschat.Server.Infrastructure.Protocol")]
+[assembly: AssemblyTitle("SharedSquawk.Server.Infrastructure.Protocol")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Crosschat.Server.Infrastructure.Protocol")]
+[assembly: AssemblyProduct("SharedSquawk.Server.Infrastructure.Protocol")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

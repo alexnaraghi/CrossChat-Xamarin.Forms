@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Crosschat.Client.Model.Entities.Messages;
+using SharedSquawk.Client.Model.Entities.Messages;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Crosschat.Client.Seedwork.Extensions;
+using SharedSquawk.Client.Seedwork.Extensions;
 
-namespace Crosschat.Client
+namespace SharedSquawk.Client
 {
 	public class RoomCollection : ObservableDictionary<string, ObservableCollection<Event>>
 	{

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Crosschat.Client.Droid.Infrastructure;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Server.Infrastructure;
+using SharedSquawk.Client.Droid.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Server.Infrastructure;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(TransportResource))]
 
-namespace Crosschat.Client.Droid.Infrastructure
+namespace SharedSquawk.Client.Droid.Infrastructure
 {
     public class TransportResource : ITransportResource
     {

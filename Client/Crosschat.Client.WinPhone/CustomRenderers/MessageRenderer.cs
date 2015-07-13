@@ -1,13 +1,13 @@
 ﻿using System.Windows;
-using Crosschat.Client.Views.Controls;
-using Crosschat.Client.WinPhone.CustomRenderers;
+using SharedSquawk.Client.Views.Controls;
+using SharedSquawk.Client.WinPhone.CustomRenderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.WinPhone;
 using DataTemplate = System.Windows.DataTemplate;
 
 [assembly: ExportRenderer(typeof(MessageViewCell), typeof(MessageRenderer))]
 
-namespace Crosschat.Client.WinPhone.CustomRenderers
+namespace SharedSquawk.Client.WinPhone.CustomRenderers
 {
 
     public class MessageRenderer : ViewCellRenderer

@@ -1,6 +1,6 @@
-﻿using Crosschat.Server.Application.DataTransferObjects.Requests;
+﻿using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 
-namespace Crosschat.Server.Application.DataTransferObjects.Messages
+namespace SharedSquawk.Server.Application.DataTransferObjects.Messages
 {
     public class JoinedUserInfo : BaseDto
     {

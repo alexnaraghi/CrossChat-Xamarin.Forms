@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crosschat.Server.Infrastructure.Protocol
+namespace SharedSquawk.Server.Infrastructure.Protocol
 {
 	/*
     public class CommandBuffer

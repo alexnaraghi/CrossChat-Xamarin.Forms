@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using Xamarin.Forms;
 
-namespace Crosschat.Client.Seedwork.Controls
+namespace SharedSquawk.Client.Seedwork.Controls
 {
     public class BindablePicker : Picker
     {

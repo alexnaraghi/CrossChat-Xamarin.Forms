@@ -1,6 +1,6 @@
-﻿using Crosschat.Client.Model.Entities;
+﻿using SharedSquawk.Client.Model.Entities;
 
-namespace Crosschat.Client.Model.Contracts
+namespace SharedSquawk.Client.Model.Contracts
 {
     public interface IContactInvitationSender
     {

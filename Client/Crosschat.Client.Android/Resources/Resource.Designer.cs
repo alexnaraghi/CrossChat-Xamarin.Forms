@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("Crosschat.Client.Droid.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("SharedSquawk.Client.Droid.Resource", IsApplication=true)]
 
-namespace Crosschat.Client.Droid
+namespace SharedSquawk.Client.Droid
 {
 	
 	

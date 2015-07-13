@@ -1,4 +1,4 @@
-namespace Crosschat.Server.Infrastructure
+namespace SharedSquawk.Server.Infrastructure
 {
     public static class GlobalConfig
     {

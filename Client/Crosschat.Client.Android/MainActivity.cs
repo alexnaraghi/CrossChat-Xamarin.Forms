@@ -4,9 +4,9 @@ using Android.OS;
 
 using Xamarin.Forms.Platform.Android;
 
-namespace Crosschat.Client.Droid
+namespace SharedSquawk.Client.Droid
 {
-    [Activity(Label = "Crosschat.Client", MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait)]
+    [Activity(Label = "SharedSquawk.Client", MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : AndroidActivity
     {
         protected override void OnCreate(Bundle bundle)

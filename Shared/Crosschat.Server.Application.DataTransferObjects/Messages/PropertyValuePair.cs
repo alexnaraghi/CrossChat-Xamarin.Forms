@@ -1,4 +1,4 @@
-﻿namespace Crosschat.Server.Application.DataTransferObjects.Messages
+﻿namespace SharedSquawk.Server.Application.DataTransferObjects.Messages
 {
     public class PropertyValuePair
     {

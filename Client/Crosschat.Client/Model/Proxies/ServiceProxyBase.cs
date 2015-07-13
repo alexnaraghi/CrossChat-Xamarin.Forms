@@ -1,4 +1,4 @@
-﻿namespace Crosschat.Client.Model.Proxies
+﻿namespace SharedSquawk.Client.Model.Proxies
 {
 
     public class ServiceProxyBase

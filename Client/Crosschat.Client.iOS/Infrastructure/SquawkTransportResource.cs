@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using Crosschat.Client.iOS.Infrastructure;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Server.Infrastructure;
+using SharedSquawk.Client.iOS.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Server.Infrastructure;
 using Xamarin.Forms;
 using System.Net;
 using System.IO;
 using System.Xml.Serialization;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 using System.Xml;
 using System.Reflection;
 
 [assembly: Dependency(typeof(SquawkTransportResource))]
 
-namespace Crosschat.Client.iOS.Infrastructure
+namespace SharedSquawk.Client.iOS.Infrastructure
 {
     public class 
 		SquawkTransportResource: ITransportResource

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Crosschat.Client.Model.Contracts
+namespace SharedSquawk.Client.Model.Contracts
 {
     public interface IPhotoPicker
     {

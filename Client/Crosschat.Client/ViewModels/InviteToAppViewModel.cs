@@ -1,12 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Client.Seedwork;
-using Crosschat.Client.Seedwork.Extensions;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Client.Seedwork.Extensions;
 using Xamarin.Forms;
 
-namespace Crosschat.Client.ViewModels
+namespace SharedSquawk.Client.ViewModels
 {
     public class InviteToAppViewModel : ViewModelBase
     {

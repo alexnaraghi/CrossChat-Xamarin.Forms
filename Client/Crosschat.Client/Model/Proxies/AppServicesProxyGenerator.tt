@@ -3,8 +3,8 @@
 <#@ assembly name="System.Xml.dll" #>
 <#@ assembly name="System.Xml.Linq.dll" #>
 <#@ assembly name="System.Runtime.dll" #>
-<#@ assembly name="$(SolutionDir)Server\Crosschat.Server.Application\bin\Debug\Crosschat.Server.Application.DataTransferObjects.dll" #>
-<#@ assembly name="$(SolutionDir)Server\Crosschat.Server.Application\bin\Debug\Crosschat.Server.Application.dll" #>
+<#@ assembly name="$(SolutionDir)Server\SharedSquawk.Server.Application\bin\Debug\SharedSquawk.Server.Application.DataTransferObjects.dll" #>
+<#@ assembly name="$(SolutionDir)Server\SharedSquawk.Server.Application\bin\Debug\SharedSquawk.Server.Application.dll" #>
 <#@ import namespace="System.Xml" #>
 <#@ import namespace="System.Xml.Linq" #>
 <#@ import namespace="System.Linq" #>
@@ -12,15 +12,15 @@
 <#@ import namespace="System" #>
 <#@ import namespace="System.Reflection" #>
 <#@ import namespace="System.Runtime" #>
-<#@ import namespace="Crosschat.Server.Application.Seedwork" #>
-<#@ import namespace="Crosschat.Server.Application.Services" #>
-<#@ import namespace="Crosschat.Server.Application.DataTransferObjects.Requests" #>
+<#@ import namespace="SharedSquawk.Server.Application.Seedwork" #>
+<#@ import namespace="SharedSquawk.Server.Application.Services" #>
+<#@ import namespace="SharedSquawk.Server.Application.DataTransferObjects.Requests" #>
 <#@ output extension=".cs" #>
 using System.Threading.Tasks;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 
 
-namespace Crosschat.Client.Model.Proxies
+namespace SharedSquawk.Client.Model.Proxies
 {
 <# 
 var appAssembly = Assembly.GetAssembly(typeof (AppService));

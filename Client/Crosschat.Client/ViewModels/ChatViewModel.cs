@@ -1,16 +1,16 @@
 ﻿using System;
-using Crosschat.Client.Seedwork;
-using Crosschat.Client.Model.Managers;
+using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Client.Model.Managers;
 using System.Windows.Input;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
-using Crosschat.Client.Model.Entities.Messages;
-using Crosschat.Client.Seedwork.Extensions;
+using SharedSquawk.Client.Model.Entities.Messages;
+using SharedSquawk.Client.Seedwork.Extensions;
 using System.Collections.Specialized;
 using System.Linq;
-using Crosschat.Client.Views;
+using SharedSquawk.Client.Views;
 
-namespace Crosschat.Client.ViewModels
+namespace SharedSquawk.Client.ViewModels
 {
 	public class ChatViewModel : ViewModelBase
 	{

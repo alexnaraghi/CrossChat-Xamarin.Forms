@@ -6,9 +6,9 @@ using System.Windows.Markup;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using Crosschat.Client.WinPhone.Resources;
+using SharedSquawk.Client.WinPhone.Resources;
 
-namespace Crosschat.Client.WinPhone
+namespace SharedSquawk.Client.WinPhone
 {
     public partial class App : Application
     {

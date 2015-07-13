@@ -1,4 +1,4 @@
-﻿namespace Crosschat.Client.Model.Entities
+﻿namespace SharedSquawk.Client.Model.Entities
 {
     public class Country
     {

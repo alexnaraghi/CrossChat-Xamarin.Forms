@@ -1,11 +1,11 @@
 ﻿using System;
 
 using Xamarin.Forms;
-using Crosschat.Client.Seedwork.Controls;
-using Crosschat.Client.Seedwork;
-using Crosschat.Client.Views.ValueConverters;
+using SharedSquawk.Client.Seedwork.Controls;
+using SharedSquawk.Client.Seedwork;
+using SharedSquawk.Client.Views.ValueConverters;
 
-namespace Crosschat.Client
+namespace SharedSquawk.Client
 {
 	public class LoginPage : MvvmableContentPage
 	{

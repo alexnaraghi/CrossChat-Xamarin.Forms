@@ -1,9 +1,9 @@
-﻿using Crosschat.Server.Application.DataTransferObjects.Enums;
-using Crosschat.Server.Application.DataTransferObjects.Messages;
+﻿using SharedSquawk.Server.Application.DataTransferObjects.Enums;
+using SharedSquawk.Server.Application.DataTransferObjects.Messages;
 using System.Xml.Serialization;
 using System;
 
-namespace Crosschat.Server.Application.DataTransferObjects.Requests
+namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 {
 	[XmlType(TypeName = "LI", Namespace = "")]
     public class LoginRequest : RequestBase

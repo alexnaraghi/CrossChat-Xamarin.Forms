@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Crosschat //common namespace to see these methods everywhere without usings
+namespace SharedSquawk //common namespace to see these methods everywhere without usings
 {
     public static class EnumerableExtensions
     {        

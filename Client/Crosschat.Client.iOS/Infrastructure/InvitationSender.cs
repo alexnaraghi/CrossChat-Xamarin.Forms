@@ -1,13 +1,13 @@
-﻿using Crosschat.Client.iOS.Infrastructure;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Client.Model.Entities;
+﻿using SharedSquawk.Client.iOS.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Client.Model.Entities;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(InvitationSender))]
 
-namespace Crosschat.Client.iOS.Infrastructure
+namespace SharedSquawk.Client.iOS.Infrastructure
 {
     public class InvitationSender : IContactInvitationSender
     {

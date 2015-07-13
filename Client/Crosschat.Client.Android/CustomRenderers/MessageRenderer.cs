@@ -4,16 +4,16 @@ using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
-using Crosschat.Client.Droid.CustomRenderers;
-using Crosschat.Client.ViewModels;
-using Crosschat.Client.Views.Controls;
+using SharedSquawk.Client.Droid.CustomRenderers;
+using SharedSquawk.Client.ViewModels;
+using SharedSquawk.Client.Views.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using View = Android.Views.View;
 
 [assembly: ExportRenderer(typeof(MessageViewCell), typeof(MessageRenderer))]
 
-namespace Crosschat.Client.Droid.CustomRenderers
+namespace SharedSquawk.Client.Droid.CustomRenderers
 {
     public class MessageRenderer : ViewCellRenderer
     {

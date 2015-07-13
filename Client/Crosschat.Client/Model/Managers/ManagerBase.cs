@@ -2,12 +2,12 @@
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Threading.Tasks;
-using Crosschat.Client.Model.Helpers;
-using Crosschat.Client.Model.Proxies;
-using Crosschat.Server.Application.DataTransferObjects.Messages;
-using Crosschat.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Client.Model.Helpers;
+using SharedSquawk.Client.Model.Proxies;
+using SharedSquawk.Server.Application.DataTransferObjects.Messages;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 
-namespace Crosschat.Client.Model.Managers
+namespace SharedSquawk.Client.Model.Managers
 {
     public abstract class ManagerBase
     {

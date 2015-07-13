@@ -3,14 +3,14 @@ using System.Threading.Tasks;
 using Windows.Networking;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
-using Crosschat.Client.Model.Contracts;
-using Crosschat.Client.WinPhone.Infrastructure;
-using Crosschat.Server.Infrastructure;
+using SharedSquawk.Client.Model.Contracts;
+using SharedSquawk.Client.WinPhone.Infrastructure;
+using SharedSquawk.Server.Infrastructure;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(SocketStreamTransportResource))]
 
-namespace Crosschat.Client.WinPhone.Infrastructure
+namespace SharedSquawk.Client.WinPhone.Infrastructure
 {
     public class SocketStreamTransportResource : ITransportResource
     {
