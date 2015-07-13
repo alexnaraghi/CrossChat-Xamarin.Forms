@@ -1,4 +1,4 @@
-﻿namespace Crosschat.Server.Infrastructure
+namespace Crosschat.Server.Infrastructure
 {
     public static class GlobalConfig
     {

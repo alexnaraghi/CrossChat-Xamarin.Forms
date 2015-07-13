@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 
 namespace Crosschat.Server.Application.DataTransferObjects.Requests
 {
@@ -6,7 +6,7 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
     {
         public ResponseBase()
         {
-            RequestResult = true;
+            Error = CommonErrors.Success;
         }
 
         //In order to associate Request with response
@@ -14,8 +14,7 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
         public long Token { get; set; }
 
         //false means timeout or connection close
-		[XmlIgnore]
-        public bool RequestResult { get; set; }
+        public bool RequestResult { get { return Error == CommonErrors.Success; }}
 
 		[XmlIgnore]
         public CommonErrors Error { get; set; }
@@ -25,6 +24,8 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
     {
         //negative values are not errors ;)
         Success = 0,
+        Timeout,
+        AuthenticationFailure,
         Maintenance,
         Banned,
     }
