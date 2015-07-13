@@ -28,5 +28,6 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
         AuthenticationFailure,
         Maintenance,
         Banned,
+		Unknown
     }
 }

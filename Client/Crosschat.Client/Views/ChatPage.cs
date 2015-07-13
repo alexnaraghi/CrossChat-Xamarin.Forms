@@ -2,11 +2,14 @@
 using Crosschat.Client.Seedwork.Controls;
 using Crosschat.Client.Views.Controls;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace Crosschat.Client.Views
 {
     public class ChatPage : MvvmableContentPage
     {
+		private ChatListView _messageList;
+
         public ChatPage(ViewModelBase viewModel) : base(viewModel)
         {
 			SetBinding (ContentPage.TitleProperty, new Binding("RoomName"));
@@ -35,10 +38,11 @@ namespace Crosschat.Client.Views
             inputBox.HeightRequest = 30;
             inputBox.SetBinding(Entry.TextProperty, new Binding("InputText", BindingMode.TwoWay));
 
-            var messageList = new ChatListView();
-            messageList.VerticalOptions = LayoutOptions.FillAndExpand;
-            messageList.SetBinding(ChatListView.ItemsSourceProperty, new Binding("Events"));
-            messageList.ItemTemplate = new DataTemplate(CreateMessageCell);
+            _messageList = new ChatListView();
+            _messageList.VerticalOptions = LayoutOptions.FillAndExpand;
+            _messageList.SetBinding(ChatListView.ItemsSourceProperty, new Binding("Events"));
+            _messageList.ItemTemplate = new DataTemplate(CreateMessageCell);
+			_messageList.ItemTapped += ItemTapped;
 
 			var testButton = new Button();
 			testButton.Text = " Update ";
@@ -54,7 +58,7 @@ namespace Crosschat.Client.Views
 							//testButton,
                             
                             //headerLabel,
-                            messageList,
+							_messageList,
 							new StackLayout
 							{
 								Children = {inputBox, sendButton},
@@ -66,21 +70,37 @@ namespace Crosschat.Client.Views
                 };
         }
 
+        void ItemTapped (object sender, ItemTappedEventArgs e)
+        {
+			// don't do anything if we just de-selected the row
+			if (e.Item == null) return; 
+			// do something with e.SelectedItem
+			((ListView)sender).SelectedItem = null; // de-select the row
+        }
+
+		public void OnItemAdded(object lastItem)
+		{
+			if (lastItem != null)
+			{
+				_messageList.ScrollTo (lastItem, ScrollToPosition.End, animated: false);
+			}
+		}
+
         private Cell CreateMessageCell()
         {
             var timestampLabel = new Label();
             timestampLabel.SetBinding(Label.TextProperty, new Binding("Timestamp", stringFormat: "[{0:HH:mm}]"));
             timestampLabel.TextColor = Color.Silver;
-            timestampLabel.Font = Font.SystemFontOfSize(14);
+			timestampLabel.FontSize = 14;
 
             var authorLabel = new Label();
             authorLabel.SetBinding(Label.TextProperty, new Binding("AuthorName", stringFormat: "{0}: "));
             authorLabel.TextColor = Device.OnPlatform(Color.Blue, Color.Yellow, Color.Yellow);
-            authorLabel.Font = Font.SystemFontOfSize(14);
+			authorLabel.FontSize = 14;
 
             var messageLabel = new Label();
             messageLabel.SetBinding(Label.TextProperty, new Binding("Text"));
-            messageLabel.Font = Font.SystemFontOfSize(14);
+			messageLabel.FontSize = 14;
 
             var stack = new StackLayout
                 {

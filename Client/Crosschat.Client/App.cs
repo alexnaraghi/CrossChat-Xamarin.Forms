@@ -1,6 +1,9 @@
 ﻿using Crosschat.Client.ViewModels;
 using Crosschat.Client.Views;
 using Xamarin.Forms;
+using Crosschat.Client.Model.Managers;
+using Crosschat.Client.Model.Contracts;
+using Crosschat.Server.Infrastructure.Protocol;
 
 namespace Crosschat.Client
 {
@@ -8,7 +11,13 @@ namespace Crosschat.Client
     {
         public static Page GetMainPage()
         {
-            return new NavigationPage(new SplashscreenPage());
+			ApplicationManager applicationManager = new ApplicationManager(
+				DependencyService.Get<ITransportResource>(),
+				DependencyService.Get<IDtoSerializer>(),
+				DependencyService.Get<IStorage>(),
+				DependencyService.Get<IDeviceInfo>());
+
+			return new NavigationPage(new LoginPage(new LoginViewModel(applicationManager)));
         }
     }
 }

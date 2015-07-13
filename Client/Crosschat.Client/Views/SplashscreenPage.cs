@@ -11,7 +11,7 @@ namespace Crosschat.Client.Views
 {
     public class SplashscreenPage : ContentPage
     {
-        private static ApplicationManager _applicationManager;
+		private static ApplicationManager _applicationManager;
 
         public SplashscreenPage()
         {
@@ -59,15 +59,15 @@ namespace Crosschat.Client.Views
 
         protected override async void OnAppearing()
         {
-            if (_applicationManager == null)
-            {
-                _applicationManager = new ApplicationManager(
-                    DependencyService.Get<ITransportResource>(),
-                    DependencyService.Get<IDtoSerializer>(),
-                    DependencyService.Get<IStorage>(),
-                    DependencyService.Get<IDeviceInfo>());
-                _applicationManager.ConnectionManager.ConnectionDropped += () => Navigation.PushAsync(new SplashscreenPage());
-            }
+			if (_applicationManager == null)
+			{
+				_applicationManager = new ApplicationManager(
+					DependencyService.Get<ITransportResource>(),
+					DependencyService.Get<IDtoSerializer>(),
+					DependencyService.Get<IStorage>(),
+					DependencyService.Get<IDeviceInfo>());
+				_applicationManager.ConnectionManager.ConnectionDropped += () => Navigation.PushAsync(new SplashscreenPage());
+			}
 
             AuthenticationResponseType result;
             try

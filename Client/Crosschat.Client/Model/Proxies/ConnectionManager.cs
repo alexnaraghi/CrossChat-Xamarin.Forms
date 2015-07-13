@@ -82,7 +82,14 @@ namespace Crosschat.Client.Model.Proxies
             Interlocked.Increment(ref _lastToken);
             request.Token = _lastToken;
 			var endpoint = EndpointFinder.Get (request.GetType ());
-			return _requestsHandler.WaitForResponse<TResponse>(request, () => _transport.SendData<TRequest, TResponse>(endpoint, request, request.Token));
+
+			var response = _requestsHandler.WaitForResponse<TResponse>(request, () => _transport.SendData<TRequest, TResponse>(endpoint, request, request.Token));
+
+			if (!response.Result.RequestResult)
+			{
+				ConnectionDropped ();
+			}
+			return response;
         }
 
 		/*

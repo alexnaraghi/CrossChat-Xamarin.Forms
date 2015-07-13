@@ -20,6 +20,7 @@ namespace Crosschat.Client.Model.Managers
         private bool _deviceInfoInitialized = false;
 
 		public event EventHandler LoggedIn = delegate { };
+		public event EventHandler LoggedOut = delegate { };
 
         public AccountManager(IStorage storage,
             IDeviceInfo deviceInfo,
@@ -135,20 +136,29 @@ namespace Crosschat.Client.Model.Managers
 				AccountUsername = username;
 				AccountPassword = password;
 				SSID = result.SSID;
+
+
+				//Do we need to look out for this member status result?
+				var memberStatusResult = await _loginServiceProxy.GetMemberStatus(
+					new MemberStatusRequest
+					{
+						SessionId = result.SSID,
+						UserId = CurrentUser.UserId
+					});
+				//Do something with the member status result.  Not sure what the US codes mean yet.
+
+				LoggedIn(this, EventArgs.Empty);
+
 			}
 
-			//Do we need to look out for this member status result?
-			var memberStatusResult = await _loginServiceProxy.GetMemberStatus(
-				new MemberStatusRequest
-				{
-					SessionId = result.SSID,
-					UserId = CurrentUser.UserId
-				});
-			//Do something with the member status result.  Not sure what the US codes mean yet.
-
-			LoggedIn(this, EventArgs.Empty);
-
 			return result.RequestResult;
+		}
+
+		public void Logout()
+		{
+			//We don't really have to do anything to tell the server we logged out, just clear our data
+			CurrentUser = null;
+			LoggedOut (this, EventArgs.Empty);
 		}
 
         public async Task<RegistrationResponseType> Register(string name, string password, int age, bool sex, string country, string platform)

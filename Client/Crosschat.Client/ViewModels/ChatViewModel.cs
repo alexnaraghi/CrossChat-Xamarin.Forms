@@ -6,6 +6,9 @@ using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using Crosschat.Client.Model.Entities.Messages;
 using Crosschat.Client.Seedwork.Extensions;
+using System.Collections.Specialized;
+using System.Linq;
+using Crosschat.Client.Views;
 
 namespace Crosschat.Client.ViewModels
 {
@@ -29,6 +32,31 @@ namespace Crosschat.Client.ViewModels
 			//This could result in some major garbage.  Keep an eye on performance, maybe we will need to drop the view model
 			//approach for messages.
 			chatRoomModel.SynchronizeWith(Events, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.CurrentUser.UserId));
+		}
+
+		protected override void OnShown ()
+		{
+			//Scroll to the bottom of the list whenever we get a new message
+			//Future idea: scroll to bottom only when the user is already at the bottom, so they can browse messages easier.
+			Events.CollectionChanged += (s, e) =>
+			{
+				if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
+				{
+					ScrollToBottom();
+				}
+			};
+
+			ScrollToBottom ();
+			base.OnShown ();
+		}
+
+		void ScrollToBottom ()
+		{
+			var chatPage = _currentPage as ChatPage;
+			if( chatPage != null && Events.Count > 0)
+			{
+				chatPage.OnItemAdded(Events.Last());
+			}
 		}
 
 		public string RoomName
@@ -75,6 +103,8 @@ namespace Crosschat.Client.ViewModels
 			await _appManager.ChatManager.GetChatUpdate ();
 			IsBusy = false;
 		}
+
+
 	}
 }
 

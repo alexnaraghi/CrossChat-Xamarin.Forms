@@ -20,7 +20,6 @@ namespace Crosschat.Server.Application.DataTransferObjects.Utils
                 if (_tasks.TryGetValue(response.Token, out task))
                 {
                     _tasks.Remove(response.Token);
-                    response.Error = CommonErrors.Success;
                     task.TrySetResult(response);
                 }
             }
@@ -35,7 +34,9 @@ namespace Crosschat.Server.Application.DataTransferObjects.Utils
             }
             action();
             StartTimeoutCheck(timeout, request.Token, taskSource);
-            var response = await taskSource.Task.ConfigureAwait(false);
+
+			var response = await taskSource.Task.ConfigureAwait(false);
+
             return response as TResponse;
         }
 

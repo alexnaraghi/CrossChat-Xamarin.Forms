@@ -57,6 +57,11 @@ namespace Crosschat.Client.Seedwork
             return _currentPage.Navigation.PushAsync(page);
         }
 
+		public Task PopToRootAsync()
+		{
+			return _currentPage.Navigation.PopToRootAsync ();
+		}
+
         public ICommand ShowCommand
         {
             get { return new Command(() => ShowAsync());}
@@ -74,8 +79,8 @@ namespace Crosschat.Client.Seedwork
         {
             if (_currentPage == null)
                 return Task.FromResult(false);
-
-            return _currentPage.DisplayAlert(title, text, "Ok", null);
+			
+            return _currentPage.DisplayAlert(title, text, "Ok");
         }
     }
 }

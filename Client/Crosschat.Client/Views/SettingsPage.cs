@@ -11,9 +11,9 @@ namespace Crosschat.Client.Views
             Title = "Settings";
             Icon = "settings.png";
 
-            var inviteButton = new Button();
-            inviteButton.Text = "Invite contacts";
-            inviteButton.SetBinding(Button.CommandProperty, new Binding("InviteCommand"));
+            var logoutButton = new Button();
+			logoutButton.Text = "Logout";
+			logoutButton.SetBinding(Button.CommandProperty, new Binding("LogoutCommand"));
 
 			#if DEBUG
 			var userLabel = new Label();
@@ -26,7 +26,7 @@ namespace Crosschat.Client.Views
             {
                 Children =
                 {
-                    inviteButton
+					logoutButton
 #if DEBUG
 					,userLabel
 					,ssidLabel

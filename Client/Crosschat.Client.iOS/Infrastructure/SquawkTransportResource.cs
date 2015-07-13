@@ -98,7 +98,7 @@ namespace Crosschat.Client.iOS.Infrastructure
 		{
 			HttpWebRequest request;
 			HttpWebResponse response;
-			long token;
+			long token = 0;
 			ResponseBase responseObject;
 			try
 			{
@@ -107,12 +107,11 @@ namespace Crosschat.Client.iOS.Infrastructure
 				token = tokenRequest.Token;
 				response = request.EndGetResponse (ar) as HttpWebResponse;
 				responseObject = Deserialize<T> (response.GetResponseStream());
-				response.Close ();
 			}
 			catch(Exception ex)
 			{
-				DropConnection();
-				return;
+				responseObject = Activator.CreateInstance<T> ();
+				responseObject.Error = CommonErrors.Unknown;
 			}
 
 			//Here we are downcasting T to an object, but the token will allow us to figure out the type
@@ -171,6 +170,7 @@ namespace Crosschat.Client.iOS.Infrastructure
 			{
 				try
 				{
+					throw new Exception("blah");
 					deserializedObject = (T)serializer.Deserialize (reader);
 				}
 				catch(Exception exc)

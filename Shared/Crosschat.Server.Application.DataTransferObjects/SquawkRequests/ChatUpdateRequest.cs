@@ -10,7 +10,7 @@ namespace Crosschat.Server.Application.DataTransferObjects.Requests
     public class ChatUpdateRequest : RequestBase
     {
 		[XmlAttribute("D")]
-		public string D  { get; set; }
+		public double Delay  { get; set; }
 		[XmlAttribute("UID")]
 		public int UserId  { get; set; }
 		[XmlAttribute("GUID")]

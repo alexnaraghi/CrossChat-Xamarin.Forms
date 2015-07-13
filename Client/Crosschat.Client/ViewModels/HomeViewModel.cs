@@ -84,6 +84,18 @@ namespace Crosschat.Client.ViewModels
 			await model.ShowAsync ();
 		}
 
+		public ICommand LogoutCommand
+		{
+			get { return new Command(OnLogout); }
+		}
+
+		public async void OnLogout()
+		{
+			_appManager.AccountManager.Logout ();
+			await PopToRootAsync ();
+		}
+
+
 		#if DEBUG
 		public string User
 		{

@@ -9,6 +9,7 @@ using Crosschat.Server.Application.DataTransferObjects.Enums;
 using Crosschat.Server.Application.DataTransferObjects.Messages;
 using Crosschat.Server.Application.DataTransferObjects.Requests;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Crosschat.Client.Model.Managers
 {
@@ -47,11 +48,13 @@ namespace Crosschat.Client.Model.Managers
             _chatServiceProxy = chatServiceProxy;
             _accountManager = accountManager;
 			_accountManager.LoggedIn += OnLoggedIn;
+			_accountManager.LoggedOut += OnLoggedOut;
 
             //Messages = new ObservableCollection<Event>();
             OnlineUsers = new ObservableCollection<UserDto>();
 			UserDirectory = new Dictionary<int, UserDto> ();
 			Rooms = new RoomCollection ();
+			_updateBuilder = new ChatUpdateBuilder ();
         }
 
 
@@ -93,7 +96,7 @@ namespace Crosschat.Client.Model.Managers
         }
 
         /// <summary>
-        /// Reloads only online players
+        /// This is the first step of a logged in user for chatting.
         /// </summary>
         public async Task ReloadUsers()
         {
@@ -113,13 +116,8 @@ namespace Crosschat.Client.Model.Managers
             
 			_sessionGuid = chatStatus.GUID;
 
-			_updateBuilder = new ChatUpdateBuilder (
-				//What is this?  ping Last packet delay?
-				"0",
-				_accountManager.CurrentUser.UserId,
-				_sessionGuid,
-				UpdateObjectsReceivedCount,
-				CurrentUpdateRequestCount);
+			_updateBuilder.Instantiate(_accountManager.CurrentUser.UserId,_sessionGuid);
+			_updateBuilder.NewRequest (0, UpdateObjectsReceivedCount, CurrentUpdateRequestCount);
 			
 			OnlineUsers.AddRange(chatStatus.Users);
 			foreach (var user in chatStatus.Users)
@@ -138,8 +136,16 @@ namespace Crosschat.Client.Model.Managers
 			{
 				_lastUpdateTime = DateTime.Now;
 
+				//This might be slightly smarter if the timer was closer to the request, but this approximation on the 
+				//response time should be close enough for the server
+				System.Diagnostics.Stopwatch timer = new Stopwatch();
+				timer.Start();
+
 				//Send a chat update request
 				var chatStatus = await _chatServiceProxy.GetChatUpdate (_updateBuilder.ToRequest ());
+
+				timer.Stop();
+				TimeSpan responseTime = timer.Elapsed;
 
 				//Client update count increments by one every time we send a request
 				CurrentUpdateRequestCount++;
@@ -153,7 +159,7 @@ namespace Crosschat.Client.Model.Managers
 					UpdateObjectsReceivedCount += chatStatus.Updates.Count;
 
 					//Clear out our buffer so we can start a new update request
-					_updateBuilder.NewRequest (UpdateObjectsReceivedCount, CurrentUpdateRequestCount);
+					_updateBuilder.NewRequest (responseTime.TotalMilliseconds, UpdateObjectsReceivedCount, CurrentUpdateRequestCount);
 
 					//Consume the response
 					LastServerUpdateId = chatStatus.ServerUpdateId;
@@ -280,7 +286,6 @@ namespace Crosschat.Client.Model.Managers
 
 		public void OnLoggedOut(object sender, EventArgs e)
 		{
-			_updateBuilder = null;
 			_sessionGuid = null;
 		}
 

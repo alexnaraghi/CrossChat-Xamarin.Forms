@@ -6,6 +6,7 @@ using Crosschat.Client.Model.Managers;
 using Crosschat.Client.Seedwork;
 using Crosschat.Server.Application.DataTransferObjects.Enums;
 using Xamarin.Forms;
+using System;
 
 namespace Crosschat.Client.ViewModels
 {
@@ -18,7 +19,18 @@ namespace Crosschat.Client.ViewModels
 		public LoginViewModel(ApplicationManager appManager)
         {
             _appManager = appManager;
+			Name = appManager.AccountManager.AccountUsername;
+			Password = appManager.AccountManager.AccountPassword;
+			_appManager.ConnectionManager.ConnectionDropped += OnConnectionLost;
         }
+
+		//The login page defines what will occur on the connection dropping
+		public void OnConnectionLost()
+		{
+			Notify ("Connection Error", "An error has occurred.  You will need to login again");
+			_appManager.AccountManager.Logout ();
+			PopToRootAsync ();
+		}
 
         public string Name
         {
@@ -49,7 +61,7 @@ namespace Crosschat.Client.ViewModels
                 string platform = Device.OnPlatform("iOS", "Android", "WP8") + (Device.Idiom == TargetIdiom.Tablet ? " Tablet" : "");
 
                 IsBusy = true;
-				var registrationResult = await _appManager.AccountManager.Login(Name, Password);
+				var	registrationResult = await _appManager.AccountManager.Login(Name, Password);
                 IsBusy = false;
 
                 if (registrationResult == true)

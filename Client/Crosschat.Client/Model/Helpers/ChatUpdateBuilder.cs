@@ -10,24 +10,35 @@ namespace Crosschat.Client
 		private ChatUpdateRequest _request;
 		private List<string> _activeRooms;
 		private List<string> _enteredRooms;
-		public ChatUpdateBuilder (string d, int userId, string guid, int lastServerUpdateId, int clientUpdateId)
+		private bool _isInstantiated;
+		public ChatUpdateBuilder ()
 		{
 			_request = new ChatUpdateRequest () {
-				D = d,
-				UserId = userId,
-				GUID = guid,
-				LastServerUpdateId = lastServerUpdateId,
-				ClientUpdateId = clientUpdateId,
 				Messages = new List<MessageDto>(),
-				ActiveRooms = "", //TODO: Filter by rooms
+				ActiveRooms = string.Empty,
 				EnteredRooms = new List<RoomEntryRequestDto>()
 			};
 			_activeRooms = new List<string> ();
 			_enteredRooms = new List<string> ();
 		}
 
-		public void NewRequest(int lastServerUpdateId, int clientUpdateId)
+		public void Instantiate(int userId, string guid)
 		{
+			_request.UserId = userId;
+			_request.GUID = guid;
+			_request.Messages.Clear ();
+			_request.ActiveRooms = string.Empty;
+			_request.EnteredRooms.Clear ();
+			_activeRooms.Clear ();
+			_enteredRooms.Clear ();
+
+			_isInstantiated = true;
+
+		}
+
+		public void NewRequest(double delay, int lastServerUpdateId, int clientUpdateId)
+		{
+			_request.Delay = delay;
 			_request.LastServerUpdateId = lastServerUpdateId;
 			_request.ClientUpdateId = clientUpdateId;
 			_request.Messages = new List<MessageDto> ();

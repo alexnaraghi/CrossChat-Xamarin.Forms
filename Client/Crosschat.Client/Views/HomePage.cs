@@ -11,7 +11,7 @@ namespace Crosschat.Client.Views
 			//Children.Add(new ActiveChatPage(viewModel));
 			Children.Add(new PublicRoomsPage(viewModel));
             Children.Add(new OnlineUsersPage(viewModel));
-            Children.Add(new SettingsPage(viewModel));
+			Children.Add(new SettingsPage(viewModel));
         }
     }
 }
