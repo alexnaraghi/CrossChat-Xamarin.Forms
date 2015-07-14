@@ -305,7 +305,7 @@ namespace SharedSquawk.Client.Model.Managers
 			await GetChatUpdate ();
 		}
 
-		public async Task JoinUserRoom(int userId)
+		public async Task<Room> JoinUserRoom(int userId)
 		{
 			var otherUserName = GetUserFullName (userId);
 			var room = RoomFactory.Get (userId, otherUserName, _accountManager.CurrentUser.UserId);
@@ -318,6 +318,8 @@ namespace SharedSquawk.Client.Model.Managers
 
 			//Manually force update the chat, to send our message asap
 			await GetChatUpdate ();
+
+			return room;
 		}
 
 		public async Task LeaveRoom(string roomId)

@@ -35,6 +35,7 @@ namespace SharedSquawk.Client.Views
 			var chatButton = new Button () {
 				Text = "Start Chat"
 			};
+			chatButton.SetBinding(Button.CommandProperty, new Binding("SelectChatCommand"));
 
 			// Accomodate iPhone status bar.
 			Padding = new Thickness(10, Device.OnPlatform(iOS: 20, Android: 0, WinPhone: 0), 10, 5);

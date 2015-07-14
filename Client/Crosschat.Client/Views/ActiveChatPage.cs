@@ -26,11 +26,13 @@ namespace SharedSquawk.Client.Views
 				
 			var noItemsLabel = new Label {
 				Text = "Start a conversation or open a room!",
+				HorizontalOptions = LayoutOptions.Center,
 				FontSize = 16
 			};
 			var noItemsLayout = new StackLayout
 			{
 				VerticalOptions = LayoutOptions.FillAndExpand,
+				HorizontalOptions = LayoutOptions.FillAndExpand,
 				Children = 
 				{
 					noItemsLabel

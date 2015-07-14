@@ -4,11 +4,16 @@ using SharedSquawk.Client.Model.Managers;
 using SharedSquawk.Server.Application.DataTransferObjects;
 using SharedSquawk.Client.Model.Helpers;
 using System.Text;
+using System.Windows.Input;
+using Xamarin.Forms;
+using System;
 
 namespace SharedSquawk.Client.ViewModels
 {
     public class UserDetailViewModel : ViewModelBase
     {
+		private ApplicationManager _appManager;
+
 		private string number;
 		private int localeID;
 		private int age;
@@ -27,7 +32,10 @@ namespace SharedSquawk.Client.ViewModels
 
 		public UserDetailViewModel(ApplicationManager appManager, Profile profile)
         {
+			_appManager = appManager;
+
 			//Auto map it like it's hot
+			//Copy, flatten, you can make it happen
 			AutoMapper.CopyPropertyValues (profile, this);
 			AutoMapper.CopyPropertyValues (profile.Details, this);
         }
@@ -120,6 +128,23 @@ namespace SharedSquawk.Client.ViewModels
 		public string RegistrationDate {
 			get { return registrationDate; }
 			set { SetProperty(ref registrationDate, value); }
+		}
+
+		public ICommand SelectChatCommand
+		{
+			get { return new Command(OnSelectChat); }
+		}
+
+		private async void OnSelectChat()
+		{
+			IsBusy = true;
+			var room = await _appManager.ChatManager.JoinUserRoom (UserId);
+			IsBusy = false;
+
+			//Go to the root and open the chat window
+			await this.PopToRootAsync ();
+			var model = new ChatViewModel (_appManager, room);
+			await model.ShowAsync ();
 		}
     }
 }
