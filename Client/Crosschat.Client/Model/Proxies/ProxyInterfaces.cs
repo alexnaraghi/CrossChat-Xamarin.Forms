@@ -26,6 +26,8 @@ namespace SharedSquawk.Client
 		Task<ConnectedMembersResponse> GetConnectedMembers (ConnectedMembersRequest request);
 
 		Task<ChatUpdateResponse> GetChatUpdate (ChatUpdateRequest request);
+
+		Task<ProfileResponse> GetUserProfile (ProfileRequest request);
 	}
 
 	public interface ILoginServiceProxy

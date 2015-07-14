@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SharedSquawk.Client
+namespace SharedSquawk.Client.Model.Entities
 {
 	public class Room
 	{
@@ -13,6 +13,17 @@ namespace SharedSquawk.Client
 		public string RoomId { get; private set; }
 
 		public string Name { get; private set; }
+
+		//Optional field to specify a user
+		public int? UserId { get; set; }
+
+		public bool IsUserChat
+		{
+			get
+			{
+				return UserId != null;
+			}
+		}
 
 		public override string ToString()
 		{

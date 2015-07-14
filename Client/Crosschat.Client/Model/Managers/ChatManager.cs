@@ -10,6 +10,8 @@ using SharedSquawk.Server.Application.DataTransferObjects.Messages;
 using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 using System.Collections.Generic;
 using System.Diagnostics;
+using SharedSquawk.Client.Model.Entities;
+using SharedSquawk.Client.Model.Helpers;
 
 namespace SharedSquawk.Client.Model.Managers
 {
@@ -51,10 +53,11 @@ namespace SharedSquawk.Client.Model.Managers
 			_accountManager.LoggedOut += OnLoggedOut;
 
             //Messages = new ObservableCollection<Event>();
-            OnlineUsers = new ObservableCollection<UserDto>();
-			UserDirectory = new Dictionary<int, UserDto> ();
+            OnlineUsers = new ObservableCollection<Profile>();
+			UserDirectory = new Dictionary<int, Profile> ();
 			Rooms = new RoomCollection ();
 			_updateBuilder = new ChatUpdateBuilder ();
+			ActiveChats = new ObservableCollection<Room> ();
         }
 
 
@@ -118,11 +121,13 @@ namespace SharedSquawk.Client.Model.Managers
 
 			_updateBuilder.Instantiate(_accountManager.CurrentUser.UserId,_sessionGuid);
 			_updateBuilder.NewRequest (0, UpdateObjectsReceivedCount, CurrentUpdateRequestCount);
-			
-			OnlineUsers.AddRange(chatStatus.Users);
+
 			foreach (var user in chatStatus.Users)
 			{
-				UserDirectory.Add (user.UserID, user);
+				Profile userProfile = new Profile ();
+				AutoMapper.CopyPropertyValues (user, userProfile);
+				OnlineUsers.Add(userProfile);
+				UserDirectory.Add (userProfile.UserId, userProfile);
 			}
 
 			//Get our first update immediately, then start spinning
@@ -153,6 +158,9 @@ namespace SharedSquawk.Client.Model.Managers
 				//Do some quick checks to make sure we are still logged in and ready for a message
 				if (_sessionGuid != null && _accountManager.IsLoggedIn && _updateBuilder != null && chatStatus != null)
 				{
+					//Every update, we refresh all our typing events
+					Rooms.ClearAllTypingEvents ();
+
 					//Clear out our update buffer and increment our packet id's
 
 					//Update our received count by the count in the response
@@ -168,15 +176,31 @@ namespace SharedSquawk.Client.Model.Managers
 						//Parse the update type
 						if (update.User != null)
 						{
-							OnlineUsers.Add (update.User);
+							Profile userProfile = new Profile ();
+							AutoMapper.CopyPropertyValues (update.User, userProfile);
+							if (!OnlineUsers.Any (p => p.UserId == userProfile.UserId))
+							{
+								OnlineUsers.Add (userProfile);
+							}
+							//Else update?
+							if (!UserDirectory.ContainsKey (userProfile.UserId))
+							{
+								UserDirectory.Add (userProfile.UserId, userProfile);
+							}
+							//Else update?
 						}
 						else if (update.DisconnectedUser != null)
 						{
-							OnlineUsers.RemoveAll (t => t.UserID == update.DisconnectedUser.UserId);	
+							OnlineUsers.RemoveAll (t => t.UserId == update.DisconnectedUser.UserId);
+							//Should we remove these users from the directory too?
 						}
 						else if (update.FP != null)
 						{
-							//Is this for typing?
+							var fp = update.FP;
+							Rooms.AddTypingEvent (fp.Room, new TypingEvent () {
+								UserName = GetUserFirstName(fp.UserId),
+								UserId = fp.UserId
+							});
 						}
 						else if (update.Message != null)
 						{
@@ -184,22 +208,22 @@ namespace SharedSquawk.Client.Model.Managers
 							var room = message.Room;
 
 							//group the same user's last chats together
-							var lastMessage = Rooms.Last(room) as TextMessage;
-							if (lastMessage != null && lastMessage.UserId == message.UserId)
+							var lastMessage = Rooms.LastTextMessage(room) as TextMessage;
+							//TODO: Fix the bug with grouping chats duplication
+							if(false)
+							//if (lastMessage != null && lastMessage.UserId == message.UserId)
 							{
-								Rooms.RemoveMessage(room, lastMessage);
+								Rooms.RemoveTextMessage(room, lastMessage);
 								lastMessage.Body += "\n\n" + message.Text;
 								lastMessage.Timestamp = DateTime.Now;
-								Rooms.AddMessage (room, lastMessage);
+								Rooms.AddTextMessage (room, lastMessage);
 							}
 							else
 							{
 								//BUG: Sometimes we are getting some users that whose names we aren't sure about...
 								//Need to investigate this.
-								var messageUsername = UserDirectory.ContainsKey (message.UserId) 
-									? UserDirectory [message.UserId].FirstName 
-									: string.Format("Unknown({0})", message.UserId);
-								Rooms.AddMessage (room, new TextMessage () {
+								var messageUsername = GetUserFirstName(message.UserId);
+								Rooms.AddTextMessage (room, new TextMessage () {
 									UserName = messageUsername,
 									Body = message.Text,
 									UserId = message.UserId,
@@ -215,10 +239,10 @@ namespace SharedSquawk.Client.Model.Managers
 							//Make the room exist, no matter how many messages there are
 							if (!Rooms.ContainsKey (room))
 							{
-								Rooms.Add(room, new ObservableCollection<Event>());
+								Rooms.Add(room, new RoomData());
 							}
 
-							Rooms.AddMessageRange(room, enteredRoom.RoomMessages.Select( r =>
+							Rooms.AddTextMessageRange(room, enteredRoom.RoomMessages.Select( r =>
 								new TextMessage(){
 									UserName = r.User.Name,
 									Body = r.Message.Body,
@@ -255,7 +279,7 @@ namespace SharedSquawk.Client.Model.Managers
 			await GetChatUpdate ();
 
 			//Add our message locally after the update for an accurate ordering
-			Rooms.AddMessage(room, new TextMessage
+			Rooms.AddTextMessage(room, new TextMessage
 				{
 					UserId = _accountManager.CurrentUser.UserId,
 					Body = text,
@@ -264,18 +288,84 @@ namespace SharedSquawk.Client.Model.Managers
 				});
 		}
 
-		public async Task JoinRoom(string roomId)
+		public async Task SendTypingEvent(string room)
 		{
-			_updateBuilder.AddRoom (roomId);
+			//TODO
+		}
+
+		public async Task JoinPublicRoom(Room room)
+		{
+			if (!ActiveChats.Any (r => r.RoomId == room.RoomId))
+			{
+				ActiveChats.Add (room);
+				_updateBuilder.AddRoom (room.RoomId);
+			}
+
+			//Manually force update the chat, to send our message asap
+			await GetChatUpdate ();
+		}
+
+		public async Task JoinUserRoom(int userId)
+		{
+			var otherUserName = GetUserFullName (userId);
+			var room = RoomFactory.Get (userId, otherUserName, _accountManager.CurrentUser.UserId);
+
+			if (!ActiveChats.Any (r => r.RoomId == room.RoomId))
+			{
+				ActiveChats.Add (room);
+				_updateBuilder.AddRoom (room.RoomId);
+			}
+
 			//Manually force update the chat, to send our message asap
 			await GetChatUpdate ();
 		}
 
 		public async Task LeaveRoom(string roomId)
 		{
+			throw new NotImplementedException ("gotta make this work with active chats");
 			_updateBuilder.RemoveRoom (roomId);
 			//Manually force update the chat, to send our message asap
 			await GetChatUpdate ();
+		}
+
+		public async Task<Profile> GetMemberDetails(int userId)
+		{
+			Profile profile;
+
+			bool didFindMemberDetails = false;
+			if (UserDirectory.ContainsKey (userId))
+			{
+				profile = UserDirectory [userId];
+
+				//If we have all the data already in our directory, pass it along
+				if (profile.Details != null)
+				{
+					didFindMemberDetails = true;
+				}
+			}
+			else
+			{
+				//hmmm this seems like a weird desync issue.  How can we know the user id of a
+				//user not in the directory?
+				profile = null;
+			}
+
+			if (profile != null && !didFindMemberDetails)
+			{
+				//We don't have the profile details, grab it
+				var response = await _chatServiceProxy.GetUserProfile(new ProfileRequest()
+				{
+					UserId = userId
+				});
+
+				ProfileDetails details = new ProfileDetails ();
+				AutoMapper.CopyPropertyValues (response, details);
+
+				//Populating the profile details will change the entry in both the directory and the user list.
+				profile.Details = details;
+			}
+
+			return profile;
 		}
 
 		public void OnLoggedIn(object sender, EventArgs e)
@@ -306,13 +396,36 @@ namespace SharedSquawk.Client.Model.Managers
 				SubjectChanged(this, EventArgs.Empty);
 			}
 		}
+		
+		//Helper
+		private string GetUserFirstName(int userId)
+		{
+			return UserDirectory.ContainsKey (userId) 
+			? UserDirectory [userId].FirstName 
+				: string.Format("Unknown({0})", userId);
+		}
+
+		private string GetUserFullName(int userId)
+		{
+			if (UserDirectory.ContainsKey (userId))
+			{
+				var user = UserDirectory [userId];
+				return user.FirstName + " " + user.LastName;
+			}
+			else
+			{
+				return string.Format("Unknown({0})", userId);
+			}
+		}
 
 		//public ObservableCollection<Event> Messages { get; private set; }
 		public RoomCollection Rooms { get; private set; }
 
-		public ObservableCollection<UserDto> OnlineUsers { get; private set; }
+		public ObservableCollection<Profile> OnlineUsers { get; private set; }
 
-		public Dictionary<int,UserDto> UserDirectory{ get; private set; }
+		public ObservableCollection<Room> ActiveChats { get; private set; }
+
+		public Dictionary<int,Profile> UserDirectory{ get; private set; }
 
 		/*
         /// <summary>

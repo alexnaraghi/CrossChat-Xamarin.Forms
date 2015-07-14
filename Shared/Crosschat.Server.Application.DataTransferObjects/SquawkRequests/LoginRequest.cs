@@ -34,7 +34,7 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 		public int UserId  { get; set; }
 
 		[XmlAttribute("US")]
-		public int US  { get; set; }
+		public string US  { get; set; }
 
 		[XmlAttribute("IS")]
 		public string IS { get; set; }

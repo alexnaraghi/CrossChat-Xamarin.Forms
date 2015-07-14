@@ -1,47 +1,56 @@
 ﻿using SharedSquawk.Client.Seedwork;
 using SharedSquawk.Client.Seedwork.Controls;
 using Xamarin.Forms;
+using SharedSquawk.Client.Views.ValueConverters;
 
 namespace SharedSquawk.Client.Views
 {
     public class ActiveChatPage : MvvmableContentPage
     {
 		public ActiveChatPage(ViewModelBase viewModel) : base(viewModel)
-        {
-            Title = "Chats";
-			Icon = "chat.png";
+		{
+			var listView = new BindableListView
+			{
+				ItemTemplate = new DataTemplate(() =>
+					{
+						var textCell = new TextCell();
+						textCell.SetBinding(TextCell.TextProperty, new Binding("Name"));
+						//textCell.SetBinding(TextCell.DetailProperty, new Binding("Description"));
+						return textCell;
+					})
+			};
 
-            var listView = new BindableListView
-                {
-                    ItemTemplate = new DataTemplate(() =>
-                        {
-                            var imageCell = new ImageCell
-                                {
-                                    ImageSource = Device.OnPlatform(
-                                        ImageSource.FromFile("empty_contact.jpg"),
-                                        ImageSource.FromFile("empty_contact.jpg"),
-                                        ImageSource.FromFile("Assets/empty_contact.jpg")),
-                                };
-                            imageCell.SetBinding(TextCell.TextProperty, new Binding("Name"));
-                            imageCell.SetBinding(TextCell.DetailProperty, new Binding("Description"));
-                            return imageCell;
-                        })
-                };
+			listView.SetBinding(ListView.ItemsSourceProperty, new Binding("ActiveChats"));
+			listView.SetBinding(BindableListView.ItemClickedCommandProperty, new Binding("SelectRoomCommand"));
+			listView.SetBinding(ListView.IsVisibleProperty, new Binding("HasConversations", BindingMode.OneWay));
+				
+			var noItemsLabel = new Label {
+				Text = "Start a conversation or open a room!",
+				FontSize = 16
+			};
+			var noItemsLayout = new StackLayout
+			{
+				VerticalOptions = LayoutOptions.FillAndExpand,
+				Children = 
+				{
+					noItemsLabel
+				}
+			};
+			noItemsLayout.SetBinding(StackLayout.IsVisibleProperty, new Binding("HasConversations", BindingMode.OneWay, converter: new InverterConverter()));
+			
 
-            listView.SetBinding(ListView.ItemsSourceProperty, new Binding("Users"));
-            listView.SetBinding(BindableListView.ItemClickedCommandProperty, new Binding("ContactSelectedCommand"));
+			var contactsLoadingIndicator = new ActivityIndicator();
+			contactsLoadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
 
-            var contactsLoadingIndicator = new ActivityIndicator();
-            contactsLoadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
-
-            Content = new StackLayout
-                {
-                    Children =
-                            {
-                                contactsLoadingIndicator,
-                                listView
-                            }
-                };
-        }
+			Content = new StackLayout
+			{
+				Children =
+				{
+					contactsLoadingIndicator,
+					listView,
+					noItemsLayout
+				}
+			};
+		}
     }
 }

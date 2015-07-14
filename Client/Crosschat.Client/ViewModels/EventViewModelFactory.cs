@@ -8,6 +8,8 @@ namespace SharedSquawk.Client.ViewModels
         {
             if (@event is TextMessage)
 				return new TextMessageViewModel(@event as TextMessage, currentUserId);
+			if (@event is TypingEvent)
+				return new TypingEventViewModel(@event as TypingEvent);
 
             //TODO: create VM for other event types 
 

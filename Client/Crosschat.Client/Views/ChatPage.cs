@@ -16,7 +16,7 @@ namespace SharedSquawk.Client.Views
             Icon = "chat.png";
 
             var headerLabel = new Label();
-            headerLabel.Font = Font.BoldSystemFontOfSize(24);
+            headerLabel.FontSize = 24;
             headerLabel.TextColor = Device.OnPlatform(Color.Green, Color.Yellow, Color.Yellow);
             headerLabel.SetBinding(Label.TextProperty, new Binding("Subject", stringFormat:"  {0}"));
 
@@ -40,14 +40,14 @@ namespace SharedSquawk.Client.Views
 
             _messageList = new ChatListView();
             _messageList.VerticalOptions = LayoutOptions.FillAndExpand;
-            _messageList.SetBinding(ChatListView.ItemsSourceProperty, new Binding("Events"));
+			_messageList.SetBinding(ChatListView.ItemsSourceProperty, new Binding("MessageEvents"));
             _messageList.ItemTemplate = new DataTemplate(CreateMessageCell);
 			_messageList.ItemTapped += ItemTapped;
 
-			var testButton = new Button();
-			testButton.Text = " Update ";
-			testButton.VerticalOptions = LayoutOptions.CenterAndExpand;
-			testButton.SetBinding(Button.CommandProperty, new Binding("UpdateCommand"));
+			var typingLabel = new Label();
+			typingLabel.FontSize = 12;
+			typingLabel.TextColor = Color.Gray;
+			typingLabel.SetBinding(Label.TextProperty, new Binding("TypingEventsString", stringFormat:"  {0}"));
             
             Content = new StackLayout
                 {
@@ -59,6 +59,7 @@ namespace SharedSquawk.Client.Views
                             
                             //headerLabel,
 							_messageList,
+							typingLabel,
 							new StackLayout
 							{
 								Children = {inputBox, sendButton},

@@ -21,6 +21,11 @@ namespace SharedSquawk.Client
 			return ConnectionManager.SendRequestAndWaitResponse<ChatUpdateRequest,ChatUpdateResponse>(request);
 		}
 
+		public Task<ProfileResponse> GetUserProfile (ProfileRequest request)
+		{
+			return ConnectionManager.SendRequestAndWaitResponse<ProfileRequest,ProfileResponse>(request);
+		}
+
 	}
 }
 

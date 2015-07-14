@@ -52,13 +52,17 @@ namespace SharedSquawk.Client.Seedwork.Extensions
 						destination.Add(projection);
                     }
                 }
-                if (e.Action == NotifyCollectionChangedAction.Remove && sourceKey != null && destKey != null)
+                else if (e.Action == NotifyCollectionChangedAction.Remove && sourceKey != null && destKey != null)
                 {
                     foreach (var item in e.OldItems.OfType<T>().Join(destination, sourceKey, destKey, (src, dst) => dst))
                     {
                         destination.Remove(item);
                     }
                 }
+				else if(e.Action == NotifyCollectionChangedAction.Reset)
+				{
+					destination.Clear();
+				}
             };
         }
 

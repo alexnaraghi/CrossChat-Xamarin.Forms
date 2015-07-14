@@ -15,7 +15,8 @@ namespace SharedSquawk.Client
 			{typeof(LoginRequest), new TransportEndpoint(){TransportMethod = TransportMethod.POST, Address = "Members/Login.ashx"}},
 			{typeof(MemberStatusRequest), new TransportEndpoint(){TransportMethod = TransportMethod.POST, Address = "Members/GetMemberStatus2.ashx"}},
 			{typeof(ConnectedMembersRequest), new TransportEndpoint(){TransportMethod = TransportMethod.POST, Address = "Chat3/JoinTC.ashx"}},
-			{typeof(ChatUpdateRequest), new TransportEndpoint(){TransportMethod = TransportMethod.POST, Address = "Chat3/GetTCUpdate.ashx"}}
+			{typeof(ChatUpdateRequest), new TransportEndpoint(){TransportMethod = TransportMethod.POST, Address = "Chat3/GetTCUpdate.ashx"}},
+			{typeof(ProfileRequest), new TransportEndpoint(){TransportMethod = TransportMethod.POST, Address = "Members/GetFullMember.aspx"}}
 		};
 
 		public static TransportEndpoint Get(Type type)

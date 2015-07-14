@@ -135,6 +135,12 @@
     <Compile Include="Views\PublicRoomsPage.cs" />
     <Compile Include="Model\PublicRoomsRepository.cs" />
     <Compile Include="Model\Entities\Room.cs" />
+    <Compile Include="Model\Factories\RoomFactory.cs" />
+    <Compile Include="Model\Entities\Messages\TypingMessage.cs" />
+    <Compile Include="ViewModels\TypingEventViewModel.cs" />
+    <Compile Include="Views\UserDetailPage.cs" />
+    <Compile Include="ViewModels\UserDetailViewModel.cs" />
+    <Compile Include="Model\Entities\Profile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Crosschat.Utils\SharedSquawk.Utils.csproj">

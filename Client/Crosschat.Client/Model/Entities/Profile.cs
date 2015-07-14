@@ -1,33 +1,35 @@
 ﻿using System;
-using System.Xml.Serialization;
+using SharedSquawk.Server.Application.DataTransferObjects;
 
-namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
+namespace SharedSquawk.Client.Model.Entities
 {
-	[XmlType(TypeName="U", Namespace = "")]
-	public class UserDto
+	public class Profile
 	{
-		[XmlAttribute("PLs")]
 		public string PracticingLanguages  { get; set; }
-		[XmlAttribute("KLs")]
 		public string KnownLanguages  { get; set; }
-		[XmlAttribute("LID")]
 		public int LocaleID  { get; set; }
-		[XmlAttribute("A")]
 		public int Age  { get; set; }
-		[XmlIgnore]
 		public Gender Gender
 		{
 			get{return (Gender)GenderInt;}
 			set{ GenderInt = (int)value; }
 		}
-		[XmlAttribute("G")]
 		public int GenderInt  { get; set; }
-		[XmlAttribute("LN")]
 		public string LastName  { get; set; }
-		[XmlAttribute("FN")]
 		public string FirstName  { get; set; }
-		[XmlAttribute("UID")]
 		public int UserId  { get; set; }
+
+		public ProfileDetails Details{get;set;}
+	}
+
+	public class ProfileDetails
+	{
+		public string US  { get; set; }
+		public string L { get; set; }
+		public string Description { get; set; }
+		public int XCM  { get; set; }
+		public int XCC  { get; set; }
+		public string RegistrationDate { get; set; }
 	}
 }
 

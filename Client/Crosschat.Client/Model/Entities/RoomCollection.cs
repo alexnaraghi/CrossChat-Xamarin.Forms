@@ -7,47 +7,77 @@ using SharedSquawk.Client.Seedwork.Extensions;
 
 namespace SharedSquawk.Client
 {
-	public class RoomCollection : ObservableDictionary<string, ObservableCollection<Event>>
+	public class RoomData
+	{
+		public ObservableCollection<Event> TextMessages{get; private set;}
+		public ObservableCollection<Event> TypingEvents{ get; private set; }
+
+		public RoomData()
+		{
+			TextMessages = new ObservableCollection<Event> ();
+			TypingEvents = new ObservableCollection<Event> ();
+		}
+	}
+
+	public class RoomCollection : ObservableDictionary<string, RoomData>
 	{
 		//
-		public void AddMessage(string key, Event value)
+		public void AddTextMessage(string key, Event value)
 		{
 			if (!ContainsKey (key))
 			{
-				Add (key, new ObservableCollection<Event> ());
+				Add (key, new RoomData());
 			}
 
-			this [key].Add (value);
+			this [key].TextMessages.Add (value);
 		}
 
-		public void AddMessageRange(string key, IEnumerable<Event> values)
+		public void AddTextMessageRange(string key, IEnumerable<Event> values)
 		{
 			if (!ContainsKey (key))
 			{
-				Add (key, new ObservableCollection<Event> ());
+				Add (key, new RoomData());
 			}
 
-			this [key].AddRange (values);
+			this [key].TextMessages.AddRange (values);
 		}
 
-		public void RemoveMessage(string key, Event value)
+		public void RemoveTextMessage(string key, Event value)
 		{
 			if (!ContainsKey (key))
 			{
 				throw new IndexOutOfRangeException ("list doesnt exit, cant remove event");
 			}
 
-			this [key].Remove (value);
+			this [key].TextMessages.Remove (value);
 		}
 
-		public Event Last(string key)
+		public Event LastTextMessage(string key)
 		{
 			if (!ContainsKey (key))
 			{
 				throw new IndexOutOfRangeException ("list doesnt exit, cant remove event");
 			}
 
-			return this [key].Last();
+			return this [key].TextMessages.Last();
+		}
+
+		public void AddTypingEvent(string key, Event value)
+		{
+			if (!ContainsKey (key))
+			{
+				Add (key, new RoomData());
+			}
+
+			this [key].TypingEvents.Add (value);
+		}
+
+		public void ClearAllTypingEvents()
+		{
+			foreach (var roomCollection in this.Values)
+			{
+				roomCollection.TypingEvents.Clear ();
+			}
 		}
 	}
 }

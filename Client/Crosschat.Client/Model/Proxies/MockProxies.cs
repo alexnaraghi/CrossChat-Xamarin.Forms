@@ -25,6 +25,11 @@ namespace SharedSquawk.Client
 
 	public class FakeChatServiceProxy : FakeServiceProxyBase, IChatServiceProxy
 	{
+		public Task<ProfileResponse> GetUserProfile (ProfileRequest request)
+		{
+			throw new NotImplementedException ();
+		}
+
 		public Task<ChatUpdateResponse> GetChatUpdate (ChatUpdateRequest request)
 		{
 			throw new NotImplementedException ();

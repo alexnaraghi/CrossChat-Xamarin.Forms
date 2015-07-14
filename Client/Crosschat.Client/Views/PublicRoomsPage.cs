@@ -8,8 +8,6 @@ namespace SharedSquawk.Client.Views
     {
 		public PublicRoomsPage(ViewModelBase viewModel) : base(viewModel)
         {
-            
-
             var listView = new BindableListView
                 {
                     ItemTemplate = new DataTemplate(() =>
@@ -28,13 +26,13 @@ namespace SharedSquawk.Client.Views
             contactsLoadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
 
             Content = new StackLayout
-                {
-                    Children =
-                            {
-                                contactsLoadingIndicator,
-                                listView
-                            }
-                };
+            {
+                Children =
+                        {
+                            contactsLoadingIndicator,
+                            listView
+                        }
+            };
         }
     }
 }

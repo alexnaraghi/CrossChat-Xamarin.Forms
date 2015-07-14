@@ -29,7 +29,7 @@ namespace SharedSquawk.Client.Views
                 };
 
             listView.SetBinding(ListView.ItemsSourceProperty, new Binding("Users"));
-            listView.SetBinding(BindableListView.ItemClickedCommandProperty, new Binding("ContactSelectedCommand"));
+			listView.SetBinding(BindableListView.ItemClickedCommandProperty, new Binding("SelectUserCommand"));
 
             var contactsLoadingIndicator = new ActivityIndicator();
             contactsLoadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));

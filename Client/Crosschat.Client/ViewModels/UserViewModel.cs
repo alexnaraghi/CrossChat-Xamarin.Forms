@@ -1,20 +1,21 @@
 ﻿using SharedSquawk.Client.Seedwork;
 using SharedSquawk.Server.Application.DataTransferObjects.Messages;
 using SharedSquawk.Server.Application.DataTransferObjects.Requests;
+using SharedSquawk.Client.Model.Entities;
 
 namespace SharedSquawk.Client.ViewModels
 {
     public class UserViewModel : ViewModelBase
     {
-        private readonly UserDto _userDto;
+        private readonly Profile _profile;
         private string _description;
         private string _name;
 
-        public UserViewModel(UserDto userDto)
+        public UserViewModel(Profile profile)
         {
-            _userDto = userDto;
-			Name = userDto.LastName + " " + userDto.FirstName;
-			Description = string.Format("{0}, {1} years old, Country: {2}", userDto.Gender.ToString(), userDto.Age, userDto.LocaleID);
+			_profile = profile;
+			Name = profile.LastName + " " + profile.FirstName;
+			Description = string.Format("{0}, {1} years old, Country: {2}", profile.Gender.ToString(), profile.Age, profile.LocaleID);
         }
 
         public string Description
@@ -28,5 +29,10 @@ namespace SharedSquawk.Client.ViewModels
             get { return _name; }
             set { SetProperty(ref _name, value); }
         }
+
+		public int UserId
+		{
+			get { return _profile.UserId; }
+		}
     }
 }

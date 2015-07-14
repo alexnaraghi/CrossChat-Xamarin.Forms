@@ -82,7 +82,7 @@ namespace SharedSquawk.Client
 			}
 
 			//Active Rooms
-			_request.ActiveRooms = string.Join ("|", _activeRooms);
+			_request.ActiveRooms = string.Join (",", _activeRooms);
 
 			return _request;
 		}

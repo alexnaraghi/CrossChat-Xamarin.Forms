@@ -18,7 +18,7 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 	public class MemberStatusResponse : ResponseBase
     {
 		[XmlAttribute("US")]
-		public int US { get; set; }
+		public string US { get; set; }
 		[XmlIgnore]
 		public bool RWorldIsOn { get; set; }
 		[XmlAttribute("RWorldIsOn")]

@@ -9,36 +9,85 @@ using SharedSquawk.Client.Seedwork.Extensions;
 using System.Collections.Specialized;
 using System.Linq;
 using SharedSquawk.Client.Views;
+using System.Text;
+using SharedSquawk.Client.Model.Entities;
 
 namespace SharedSquawk.Client.ViewModels
 {
 	public class ChatViewModel : ViewModelBase
 	{
 		private readonly ApplicationManager _appManager;
-		private ObservableCollection<EventViewModel> _events;
+		private ObservableCollection<EventViewModel> _messageEvents;
+		private ObservableCollection<TypingEventViewModel> _typingEvents;
 		private Room _room;
 		private string _inputText;
 		private readonly EventViewModelFactory _eventViewModelFactory;
+		private string _typingEventsString;
 
 		public ChatViewModel (ApplicationManager appManager, Room room)
 		{
 			_room = room;
 			_appManager = appManager;
 			_eventViewModelFactory = new EventViewModelFactory();
-			_events = new ObservableCollection<EventViewModel>();
+			_messageEvents = new ObservableCollection<EventViewModel>();
+			_typingEvents = new ObservableCollection<TypingEventViewModel>();
 
-			var chatRoomModel = _appManager.ChatManager.Rooms [room.RoomId];
+			var chatModel = _appManager.ChatManager.Rooms [room.RoomId];
 			//Yikes, every time we switch rooms, we are creating EventViewModels for potentially hundreds of messages.
 			//This could result in some major garbage.  Keep an eye on performance, maybe we will need to drop the view model
 			//approach for messages.
-			chatRoomModel.SynchronizeWith(Events, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.CurrentUser.UserId));
+			chatModel.TextMessages.SynchronizeWith(MessageEvents, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.CurrentUser.UserId));
+			chatModel.TypingEvents.SynchronizeWith(_typingEvents, i => new TypingEventViewModel(i as TypingEvent), s => (s as TypingEvent).UserId, d => d.UserId);
+
+			_typingEvents.CollectionChanged += _typingEvents_CollectionChanged; 
+		}
+
+		void _typingEvents_CollectionChanged (object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (_typingEvents.Count == 0)
+			{
+				TypingEventsString = string.Empty;
+				return;
+			}
+			else if (_typingEvents.Count > 4)
+			{
+				TypingEventsString = "Many people are typing...";
+				return;
+			}
+
+			StringBuilder sb = new StringBuilder ();
+			if (_typingEvents.Count == 1)
+			{
+				sb.Append (_typingEvents [0].UserName).Append (" is typing...");
+			}
+			else if (_typingEvents.Count == 2)
+			{
+				sb.Append (_typingEvents [0].UserName).Append (" and ");
+				sb.Append (_typingEvents [1].UserName).Append (" are typing...");
+			}
+			else
+			{
+				for (int i = 0; i < _typingEvents.Count - 1; i++)
+				{
+					var str = _typingEvents [i].UserName;
+					sb.Append (str).Append (", ");
+				}
+
+				//The last entry is special
+				var lastStr = _typingEvents [_typingEvents.Count - 1].UserName;
+				sb.Append (" and ").Append (lastStr);
+
+				sb.Append (" are typing...");
+			}
+
+			TypingEventsString = sb.ToString(); 
 		}
 
 		protected override void OnShown ()
 		{
 			//Scroll to the bottom of the list whenever we get a new message
 			//Future idea: scroll to bottom only when the user is already at the bottom, so they can browse messages easier.
-			Events.CollectionChanged += (s, e) =>
+			MessageEvents.CollectionChanged += (s, e) =>
 			{
 				if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
 				{
@@ -50,12 +99,14 @@ namespace SharedSquawk.Client.ViewModels
 			base.OnShown ();
 		}
 
+		//note this does technically break the mvvm pattern, but I can't think of a less intrusive way to do this.
+		//Simple code wins over conformant code here
 		void ScrollToBottom ()
 		{
 			var chatPage = _currentPage as ChatPage;
-			if( chatPage != null && Events.Count > 0)
+			if( chatPage != null && MessageEvents.Count > 0)
 			{
-				chatPage.OnItemAdded(Events.Last());
+				chatPage.OnItemAdded(MessageEvents.Last());
 			}
 		}
 
@@ -67,12 +118,27 @@ namespace SharedSquawk.Client.ViewModels
 		public string InputText
 		{
 			get { return _inputText; }
-			set { SetProperty(ref _inputText, value); }
+			set 
+			{ 
+				SetProperty(ref _inputText, value); 
+			}
 		}
 
-		public ObservableCollection<EventViewModel> Events {
-			get { return _events; }
-			set { SetProperty(ref _events, value); }
+		public ObservableCollection<EventViewModel> MessageEvents {
+			get { return _messageEvents; }
+			set { SetProperty(ref _messageEvents, value); }
+		}
+
+		public string TypingEventsString 
+		{
+			get 
+			{
+				return _typingEventsString;
+			}
+			set 
+			{
+				SetProperty(ref _typingEventsString, value); 
+			}
 		}
 
 		public ICommand SendMessageCommand
