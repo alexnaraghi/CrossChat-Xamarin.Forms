@@ -10,7 +10,7 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
     public class ChatUpdateRequest : RequestBase
     {
 		[XmlAttribute("D")]
-		public double Delay  { get; set; }
+		public string Delay  { get; set; }
 		[XmlAttribute("UID")]
 		public int UserId  { get; set; }
 		[XmlAttribute("GUID")]
@@ -25,6 +25,8 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 		public List<MessageDto> Messages{ get; set;}
 		[XmlElement("E")]
 		public List<RoomEntryRequestDto> EnteredRooms  { get; set; }
+		[XmlElement("C")]
+		public List<UserChatDto> UserChatRequests  { get; set; }
     }
 
 	[XmlType(TypeName="UPDs", Namespace = "")]
@@ -60,6 +62,18 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 		public EnteredRoomDto EnteredRoom { get; set;}
 		[XmlElement("C")]
 		public UserChatDto UserChatRequest { get; set;}
+		[XmlElement("CR")]
+		public ChatResultDto UserChatResult { get; set;}
+	}
+
+	[XmlType(TypeName="CR", Namespace = "")]
+	public class ChatResultDto
+	{
+		[XmlAttribute("UID")]
+		public int UserId { get; set;}
+
+		[XmlAttribute("V")]
+		public string Value { get; set;}
 	}
 
 	[XmlType(TypeName="DU", Namespace = "")]
@@ -99,7 +113,7 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 	[XmlType(TypeName="C", Namespace = "")]
 	public class UserChatDto
 	{
-		[XmlElement("UID")]
+		[XmlAttribute("UID")]
 		public int UserId;
 	}
 

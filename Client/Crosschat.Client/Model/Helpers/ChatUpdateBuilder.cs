@@ -10,16 +10,19 @@ namespace SharedSquawk.Client
 		private ChatUpdateRequest _request;
 		private List<string> _activeRooms;
 		private List<string> _enteredRooms;
+		private List<int> _enteredUserChatRequests;
 		private bool _isInstantiated;
 		public ChatUpdateBuilder ()
 		{
 			_request = new ChatUpdateRequest () {
 				Messages = new List<MessageDto>(),
 				ActiveRooms = string.Empty,
-				EnteredRooms = new List<RoomEntryRequestDto>()
+				EnteredRooms = new List<RoomEntryRequestDto>(),
+				UserChatRequests = new List<UserChatDto>()
 			};
 			_activeRooms = new List<string> ();
 			_enteredRooms = new List<string> ();
+			_enteredUserChatRequests = new List<int> ();
 		}
 
 		public void Instantiate(int userId, string guid)
@@ -31,23 +34,26 @@ namespace SharedSquawk.Client
 			_request.EnteredRooms.Clear ();
 			_activeRooms.Clear ();
 			_enteredRooms.Clear ();
+			_enteredUserChatRequests.Clear ();
 
 			_isInstantiated = true;
 
 		}
 
-		public void NewRequest(double delay, int lastServerUpdateId, int clientUpdateId)
+		public void NewRequest(double delayMs, int lastServerUpdateId, int clientUpdateId)
 		{
-			_request.Delay = delay;
+			_request.Delay = delayMs.ToString("0.###");
 			_request.LastServerUpdateId = lastServerUpdateId;
 			_request.ClientUpdateId = clientUpdateId;
 			_request.Messages = new List<MessageDto> ();
 			_request.EnteredRooms.Clear ();
+			_request.UserChatRequests.Clear ();
 			_request.ActiveRooms = null;
 
 			//When a new request is started, all rooms entered become part of the active room list
 			_activeRooms.AddRange (_enteredRooms);
 			_enteredRooms.Clear ();
+			_enteredUserChatRequests.Clear ();
 		}
 
 		public void AddMessage(MessageDto message)
@@ -55,7 +61,17 @@ namespace SharedSquawk.Client
 			_request.Messages.Add (message);
 		}
 
-		public void AddRoom(string room)
+		public void AddPublicRoom(string room)
+		{
+			_enteredRooms.Add (room);
+		}
+
+		public void AddUserRoomRequest(int userId)
+		{
+			_enteredUserChatRequests.Add (userId);
+		}
+
+		public void AddAcceptedUserRoom(string room)
 		{
 			_enteredRooms.Add (room);
 		}
@@ -79,6 +95,12 @@ namespace SharedSquawk.Client
 			foreach (var room in _enteredRooms)
 			{
 				_request.EnteredRooms.Add (new RoomEntryRequestDto{ Room = room });
+			}
+
+			_request.UserChatRequests.Clear ();
+			foreach (var userId in _enteredUserChatRequests)
+			{
+				_request.UserChatRequests.Add (new UserChatDto{ UserId = userId });
 			}
 
 			//Active Rooms

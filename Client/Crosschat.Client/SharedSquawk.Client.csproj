@@ -141,6 +141,7 @@
     <Compile Include="Views\UserDetailPage.cs" />
     <Compile Include="ViewModels\UserDetailViewModel.cs" />
     <Compile Include="Model\Entities\Profile.cs" />
+    <Compile Include="Model\Entities\RoomData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Crosschat.Utils\SharedSquawk.Utils.csproj">

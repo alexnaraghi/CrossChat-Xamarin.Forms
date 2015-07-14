@@ -3,6 +3,7 @@ using SharedSquawk.Client.Seedwork.Controls;
 using SharedSquawk.Client.Views.Controls;
 using Xamarin.Forms;
 using System.Linq;
+using SharedSquawk.Client.Views.ValueConverters;
 
 namespace SharedSquawk.Client.Views
 {
@@ -24,6 +25,7 @@ namespace SharedSquawk.Client.Views
             sendButton.Text = " Send ";
             sendButton.VerticalOptions = LayoutOptions.EndAndExpand;
             sendButton.SetBinding(Button.CommandProperty, new Binding("SendMessageCommand"));
+			sendButton.SetBinding(Button.IsEnabledProperty, new Binding("IsConnected", BindingMode.OneWay));
             if (Device.OS == TargetPlatform.WinPhone)
             {
                 sendButton.BackgroundColor = Color.Green;
@@ -37,10 +39,12 @@ namespace SharedSquawk.Client.Views
             inputBox.Placeholder = "Type a message...";
             inputBox.HeightRequest = 30;
             inputBox.SetBinding(Entry.TextProperty, new Binding("InputText", BindingMode.TwoWay));
+			inputBox.SetBinding(Entry.IsEnabledProperty, new Binding("IsConnected", BindingMode.OneWay));
 
             _messageList = new ChatListView();
             _messageList.VerticalOptions = LayoutOptions.FillAndExpand;
 			_messageList.SetBinding(ChatListView.ItemsSourceProperty, new Binding("MessageEvents"));
+			_messageList.SetBinding(ChatListView.IsVisibleProperty, new Binding("IsConnected", BindingMode.OneWay));
             _messageList.ItemTemplate = new DataTemplate(CreateMessageCell);
 			_messageList.ItemTapped += ItemTapped;
 
@@ -48,6 +52,24 @@ namespace SharedSquawk.Client.Views
 			typingLabel.FontSize = 12;
 			typingLabel.TextColor = Color.Gray;
 			typingLabel.SetBinding(Label.TextProperty, new Binding("TypingEventsString", stringFormat:"  {0}"));
+
+			#region Error Message UI
+			var chatStatusLabel = new Label {
+				HorizontalOptions = LayoutOptions.Center,
+				FontSize = 16
+			};
+			chatStatusLabel.SetBinding(Label.TextProperty, new Binding("StatusText", BindingMode.OneWay));
+			var chatStatusLayout = new StackLayout
+			{
+				VerticalOptions = LayoutOptions.FillAndExpand,
+				HorizontalOptions = LayoutOptions.FillAndExpand,
+				Children = 
+				{
+					chatStatusLabel
+				}
+			};
+			chatStatusLayout.SetBinding(StackLayout.IsVisibleProperty, new Binding("IsConnected", BindingMode.OneWay, converter: new InverterConverter()));
+			#endregion
             
             Content = new StackLayout
                 {
@@ -59,6 +81,7 @@ namespace SharedSquawk.Client.Views
                             
                             //headerLabel,
 							_messageList,
+							chatStatusLayout,
 							typingLabel,
 							new StackLayout
 							{

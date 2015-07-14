@@ -4,29 +4,19 @@ using SharedSquawk.Client.Model.Entities.Messages;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SharedSquawk.Client.Seedwork.Extensions;
+using System.ComponentModel;
+using SharedSquawk.Client.Properties;
+using System.Runtime.CompilerServices;
 
-namespace SharedSquawk.Client
+namespace SharedSquawk.Client.Model.Entities
 {
-	public class RoomData
-	{
-		public ObservableCollection<Event> TextMessages{get; private set;}
-		public ObservableCollection<Event> TypingEvents{ get; private set; }
-
-		public RoomData()
-		{
-			TextMessages = new ObservableCollection<Event> ();
-			TypingEvents = new ObservableCollection<Event> ();
-		}
-	}
-
 	public class RoomCollection : ObservableDictionary<string, RoomData>
 	{
-		//
 		public void AddTextMessage(string key, Event value)
 		{
 			if (!ContainsKey (key))
 			{
-				Add (key, new RoomData());
+				throw new IndexOutOfRangeException ("list doesnt exit, cant add event");
 			}
 
 			this [key].TextMessages.Add (value);
@@ -36,9 +26,8 @@ namespace SharedSquawk.Client
 		{
 			if (!ContainsKey (key))
 			{
-				Add (key, new RoomData());
+				throw new IndexOutOfRangeException ("list doesnt exit, cant add event");
 			}
-
 			this [key].TextMessages.AddRange (values);
 		}
 
@@ -66,7 +55,7 @@ namespace SharedSquawk.Client
 		{
 			if (!ContainsKey (key))
 			{
-				Add (key, new RoomData());
+				throw new IndexOutOfRangeException ("list doesnt exit, cant add event");
 			}
 
 			this [key].TypingEvents.Add (value);
@@ -78,6 +67,27 @@ namespace SharedSquawk.Client
 			{
 				roomCollection.TypingEvents.Clear ();
 			}
+		}
+
+		public void SetStatus(string key, RoomStatus status)
+		{
+			if (!ContainsKey (key))
+			{
+				throw new IndexOutOfRangeException ("list doesnt exit, cant set status");
+			}
+			this [key].Status = status;
+		}
+
+		public void CreateRoom(Room room)
+		{
+			//A redundant key here, but that actually is useful for synchronizing observable collections
+			//(the synchronize command doesn't have access to the key in this app's implementation).
+			this.Add (room.RoomId, new RoomData(room));
+		}
+
+		public void RemoveRoom(string key)
+		{
+			this.Remove (key);
 		}
 	}
 }

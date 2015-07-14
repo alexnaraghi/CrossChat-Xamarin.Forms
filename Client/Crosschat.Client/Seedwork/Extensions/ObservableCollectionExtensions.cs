@@ -75,5 +75,49 @@ namespace SharedSquawk.Client.Seedwork.Extensions
         {
             SynchronizeWith<T, TR, T>(source, destination, creator, null, null);
         }
+
+		/// <summary>
+		/// Set one-way synchronization between an observable dictionary and observable collection (TODO: use Rx)
+		/// </summary>
+		public static void SynchronizeWith<K, T, TR, TKey>(this ObservableDictionary<K,T> source,
+																ObservableCollection<TR> destination,
+																Func<T, TR> creator,
+																Func<T, TKey> sourceKey,
+																Func<TR, TKey> destKey)
+		{
+			source.ForEach(item => destination.Add(creator(item.Value)));
+			source.CollectionChanged += (s, e) =>
+			{
+				if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
+				{
+					foreach (var item in e.NewItems.OfType<KeyValuePair<K,T>>())
+					{
+						var projection = creator(item.Value);
+						destination.Add(projection);
+					}
+				}
+				else if (e.Action == NotifyCollectionChangedAction.Remove && sourceKey != null && destKey != null)
+				{
+					foreach (var item in e.OldItems.OfType<KeyValuePair<K,T>>().Select(kv => kv.Value).Join(destination, sourceKey, destKey, (src, dst) => dst))
+					{
+						destination.Remove(item);
+					}
+				}
+				else if(e.Action == NotifyCollectionChangedAction.Reset)
+				{
+					destination.Clear();
+				}
+			};
+		}
+
+		/// <summary>
+		/// Set one-way synchronization between an observble dictionary and an observable collection
+		/// </summary>
+		public static void SynchronizeWith<K, T, TR>(this ObservableDictionary<K,T> source,
+			ObservableCollection<TR> destination,
+			Func<T, TR> creator)
+		{
+			SynchronizeWith<K, T, TR, T>(source, destination, creator, null, null);
+		}
     }
 }

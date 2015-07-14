@@ -138,12 +138,12 @@ namespace SharedSquawk.Client.ViewModels
 		private async void OnSelectChat()
 		{
 			IsBusy = true;
-			var room = await _appManager.ChatManager.JoinUserRoom (UserId);
+			var roomData = await _appManager.ChatManager.JoinUserRoom (UserId);
 			IsBusy = false;
 
 			//Go to the root and open the chat window
 			await this.PopToRootAsync ();
-			var model = new ChatViewModel (_appManager, room);
+			var model = new ChatViewModel (_appManager, roomData);
 			await model.ShowAsync ();
 		}
     }

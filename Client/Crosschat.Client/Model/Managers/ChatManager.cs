@@ -57,7 +57,6 @@ namespace SharedSquawk.Client.Model.Managers
 			UserDirectory = new Dictionary<int, Profile> ();
 			Rooms = new RoomCollection ();
 			_updateBuilder = new ChatUpdateBuilder ();
-			ActiveChats = new ObservableCollection<Room> ();
         }
 
 
@@ -150,7 +149,8 @@ namespace SharedSquawk.Client.Model.Managers
 				var chatStatus = await _chatServiceProxy.GetChatUpdate (_updateBuilder.ToRequest ());
 
 				timer.Stop();
-				TimeSpan responseTime = timer.Elapsed;
+				//HACK: Time is way off, making it more realistic till i figure out how to improve accuracy
+				TimeSpan responseTime = timer.Elapsed - TimeSpan.FromMilliseconds(130);
 
 				//Client update count increments by one every time we send a request
 				CurrentUpdateRequestCount++;
@@ -167,7 +167,7 @@ namespace SharedSquawk.Client.Model.Managers
 					UpdateObjectsReceivedCount += chatStatus.Updates.Count;
 
 					//Clear out our buffer so we can start a new update request
-					_updateBuilder.NewRequest (responseTime.TotalMilliseconds, UpdateObjectsReceivedCount, CurrentUpdateRequestCount);
+					_updateBuilder.NewRequest (Math.Abs(responseTime.TotalMilliseconds), UpdateObjectsReceivedCount, CurrentUpdateRequestCount);
 
 					//Consume the response
 					LastServerUpdateId = chatStatus.ServerUpdateId;
@@ -198,7 +198,7 @@ namespace SharedSquawk.Client.Model.Managers
 						{
 							var fp = update.FP;
 							Rooms.AddTypingEvent (fp.Room, new TypingEvent () {
-								UserName = GetUserFirstName(fp.UserId),
+								UserName = GetUserFirstName (fp.UserId),
 								UserId = fp.UserId
 							});
 						}
@@ -208,12 +208,12 @@ namespace SharedSquawk.Client.Model.Managers
 							var room = message.Room;
 
 							//group the same user's last chats together
-							var lastMessage = Rooms.LastTextMessage(room) as TextMessage;
+							var lastMessage = Rooms.LastTextMessage (room) as TextMessage;
 							//TODO: Fix the bug with grouping chats duplication
-							if(false)
+							if (false)
 							//if (lastMessage != null && lastMessage.UserId == message.UserId)
 							{
-								Rooms.RemoveTextMessage(room, lastMessage);
+								Rooms.RemoveTextMessage (room, lastMessage);
 								lastMessage.Body += "\n\n" + message.Text;
 								lastMessage.Timestamp = DateTime.Now;
 								Rooms.AddTextMessage (room, lastMessage);
@@ -222,7 +222,7 @@ namespace SharedSquawk.Client.Model.Managers
 							{
 								//BUG: Sometimes we are getting some users that whose names we aren't sure about...
 								//Need to investigate this.
-								var messageUsername = GetUserFirstName(message.UserId);
+								var messageUsername = GetUserFirstName (message.UserId);
 								Rooms.AddTextMessage (room, new TextMessage () {
 									UserName = messageUsername,
 									Body = message.Text,
@@ -236,24 +236,44 @@ namespace SharedSquawk.Client.Model.Managers
 							var enteredRoom = update.EnteredRoom;
 							var room = update.EnteredRoom.Room;
 
-							//Make the room exist, no matter how many messages there are
-							if (!Rooms.ContainsKey (room))
-							{
-								Rooms.Add(room, new RoomData());
-							}
-
-							Rooms.AddTextMessageRange(room, enteredRoom.RoomMessages.Select( r =>
-								new TextMessage(){
-									UserName = r.User.Name,
-									Body = r.Message.Body,
-									UserId = null, //How can we get this?  only the first name is sent, so we can't resolve duplicate names
-									Timestamp = DateTime.Now
-								}));
-							//do something				
+							Rooms.SetStatus (room, RoomStatus.Connected);
+							Rooms.AddTextMessageRange (room, enteredRoom.RoomMessages.Select (r =>
+								new TextMessage () {
+								UserName = r.User.Name,
+								Body = r.Message.Body,
+								UserId = null, //How can we get this?  only the first name is sent, so we can't resolve duplicate names
+								Timestamp = DateTime.Now
+							}));
+											
 						}
 						else if (update.UserChatRequest != null)
 						{
 							//do something
+						}
+						else if (update.UserChatResult != null)
+						{
+							var chatResult = update.UserChatResult;
+							if (chatResult.Value == "Ok")
+							{
+								//TODO: centralize this conversion
+								var roomId = _accountManager.CurrentUser.UserId + "-" + chatResult.UserId;
+								_updateBuilder.AddAcceptedUserRoom (roomId);
+
+
+								//So, we can be getting responses from a different session.  In that case,
+								//we will need to spawn up a room and act as if we always intended to get
+								//this chat accpetance
+								if (!Rooms.ContainsKey (roomId))
+								{
+									Rooms.CreateRoom (new Room(roomId, GetUserFullName(chatResult.UserId)){ UserId = chatResult.UserId });
+								}
+
+								Rooms.SetStatus (roomId, RoomStatus.Connected);
+							}
+							else
+							{
+								//TODO: handle other chat results
+							}
 						}
 						else
 						{
@@ -293,33 +313,36 @@ namespace SharedSquawk.Client.Model.Managers
 			//TODO
 		}
 
-		public async Task JoinPublicRoom(Room room)
+		public async Task<RoomData> JoinPublicRoom(Room room)
 		{
-			if (!ActiveChats.Any (r => r.RoomId == room.RoomId))
+			if (!Rooms.Any (r => r.Value.Room.RoomId == room.RoomId))
 			{
-				ActiveChats.Add (room);
-				_updateBuilder.AddRoom (room.RoomId);
-			}
+				Rooms.CreateRoom (room);
+				_updateBuilder.AddPublicRoom (room.RoomId);
 
-			//Manually force update the chat, to send our message asap
-			await GetChatUpdate ();
+				//Manually force update the chat, to send our message asap
+				await GetChatUpdate ();
+			}
+			//Otherwise we already have the room in our active chats, nothing to do here
+
+			return Rooms [room.RoomId];
 		}
 
-		public async Task<Room> JoinUserRoom(int userId)
+		public async Task<RoomData> JoinUserRoom(int userId)
 		{
 			var otherUserName = GetUserFullName (userId);
 			var room = RoomFactory.Get (userId, otherUserName, _accountManager.CurrentUser.UserId);
 
-			if (!ActiveChats.Any (r => r.RoomId == room.RoomId))
+			if (!Rooms.Any (r => r.Value.Room.RoomId == room.RoomId))
 			{
-				ActiveChats.Add (room);
-				_updateBuilder.AddRoom (room.RoomId);
+				Rooms.CreateRoom (room);
+				_updateBuilder.AddUserRoomRequest (userId);
 			}
 
 			//Manually force update the chat, to send our message asap
 			await GetChatUpdate ();
 
-			return room;
+			return Rooms [room.RoomId];
 		}
 
 		public async Task LeaveRoom(string roomId)
@@ -424,8 +447,6 @@ namespace SharedSquawk.Client.Model.Managers
 		public RoomCollection Rooms { get; private set; }
 
 		public ObservableCollection<Profile> OnlineUsers { get; private set; }
-
-		public ObservableCollection<Room> ActiveChats { get; private set; }
 
 		public Dictionary<int,Profile> UserDirectory{ get; private set; }
 

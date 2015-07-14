@@ -44,7 +44,7 @@ namespace SharedSquawk.Client.ViewModels
             Subject = _appManager.ChatManager.Subject;
 
             _appManager.ChatManager.OnlineUsers.SynchronizeWith(Users, u => new UserViewModel(u));
-			_appManager.ChatManager.ActiveChats.SynchronizeWith(ActiveChats, u => u);
+			_appManager.ChatManager.Rooms.SynchronizeWith(ActiveChats, r => r.Room, s => s.Room.RoomId, d => d.RoomId);
 			//_appManager.ChatManager.Messages.SynchronizeWith(Events, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.CurrentUser.UserId));
             IsBusy = false;
 
@@ -99,8 +99,8 @@ namespace SharedSquawk.Client.ViewModels
 			{
 				throw new Exception ("Selected item was not a room");
 			}
-			await _appManager.ChatManager.JoinPublicRoom (room);
-			var model = new ChatViewModel (_appManager, room);
+			var roomData = await _appManager.ChatManager.JoinPublicRoom (room);
+			var model = new ChatViewModel (_appManager, roomData);
 			await model.ShowAsync ();
 		}
 

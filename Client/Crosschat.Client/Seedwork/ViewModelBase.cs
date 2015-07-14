@@ -75,7 +75,11 @@ namespace SharedSquawk.Client.Seedwork
 
 		public Task PopToRootAsync()
 		{
-			return _currentPage.Navigation.PopToRootAsync ();
+			if (_currentPage.Navigation != null && _currentPage.Navigation.NavigationStack.Count > 0)
+			{
+				return _currentPage.Navigation.PopToRootAsync ();
+			}
+			return Task.FromResult(false);
 		}
 
         public ICommand ShowCommand

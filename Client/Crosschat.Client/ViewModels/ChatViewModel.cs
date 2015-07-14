@@ -19,27 +19,79 @@ namespace SharedSquawk.Client.ViewModels
 		private readonly ApplicationManager _appManager;
 		private ObservableCollection<EventViewModel> _messageEvents;
 		private ObservableCollection<TypingEventViewModel> _typingEvents;
-		private Room _room;
 		private string _inputText;
 		private readonly EventViewModelFactory _eventViewModelFactory;
 		private string _typingEventsString;
+		private RoomStatus _roomStatus;
+		private RoomData _roomData;
 
-		public ChatViewModel (ApplicationManager appManager, Room room)
+		public ChatViewModel (ApplicationManager appManager, RoomData roomData)
 		{
-			_room = room;
 			_appManager = appManager;
 			_eventViewModelFactory = new EventViewModelFactory();
 			_messageEvents = new ObservableCollection<EventViewModel>();
 			_typingEvents = new ObservableCollection<TypingEventViewModel>();
 
-			var chatModel = _appManager.ChatManager.Rooms [room.RoomId];
+			_roomData = roomData;
+
+			//Bind this view model to status changes on the model
+			Status = _roomData.Status;
+			_roomData.PropertyChanged += ChatModel_PropertyChanged;
+
 			//Yikes, every time we switch rooms, we are creating EventViewModels for potentially hundreds of messages.
 			//This could result in some major garbage.  Keep an eye on performance, maybe we will need to drop the view model
 			//approach for messages.
-			chatModel.TextMessages.SynchronizeWith(MessageEvents, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.CurrentUser.UserId));
-			chatModel.TypingEvents.SynchronizeWith(_typingEvents, i => new TypingEventViewModel(i as TypingEvent), s => (s as TypingEvent).UserId, d => d.UserId);
-
+			_roomData.TextMessages.SynchronizeWith(MessageEvents, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.CurrentUser.UserId));
+			_roomData.TypingEvents.SynchronizeWith(_typingEvents, i => new TypingEventViewModel(i as TypingEvent), s => (s as TypingEvent).UserId, d => d.UserId);
 			_typingEvents.CollectionChanged += _typingEvents_CollectionChanged; 
+		}
+
+		void ChatModel_PropertyChanged (object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			const string statusString = "Status"; //Upgrade C#, use nameof
+			if (e.PropertyName == statusString)
+			{
+				Status = _roomData.Status;
+			}
+		}
+
+		public RoomStatus Status
+		{
+			get{ return _roomStatus; }
+			set{ SetProperty (ref _roomStatus, value); }
+		}
+
+		public bool IsConnected
+		{
+			get { return _roomStatus == RoomStatus.Connected; }
+		}
+
+		public string StatusText
+		{
+			get {
+				switch (_roomStatus)
+				{
+				case RoomStatus.Waiting:
+					if (_roomData.Room.IsUserChat)
+					{
+						return "Waiting for the other user to join...";
+					}
+					else
+					{
+						return "Joining...";
+					}
+				case RoomStatus.Connected:
+					return string.Empty;
+				case RoomStatus.Error:
+					return "An error has occurred.";
+				case RoomStatus.OtherUserDeclined:
+					return "The other user has declined this chat request.";
+				case RoomStatus.OtherUserLeft:
+					return "The other user has left the chat.";
+				default:
+					return "Unknown Status";
+				}
+			}
 		}
 
 		void _typingEvents_CollectionChanged (object sender, NotifyCollectionChangedEventArgs e)
@@ -112,7 +164,7 @@ namespace SharedSquawk.Client.ViewModels
 
 		public string RoomName
 		{
-			get { return _room.Name; }
+			get { return _roomData.Room.Name; }
 		}
 
 		public string InputText
@@ -154,7 +206,7 @@ namespace SharedSquawk.Client.ViewModels
 			InputText = string.Empty;
 
 			IsBusy = true;
-			await _appManager.ChatManager.SendMessage(text, _room.RoomId);
+			await _appManager.ChatManager.SendMessage(text, _roomData.Room.RoomId);
 			IsBusy = false;
 		}
 
