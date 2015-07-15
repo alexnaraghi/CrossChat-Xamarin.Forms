@@ -89,31 +89,26 @@ namespace SharedSquawk.Client.Model.Managers
         public async Task ReloadUsers()
         {
 			ConnectedMembersResponse chatStatus;
-			try
-			{
-				chatStatus = await _chatServiceProxy.GetConnectedMembers(new ConnectedMembersRequest()
-					{
-						SSID = _accountManager.SSID,
-						PracticingLanguages = _accountManager.CurrentUser.PracticingLanguages,
-						KnownLanguages = _accountManager.CurrentUser.KnownLanguages,
-						LocaleID = _accountManager.CurrentUser.LocaleID,
-						Age = _accountManager.CurrentUser.Age,
-						Gender = _accountManager.CurrentUser.Gender,
-						LastName = _accountManager.CurrentUser.LastName,
-						FirstName = _accountManager.CurrentUser.FirstName,
-						UserID = _accountManager.CurrentUser.UserId
-					});
-			}
-			catch(AggregateException ex)
-			{
-				throw ex.Flatten ();
-			}
-			catch(Exception ex)
-			{
-				throw ex;
-			}
+
+			chatStatus = await _chatServiceProxy.GetConnectedMembers(new ConnectedMembersRequest()
+				{
+					SSID = _accountManager.SSID,
+					PracticingLanguages = _accountManager.CurrentUser.PracticingLanguages,
+					KnownLanguages = _accountManager.CurrentUser.KnownLanguages,
+					LocaleID = _accountManager.CurrentUser.LocaleID,
+					Age = _accountManager.CurrentUser.Age,
+					Gender = _accountManager.CurrentUser.Gender,
+					LastName = _accountManager.CurrentUser.LastName,
+					FirstName = _accountManager.CurrentUser.FirstName,
+					UserID = _accountManager.CurrentUser.UserId
+				});
 
             OnlineUsers.Clear();
+
+			if (chatStatus == null)
+			{
+				return;
+			}
             
 			_sessionGuid = chatStatus.GUID;
 
@@ -145,14 +140,11 @@ namespace SharedSquawk.Client.Model.Managers
 				timer.Start();
 
 				//Send a chat update request
-				ChatUpdateResponse chatStatus;
-				try
+				ChatUpdateResponse chatStatus = await _chatServiceProxy.GetChatUpdate (_updateBuilder.ToRequest ());
+
+				if (chatStatus == null)
 				{
-					chatStatus = await _chatServiceProxy.GetChatUpdate (_updateBuilder.ToRequest ());
-				}
-				catch(AggregateException ex)
-				{
-					throw ex.Flatten ();
+					return;
 				}
 
 				timer.Stop();

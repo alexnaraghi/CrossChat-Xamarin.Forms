@@ -7,6 +7,7 @@ using SharedSquawk.Client.Seedwork;
 using SharedSquawk.Server.Application.DataTransferObjects.Enums;
 using Xamarin.Forms;
 using System;
+using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 
 namespace SharedSquawk.Client.ViewModels
 {
@@ -27,9 +28,21 @@ namespace SharedSquawk.Client.ViewModels
 		//The login page defines what will occur on the connection dropping
 		public void OnConnectionLost()
 		{
-			Notify ("Connection Error", "An error has occurred.  You will need to login again");
+			if (CurrentViewModel == this)
+			{
+				Notify ("Connection Error", "An error has occurred when trying to login.");
+			}
+			else
+			{
+				Logout ();
+			}
+		}
+
+		public async Task Logout()
+		{
+			await Notify ("Connection Error", "An error has occurred.  You will need to login again.");
 			_appManager.AccountManager.Logout ();
-			ShowModalAsync ();
+			await new LoginViewModel (_appManager).ShowModalAsync ();
 		}
 
         public string Name

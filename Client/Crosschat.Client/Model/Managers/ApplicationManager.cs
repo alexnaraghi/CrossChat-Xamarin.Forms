@@ -1,6 +1,4 @@
-﻿#define ALEXMOCK
-
-using SharedSquawk.Client.Model.Contracts;
+﻿using SharedSquawk.Client.Model.Contracts;
 using SharedSquawk.Client.Model.Proxies;
 using SharedSquawk.Server.Application.DataTransferObjects.Utils;
 using SharedSquawk.Server.Infrastructure.Protocol;

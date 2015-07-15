@@ -79,34 +79,35 @@ namespace SharedSquawk.Client.Model.Managers
 					Password = password
 				});
 
-			if (result.RequestResult == true)
+			if (result == null)
 			{
-				CurrentUser = result;
-				AccountUsername = username;
-				AccountPassword = password;
-				SSID = result.SSID;
-
-
-				//Do we need to look out for this member status result?
-				MemberStatusResponse memberStatusResult;
-				try
-				{
-					memberStatusResult = await _loginServiceProxy.GetMemberStatus(
-						new MemberStatusRequest
-						{
-							SessionId = result.SSID,
-							UserId = CurrentUser.UserId
-						});
-				}
-				catch(AggregateException ex)
-				{
-					throw ex.Flatten ();
-				}
-				//Do something with the member status result.  Not sure what the US codes mean yet.
-
-				LoggedIn(this, EventArgs.Empty);
-
+				return false;
 			}
+
+			CurrentUser = result;
+			AccountUsername = username;
+			AccountPassword = password;
+			SSID = result.SSID;
+
+
+			//Do we need to look out for this member status result?
+			MemberStatusResponse memberStatusResult;
+			try
+			{
+				memberStatusResult = await _loginServiceProxy.GetMemberStatus(
+					new MemberStatusRequest
+					{
+						SessionId = result.SSID,
+						UserId = CurrentUser.UserId
+					});
+			}
+			catch(AggregateException ex)
+			{
+				throw ex.Flatten ();
+			}
+			//Do something with the member status result.  Not sure what the US codes mean yet.
+
+			LoggedIn(this, EventArgs.Empty);
 
 			return result.RequestResult;
 		}

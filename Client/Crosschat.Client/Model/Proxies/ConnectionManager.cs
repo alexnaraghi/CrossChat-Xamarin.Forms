@@ -25,7 +25,6 @@ namespace SharedSquawk.Client.Model.Proxies
             _requestsHandler = requestsHandler;
 
 			_transport.DataReceived += DataReceived;
-            _transport.ConnectionError += Transport_ConnectionError;
 
 		}
 
@@ -34,24 +33,31 @@ namespace SharedSquawk.Client.Model.Proxies
 			_requestsHandler.AppendResponse (response);
 		}
 
-        private void Transport_ConnectionError()
-        {
-            ConnectionDropped();
-        }
-
-        public event Action ConnectionDropped = delegate { }; 
+		public event Action ConnectionDropped = delegate { }; 
 
 		internal Task<TResponse> SendRequestAndWaitResponse<TRequest, TResponse>(TRequest request)
 			where TRequest : RequestBase
 			where TResponse : ResponseBase
         {
-            Interlocked.Increment(ref _lastToken);
-            request.Token = _lastToken;
 			var endpoint = EndpointFinder.Get (request.GetType ());
 
-			var response = _requestsHandler.WaitForResponse<TResponse>(request, () => _transport.SendData<TRequest, TResponse>(endpoint, request, request.Token));
+			Task<TResponse> response = null;
+			const int maxTries = 3;
 
-			if (!response.Result.RequestResult)
+			//We'll allow the client to try a few times to get a connection.
+			for(int i = 0; i < maxTries; i++)
+			{
+				Interlocked.Increment(ref _lastToken);
+				request.Token = _lastToken;
+
+				response = _requestsHandler.WaitForResponse<TResponse>(request, () => _transport.SendData<TRequest, TResponse>(endpoint, request, request.Token));
+				if (response != null)
+				{
+					break;
+				}
+			}
+
+			if (response.Result == null)
 			{
 				ConnectionDropped ();
 			}

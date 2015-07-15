@@ -116,7 +116,7 @@ namespace SharedSquawk.Client.iOS.Infrastructure
 			}
 			catch(Exception ex)
 			{
-				responseObject = Activator.CreateInstance<T> ();
+				responseObject = Activator.CreateInstance<ResponseBase> ();
 				responseObject.Error = CommonErrors.Unknown;
 			}
 

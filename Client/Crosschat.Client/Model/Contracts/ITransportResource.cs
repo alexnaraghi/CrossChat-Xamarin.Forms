@@ -10,8 +10,6 @@ namespace SharedSquawk.Client.Model.Contracts
 
         Task DisconnectAsync();
 
-        event Action ConnectionError;
-
 		event Action<ResponseBase> DataReceived;
 
 		void SendData<TRequest, TResponse>(TransportEndpoint endpoint, TRequest data, long token) 
