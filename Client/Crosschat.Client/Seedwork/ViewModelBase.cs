@@ -82,6 +82,15 @@ namespace SharedSquawk.Client.Seedwork
 			return Task.FromResult(false);
 		}
 
+		public Task PopAsync()
+		{
+			if (_currentPage.Navigation != null && _currentPage.Navigation.NavigationStack.Count > 0)
+			{
+				return _currentPage.Navigation.PopAsync();
+			}
+			return Task.FromResult(false);
+		}
+
         public ICommand ShowCommand
         {
             get { return new Command(() => ShowAsync());}

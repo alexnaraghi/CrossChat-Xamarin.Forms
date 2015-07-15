@@ -10,7 +10,7 @@ namespace SharedSquawk.Client.Model
 			new Room("CREn", "English"),
 			new Room("CREnJa", "English - Japanese"),
 			new Room("CRJa", "Japanese"),
-			new Room("CREnSp", "English - Chinese (Mandarin)"),
+			new Room("CREnCh", "English - Chinese (Mandarin)"),
 			new Room("CREnAr", "English - Arabic"),
 			new Room("CREnKo", "English - Korean"),
 			new Room("CREnFr", "English - French"),

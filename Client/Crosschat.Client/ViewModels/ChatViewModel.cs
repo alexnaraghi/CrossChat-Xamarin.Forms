@@ -58,12 +58,31 @@ namespace SharedSquawk.Client.ViewModels
 		public RoomStatus Status
 		{
 			get{ return _roomStatus; }
-			set{ SetProperty (ref _roomStatus, value); }
+			set
+			{ 
+				SetProperty (ref _roomStatus, value);
+
+				//Notify any bindings that depend on the room status
+				Raise ("IsInConnectedMode");
+				Raise ("IsInMessageMode");
+				Raise ("IsInRequestMode");
+				Raise ("StatusText");
+			}
 		}
 
-		public bool IsConnected
+		public bool IsInConnectedMode
 		{
 			get { return _roomStatus == RoomStatus.Connected; }
+		}
+
+		public bool IsInMessageMode
+		{
+			get { return _roomStatus != RoomStatus.Connected && _roomStatus != RoomStatus.AwaitingOurApproval; }
+		}
+
+		public bool IsInRequestMode
+		{
+			get { return _roomStatus == RoomStatus.AwaitingOurApproval; }
 		}
 
 		public string StatusText
@@ -223,6 +242,47 @@ namespace SharedSquawk.Client.ViewModels
 		}
 
 
+		public ICommand AcceptChatCommand
+		{
+			get{ return new Command (OnAcceptChat); }
+		}
+
+		private async void OnAcceptChat()
+		{
+			if (_roomData.Room.UserId != null)
+			{
+				IsBusy = true;
+				await _appManager.ChatManager.ApproveUserChat (_roomData.Room.UserId.Value);
+				IsBusy = false;
+			}
+		}
+
+		public ICommand DeclineChatCommand
+		{
+			get{ return new Command (OnDeclineChat); }
+		}
+
+		private async void OnDeclineChat()
+		{
+			if (_roomData.Room.UserId != null)
+			{
+				IsBusy = true;
+				await _appManager.ChatManager.DeclineUserChat (_roomData.Room.UserId.Value);
+				IsBusy = false;
+			}
+			await PopAsync ();
+		}
+
+		public ICommand LeaveRoomCommand
+		{
+			get{ return new Command (OnLeaveRoom); }
+		}
+
+		private async void OnLeaveRoom()
+		{
+			_appManager.ChatManager.LeaveRoom (_roomData.Room.RoomId);
+			await PopAsync ();
+		}
 	}
 }
 

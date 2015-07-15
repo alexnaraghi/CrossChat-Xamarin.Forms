@@ -95,8 +95,17 @@ namespace SharedSquawk.Client.Model.Managers
 
             await InitDeviceInfo();
             await ConnectionManager.ConnectAsync();
-            var authResult = await _authenticationServiceProxy.Authenticate(
-                new AuthenticationRequest { Huid = _deviceInfo.Huid, Name = name, Password = password });
+
+			AuthenticationResponse authResult;
+			try
+			{
+				authResult = await _authenticationServiceProxy.Authenticate(
+					new AuthenticationRequest { Huid = _deviceInfo.Huid, Name = name, Password = password });
+			}
+			catch(AggregateException ex)
+			{
+				throw ex.Flatten ();
+			}
 
             if (authResult.Result == AuthenticationResponseType.Success)
             {
@@ -139,12 +148,20 @@ namespace SharedSquawk.Client.Model.Managers
 
 
 				//Do we need to look out for this member status result?
-				var memberStatusResult = await _loginServiceProxy.GetMemberStatus(
-					new MemberStatusRequest
-					{
-						SessionId = result.SSID,
-						UserId = CurrentUser.UserId
-					});
+				MemberStatusResponse memberStatusResult;
+				try
+				{
+					memberStatusResult = await _loginServiceProxy.GetMemberStatus(
+						new MemberStatusRequest
+						{
+							SessionId = result.SSID,
+							UserId = CurrentUser.UserId
+						});
+				}
+				catch(AggregateException ex)
+				{
+					throw ex.Flatten ();
+				}
 				//Do something with the member status result.  Not sure what the US codes mean yet.
 
 				LoggedIn(this, EventArgs.Empty);
@@ -166,18 +183,28 @@ namespace SharedSquawk.Client.Model.Managers
             await InitDeviceInfo();
 			//ALEXTEST
             //await ConnectionManager.ConnectAsync();
-            var result = await _registrationServiceProxy.RegisterNewUser(
-                new RegistrationRequest
-                {
-                    Age = age,
-                    Name = name,
-                    Password = password,
-                    Platform = platform,
-                    Sex = sex,
-                    Country = country,
-                    Huid = _deviceInfo.Huid,
-                    PushUri = _deviceInfo.PushUri,
-                });
+
+			RegistrationResponse result;
+			try
+			{
+				result = await _registrationServiceProxy.RegisterNewUser(
+					new RegistrationRequest
+					{
+						Age = age,
+						Name = name,
+						Password = password,
+						Platform = platform,
+						Sex = sex,
+						Country = country,
+						Huid = _deviceInfo.Huid,
+						PushUri = _deviceInfo.PushUri,
+					});
+				
+			}
+			catch(AggregateException ex)
+			{
+				throw ex.Flatten ();
+			}
 
             if (result.Result == RegistrationResponseType.Success)
             {
@@ -188,25 +215,6 @@ namespace SharedSquawk.Client.Model.Managers
             }
 
             return result.Result;
-        }
-
-        public async Task<bool> ChangePhoto(byte[] photoData)
-        {
-            var response = await _profileServiceProxy.ChangePhoto(new ChangePhotoRequest { PhotoData = photoData });
-            if (response.Success)
-            {
-                //CurrentUser.PhotoId = response.PhotoId;
-            }
-            return response.Success;
-        }
-
-        public async Task Deactivate()
-        {
-            var response = await _registrationServiceProxy.Deactivate(new DeactivationRequest());
-            //IsRegistered = false;
-            AccountUsername = "";
-            AccountPassword = "";
-            CurrentUser = null;
         }
 
         private async Task InitDeviceInfo()

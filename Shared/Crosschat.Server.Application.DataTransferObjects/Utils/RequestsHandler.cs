@@ -32,7 +32,15 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Utils
             {
                 _tasks[request.Token] = taskSource;
             }
-            action();
+			try
+			{
+            	action();
+			}
+			catch(Exception ex)
+			{
+				//For debugging stack trace
+				throw ex;
+			}
             StartTimeoutCheck(timeout, request.Token, taskSource);
 
 			var response = await taskSource.Task.ConfigureAwait(false);

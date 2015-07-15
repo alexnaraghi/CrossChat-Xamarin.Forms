@@ -5,12 +5,17 @@ namespace SharedSquawk.Client
 {
     public class RoomFactory
     {
-		public static Room Get(int otherUserId, string otherUserName, int currentUserId)
+		public static Room Get(int currentUserId, int otherUserId, string otherUserName)
         {
-			var room = new Room (currentUserId + "-" + otherUserId, otherUserName);
+			var room = new Room (GetRoomId(currentUserId, otherUserId), otherUserName);
 			room.UserId = otherUserId;
 
 			return room;
         }
+
+		public static string GetRoomId(int creatorUserId, int otherUserId)
+		{
+			return creatorUserId + "-" + otherUserId;
+		}
     }
 }

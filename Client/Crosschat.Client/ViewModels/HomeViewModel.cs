@@ -39,7 +39,6 @@ namespace SharedSquawk.Client.ViewModels
         private async void LoadData()
         {
             IsBusy = true;
-            await _appManager.ChatManager.ReloadChat();
             await _appManager.ChatManager.ReloadUsers();
             Subject = _appManager.ChatManager.Subject;
 
@@ -116,9 +115,14 @@ namespace SharedSquawk.Client.ViewModels
 			{
 				throw new Exception ("Selected item was not a user detail view model");
 			}
-			var fullMember = await _appManager.ChatManager.GetMemberDetails (user.UserId);
-			var model = new UserDetailViewModel (_appManager, fullMember);
-			await model.ShowAsync ();
+
+			//If the user is not us, go to their detail page
+			if (user.UserId != _appManager.AccountManager.CurrentUser.UserId)
+			{
+				var fullMember = await _appManager.ChatManager.GetMemberDetails (user.UserId);
+				var model = new UserDetailViewModel (_appManager, fullMember);
+				await model.ShowAsync ();
+			}
 		}
 
 

@@ -23,6 +23,8 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 		public string ActiveRooms  { get; set; }
 		[XmlElement("M")]
 		public List<MessageDto> Messages{ get; set;}
+		[XmlElement("CR")]
+		public List<ChatResultDto> UserChatResponses  { get; set; }
 		[XmlElement("E")]
 		public List<RoomEntryRequestDto> EnteredRooms  { get; set; }
 		[XmlElement("C")]
@@ -58,12 +60,12 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 		public FPDto FP { get; set;}
 		[XmlElement("M")]
 		public MessageDto Message { get; set;}
+		[XmlElement("CR")]
+		public ChatResultDto UserChatResult { get; set;}
 		[XmlElement("ER")]
 		public EnteredRoomDto EnteredRoom { get; set;}
 		[XmlElement("C")]
 		public UserChatDto UserChatRequest { get; set;}
-		[XmlElement("CR")]
-		public ChatResultDto UserChatResult { get; set;}
 	}
 
 	[XmlType(TypeName="CR", Namespace = "")]
@@ -73,7 +75,20 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 		public int UserId { get; set;}
 
 		[XmlAttribute("V")]
-		public string Value { get; set;}
+		public string V { get; set;} //Value
+
+		[XmlIgnore]
+		public ChatReply Reply
+		{
+			get 
+			{
+				return (ChatReply)Enum.Parse (typeof(ChatReply), V);
+			}
+			set 
+			{
+				V = value.ToString ();
+			}
+		}
 	}
 
 	[XmlType(TypeName="DU", Namespace = "")]
@@ -81,6 +96,8 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 	{
 		[XmlAttribute("UID")]
 		public int UserId { get; set;}
+		[XmlAttribute("R")]
+		public string RoomId { get; set;}
 	}
 
 	[XmlType(TypeName="M", Namespace = "")]

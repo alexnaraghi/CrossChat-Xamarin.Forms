@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using SharedSquawk.Client.Model.Entities;
 using SharedSquawk.Client.Model.Helpers;
+using SharedSquawk.Server.Application.DataTransferObjects;
 
 namespace SharedSquawk.Client.Model.Managers
 {
@@ -84,36 +85,35 @@ namespace SharedSquawk.Client.Model.Managers
 		}
 
         /// <summary>
-        /// Reloads only messages and subject
-        /// </summary>
-        public async Task ReloadChat()
-        {
-            //var chatStatus = await _chatServiceProxy.GetLastMessages(new LastMessageRequest());
-            //Subject = chatStatus.Subject;
-            //Messages.Clear();
-            //if (chatStatus.Messages != null)
-            //{
-                //Messages.AddRange(chatStatus.Messages.Select(ToEntity<TextMessage>));
-            //}
-        }
-
-        /// <summary>
         /// This is the first step of a logged in user for chatting.
         /// </summary>
         public async Task ReloadUsers()
         {
-			var chatStatus = await _chatServiceProxy.GetConnectedMembers(new ConnectedMembersRequest()
-				{
-					SSID = _accountManager.SSID,
-					PracticingLanguages = _accountManager.CurrentUser.PracticingLanguages,
-					KnownLanguages = _accountManager.CurrentUser.KnownLanguages,
-					LocaleID = _accountManager.CurrentUser.LocaleID,
-					Age = _accountManager.CurrentUser.Age,
-					Gender = _accountManager.CurrentUser.Gender,
-					LastName = _accountManager.CurrentUser.LastName,
-					FirstName = _accountManager.CurrentUser.FirstName,
-					UserID = _accountManager.CurrentUser.UserId
-				});
+			ConnectedMembersResponse chatStatus;
+			try
+			{
+				chatStatus = await _chatServiceProxy.GetConnectedMembers(new ConnectedMembersRequest()
+					{
+						SSID = _accountManager.SSID,
+						PracticingLanguages = _accountManager.CurrentUser.PracticingLanguages,
+						KnownLanguages = _accountManager.CurrentUser.KnownLanguages,
+						LocaleID = _accountManager.CurrentUser.LocaleID,
+						Age = _accountManager.CurrentUser.Age,
+						Gender = _accountManager.CurrentUser.Gender,
+						LastName = _accountManager.CurrentUser.LastName,
+						FirstName = _accountManager.CurrentUser.FirstName,
+						UserID = _accountManager.CurrentUser.UserId
+					});
+			}
+			catch(AggregateException ex)
+			{
+				throw ex.Flatten ();
+			}
+			catch(Exception ex)
+			{
+				throw ex;
+			}
+
             OnlineUsers.Clear();
             
 			_sessionGuid = chatStatus.GUID;
@@ -146,7 +146,15 @@ namespace SharedSquawk.Client.Model.Managers
 				timer.Start();
 
 				//Send a chat update request
-				var chatStatus = await _chatServiceProxy.GetChatUpdate (_updateBuilder.ToRequest ());
+				ChatUpdateResponse chatStatus;
+				try
+				{
+					chatStatus = await _chatServiceProxy.GetChatUpdate (_updateBuilder.ToRequest ());
+				}
+				catch(AggregateException ex)
+				{
+					throw ex.Flatten ();
+				}
 
 				timer.Stop();
 				//HACK: Time is way off, making it more realistic till i figure out how to improve accuracy
@@ -191,8 +199,17 @@ namespace SharedSquawk.Client.Model.Managers
 						}
 						else if (update.DisconnectedUser != null)
 						{
-							OnlineUsers.RemoveAll (t => t.UserId == update.DisconnectedUser.UserId);
-							//Should we remove these users from the directory too?
+							//The server sends two things with this update, either the user disconnected from a 
+							//room, or disconnected entirely from the server.
+							if (update.DisconnectedUser.RoomId != null)
+							{
+								Rooms.SetStatus (update.DisconnectedUser.RoomId, RoomStatus.OtherUserLeft);
+							}
+							else
+							{
+								//Should we remove these users from the directory too?
+								OnlineUsers.RemoveAll (t => t.UserId == update.DisconnectedUser.UserId);
+							}
 						}
 						else if (update.FP != null)
 						{
@@ -208,17 +225,16 @@ namespace SharedSquawk.Client.Model.Managers
 							var room = message.Room;
 
 							//group the same user's last chats together
-							var lastMessage = Rooms.LastTextMessage (room) as TextMessage;
+							//var lastMessage = Rooms.LastTextMessage (room) as TextMessage;
 							//TODO: Fix the bug with grouping chats duplication
-							if (false)
 							//if (lastMessage != null && lastMessage.UserId == message.UserId)
-							{
-								Rooms.RemoveTextMessage (room, lastMessage);
-								lastMessage.Body += "\n\n" + message.Text;
-								lastMessage.Timestamp = DateTime.Now;
-								Rooms.AddTextMessage (room, lastMessage);
-							}
-							else
+//							{
+//								Rooms.RemoveTextMessage (room, lastMessage);
+//								lastMessage.Body += "\n\n" + message.Text;
+//								lastMessage.Timestamp = DateTime.Now;
+//								Rooms.AddTextMessage (room, lastMessage);
+//							}
+//							else
 							{
 								//BUG: Sometimes we are getting some users that whose names we aren't sure about...
 								//Need to investigate this.
@@ -248,31 +264,52 @@ namespace SharedSquawk.Client.Model.Managers
 						}
 						else if (update.UserChatRequest != null)
 						{
+							var request = update.UserChatRequest;
+
+							var roomId = RoomFactory.GetRoomId (request.UserId, _accountManager.CurrentUser.UserId);
 							//do something
+							if (!Rooms.ContainsKey (roomId))
+							{
+								Rooms.CreateRoom (new Room(roomId, GetUserFullName(request.UserId)){ UserId = request.UserId });
+							}
+							Rooms.SetStatus (roomId, RoomStatus.AwaitingOurApproval);
 						}
 						else if (update.UserChatResult != null)
 						{
 							var chatResult = update.UserChatResult;
-							if (chatResult.Value == "Ok")
+							if (!UserDirectory.ContainsKey (chatResult.UserId))
 							{
-								//TODO: centralize this conversion
-								var roomId = _accountManager.CurrentUser.UserId + "-" + chatResult.UserId;
-								_updateBuilder.AddAcceptedUserRoom (roomId);
-
-
-								//So, we can be getting responses from a different session.  In that case,
-								//we will need to spawn up a room and act as if we always intended to get
-								//this chat accpetance
-								if (!Rooms.ContainsKey (roomId))
-								{
-									Rooms.CreateRoom (new Room(roomId, GetUserFullName(chatResult.UserId)){ UserId = chatResult.UserId });
-								}
-
-								Rooms.SetStatus (roomId, RoomStatus.Connected);
+								//If for some reason we got a chat result from a user that isn't connected,
+								//I think we should just ignore it
+								break;
 							}
-							else
+
+							var roomId = RoomFactory.GetRoomId(_accountManager.CurrentUser.UserId, chatResult.UserId);
+
+							switch (chatResult.Reply)
 							{
-								//TODO: handle other chat results
+							case ChatReply.Ok:
+								{
+									_updateBuilder.AddAcceptedUserRoom (roomId);
+
+
+									//So, we can be getting responses from a different session.  In that case,
+									//we will need to spawn up a room and act as if we always intended to get
+									//this chat accpetance
+									if (!Rooms.ContainsKey (roomId))
+									{
+										Rooms.CreateRoom (new Room(roomId, GetUserFullName(chatResult.UserId)){ UserId = chatResult.UserId });
+									}
+
+									Rooms.SetStatus (roomId, RoomStatus.Connected);
+								}
+								break;
+							case ChatReply.No:
+								Rooms.SetStatus (roomId, RoomStatus.OtherUserDeclined);
+								break;
+							default:
+								throw new NotSupportedException ("Chat reply is not known");
+								break;
 							}
 						}
 						else
@@ -328,10 +365,10 @@ namespace SharedSquawk.Client.Model.Managers
 			return Rooms [room.RoomId];
 		}
 
-		public async Task<RoomData> JoinUserRoom(int userId)
+		public async Task<RoomData> RequestUserChat(int userId)
 		{
 			var otherUserName = GetUserFullName (userId);
-			var room = RoomFactory.Get (userId, otherUserName, _accountManager.CurrentUser.UserId);
+			var room = RoomFactory.Get (_accountManager.CurrentUser.UserId, userId, otherUserName);
 
 			if (!Rooms.Any (r => r.Value.Room.RoomId == room.RoomId))
 			{
@@ -344,13 +381,48 @@ namespace SharedSquawk.Client.Model.Managers
 
 			return Rooms [room.RoomId];
 		}
-
-		public async Task LeaveRoom(string roomId)
+			
+		public async Task ApproveUserChat(int userId)
 		{
-			throw new NotImplementedException ("gotta make this work with active chats");
-			_updateBuilder.RemoveRoom (roomId);
+			var creatorUserId = RoomFactory.GetRoomId (userId, _accountManager.CurrentUser.UserId);
+
+			_updateBuilder.AcceptChatRequest (userId, creatorUserId);
+
+			//Wait for the room to be entered by the server now
+			Rooms.SetStatus (creatorUserId, RoomStatus.Waiting);
+
 			//Manually force update the chat, to send our message asap
 			await GetChatUpdate ();
+		}
+
+		public async Task DeclineUserChat(int userId)
+		{
+			_updateBuilder.DeclineChatRequest (userId);
+
+			//Cleanup in case the room is already active
+			LeaveRoom(userId);
+
+			//Manually force update the chat, to send our message asap
+			await GetChatUpdate ();
+		}
+
+		public void LeaveRoom(string roomId)
+		{
+			_updateBuilder.RemoveRoom (roomId);
+			if (Rooms.ContainsKey (roomId))
+			{
+				Rooms.RemoveRoom (roomId);
+			}
+		}
+
+		public void LeaveRoom(int userId)
+		{
+			//We aren't sure who made the room based on this context, just leave either combo
+			//and don't worry about it
+			var roomId = RoomFactory.GetRoomId (_accountManager.CurrentUser.UserId, userId);
+			LeaveRoom (roomId);
+			var roomId2 = RoomFactory.GetRoomId (userId, _accountManager.CurrentUser.UserId);
+			LeaveRoom (roomId2);
 		}
 
 		public async Task<Profile> GetMemberDetails(int userId)
@@ -378,10 +450,19 @@ namespace SharedSquawk.Client.Model.Managers
 			if (profile != null && !didFindMemberDetails)
 			{
 				//We don't have the profile details, grab it
-				var response = await _chatServiceProxy.GetUserProfile(new ProfileRequest()
+				ProfileResponse response;
+
+				try
 				{
-					UserId = userId
-				});
+					response = await _chatServiceProxy.GetUserProfile(new ProfileRequest()
+					{
+						UserId = userId
+					});
+				}
+				catch(AggregateException ex)
+				{
+					throw ex.Flatten ();
+				}
 
 				ProfileDetails details = new ProfileDetails ();
 				AutoMapper.CopyPropertyValues (response, details);
@@ -449,6 +530,22 @@ namespace SharedSquawk.Client.Model.Managers
 		public ObservableCollection<Profile> OnlineUsers { get; private set; }
 
 		public Dictionary<int,Profile> UserDirectory{ get; private set; }
+
+
+
+		/// <summary>
+		/// Reloads only messages and subject
+		/// </summary>
+		//        public async Task ReloadChat()
+		//        {
+		//var chatStatus = await _chatServiceProxy.GetLastMessages(new LastMessageRequest());
+		//Subject = chatStatus.Subject;
+		//Messages.Clear();
+		//if (chatStatus.Messages != null)
+		//{
+		//Messages.AddRange(chatStatus.Messages.Select(ToEntity<TextMessage>));
+		//}
+		//        }
 
 		/*
         /// <summary>

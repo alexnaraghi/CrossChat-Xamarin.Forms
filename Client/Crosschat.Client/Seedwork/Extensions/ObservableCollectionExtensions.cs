@@ -106,6 +106,7 @@ namespace SharedSquawk.Client.Seedwork.Extensions
 				else if(e.Action == NotifyCollectionChangedAction.Reset)
 				{
 					destination.Clear();
+					source.ForEach(item => destination.Add(creator(item.Value)));
 				}
 			};
 		}

@@ -2,6 +2,7 @@
 using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 using System.Collections.Generic;
 using System.Linq;
+using SharedSquawk.Server.Application.DataTransferObjects;
 
 namespace SharedSquawk.Client
 {
@@ -11,6 +12,7 @@ namespace SharedSquawk.Client
 		private List<string> _activeRooms;
 		private List<string> _enteredRooms;
 		private List<int> _enteredUserChatRequests;
+
 		private bool _isInstantiated;
 		public ChatUpdateBuilder ()
 		{
@@ -18,7 +20,8 @@ namespace SharedSquawk.Client
 				Messages = new List<MessageDto>(),
 				ActiveRooms = string.Empty,
 				EnteredRooms = new List<RoomEntryRequestDto>(),
-				UserChatRequests = new List<UserChatDto>()
+				UserChatRequests = new List<UserChatDto>(),
+				UserChatResponses = new List<ChatResultDto>()
 			};
 			_activeRooms = new List<string> ();
 			_enteredRooms = new List<string> ();
@@ -32,6 +35,8 @@ namespace SharedSquawk.Client
 			_request.Messages.Clear ();
 			_request.ActiveRooms = string.Empty;
 			_request.EnteredRooms.Clear ();
+			_request.UserChatRequests.Clear ();
+			_request.UserChatResponses.Clear ();
 			_activeRooms.Clear ();
 			_enteredRooms.Clear ();
 			_enteredUserChatRequests.Clear ();
@@ -48,6 +53,7 @@ namespace SharedSquawk.Client
 			_request.Messages = new List<MessageDto> ();
 			_request.EnteredRooms.Clear ();
 			_request.UserChatRequests.Clear ();
+			_request.UserChatResponses.Clear ();
 			_request.ActiveRooms = null;
 
 			//When a new request is started, all rooms entered become part of the active room list
@@ -74,6 +80,25 @@ namespace SharedSquawk.Client
 		public void AddAcceptedUserRoom(string room)
 		{
 			_enteredRooms.Add (room);
+		}
+
+		public void AcceptChatRequest(int userId, string roomId)
+		{
+			_request.UserChatResponses.Add(new ChatResultDto
+			{
+				UserId = userId,
+				Reply = ChatReply.Ok
+			});
+			_enteredRooms.Add (roomId);
+		}
+
+		public void DeclineChatRequest(int userId)
+		{
+			_request.UserChatResponses.Add(new ChatResultDto
+				{
+					UserId = userId,
+					Reply = ChatReply.No
+				});
 		}
 
 		public void RemoveRoom(string room)

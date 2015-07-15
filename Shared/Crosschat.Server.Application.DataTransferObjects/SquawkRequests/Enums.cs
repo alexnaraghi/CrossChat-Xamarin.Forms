@@ -6,5 +6,11 @@ namespace SharedSquawk.Server.Application.DataTransferObjects
 		Male = 0,
 		Female
 	}
+
+	public enum ChatReply
+	{
+		Ok,
+		No
+	}
 }
 

@@ -58,6 +58,7 @@ namespace SharedSquawk.Client.Views
 				HorizontalOptions = LayoutOptions.Center,
 				FontSize = 16
 			};
+
 			chatStatusLabel.SetBinding(Label.TextProperty, new Binding("StatusText", BindingMode.OneWay));
 			var chatStatusLayout = new StackLayout
 			{
@@ -68,9 +69,63 @@ namespace SharedSquawk.Client.Views
 					chatStatusLabel
 				}
 			};
-			chatStatusLayout.SetBinding(StackLayout.IsVisibleProperty, new Binding("IsConnected", BindingMode.OneWay, converter: new InverterConverter()));
+			chatStatusLayout.SetBinding(StackLayout.IsVisibleProperty, new Binding("IsInMessageMode", BindingMode.OneWay));
 			#endregion
-            
+
+			#region Request UI
+			var requestLabel = new Label {
+				HorizontalOptions = LayoutOptions.Center,
+				FontSize = 16,
+				Text = "This user wants to chat!  What would you like to do?"
+			};
+
+			var acceptButton = new Button();
+			acceptButton.Text = "Accept";
+			acceptButton.SetBinding(Button.CommandProperty, new Binding("AcceptChatCommand"));
+			if (Device.OS == TargetPlatform.WinPhone)
+			{
+				acceptButton.BackgroundColor = Color.Green;
+				acceptButton.BorderColor = Color.Green;
+				acceptButton.TextColor = Color.White; 
+			}
+
+			var declineButton = new Button();
+			declineButton.Text = "Decline";
+			declineButton.SetBinding(Button.CommandProperty, new Binding("DeclineChatCommand"));
+			if (Device.OS == TargetPlatform.WinPhone)
+			{
+				declineButton.BackgroundColor = Color.Green;
+				declineButton.BorderColor = Color.Green;
+				declineButton.TextColor = Color.White; 
+			}
+
+			var ignoreButton = new Button();
+			{
+				ignoreButton.Text = "Ignore";
+				ignoreButton.SetBinding(Button.CommandProperty, new Binding("LeaveRoomCommand"));
+				if (Device.OS == TargetPlatform.WinPhone)
+				{
+					ignoreButton.BackgroundColor = Color.Green;
+					ignoreButton.BorderColor = Color.Green;
+					ignoreButton.TextColor = Color.White; 
+				}
+			}
+
+			var requestLayout = new StackLayout
+			{
+				VerticalOptions = LayoutOptions.FillAndExpand,
+				HorizontalOptions = LayoutOptions.FillAndExpand,
+				Children = 
+				{
+					requestLabel,
+					acceptButton,
+					declineButton,
+					ignoreButton
+				}
+			};
+			requestLayout.SetBinding(StackLayout.IsVisibleProperty, new Binding("IsInRequestMode", BindingMode.OneWay));
+			#endregion
+
             Content = new StackLayout
                 {
                     Padding = Device.OnPlatform(new Thickness(6,6,6,6), new Thickness(0), new Thickness(0)),
@@ -82,6 +137,7 @@ namespace SharedSquawk.Client.Views
                             //headerLabel,
 							_messageList,
 							chatStatusLayout,
+							requestLayout,
 							typingLabel,
 							new StackLayout
 							{
