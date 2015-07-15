@@ -29,7 +29,7 @@ namespace SharedSquawk.Client.ViewModels
 		{
 			Notify ("Connection Error", "An error has occurred.  You will need to login again");
 			_appManager.AccountManager.Logout ();
-			PopToRootAsync ();
+			ShowModalAsync ();
 		}
 
         public string Name

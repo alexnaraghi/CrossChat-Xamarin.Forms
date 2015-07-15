@@ -26,6 +26,12 @@ namespace SharedSquawk.Client.iOS.Infrastructure
         public event Action ConnectionError = delegate { };
 		public event Action<ResponseBase> DataReceived = delegate { };
         public event Action ConnectionStateChanged = delegate { };
+		private DtoSerializer _serializer;
+
+		public SquawkTransportResource()
+		{
+			_serializer = new DtoSerializer ();	
+		}
         
         public async Task ConnectAsync()
         {
@@ -82,7 +88,7 @@ namespace SharedSquawk.Client.iOS.Infrastructure
 			request.Timeout = GlobalConfig.TimeoutMs;
 
 			Stream stream = request.GetRequestStream();
-			Serialize<TRequest> (data, stream);
+			_serializer.Serialize<TRequest> (data, stream);
 			stream.Close();
 
 			try
@@ -106,7 +112,7 @@ namespace SharedSquawk.Client.iOS.Infrastructure
 				request = tokenRequest.Request;
 				token = tokenRequest.Token;
 				response = request.EndGetResponse (ar) as HttpWebResponse;
-				responseObject = Deserialize<T> (response.GetResponseStream());
+				responseObject = _serializer.Deserialize<T> (response.GetResponseStream());
 			}
 			catch(Exception ex)
 			{
@@ -119,75 +125,7 @@ namespace SharedSquawk.Client.iOS.Infrastructure
 			DataReceived(responseObject);
 		}
 
-		private void Serialize<T>(T data, Stream stream)
-		{
-			XmlSerializer serializer = new XmlSerializer (typeof(T));
-
-			//We have to strip out all the namespaces and xml declaration stuff because that is how the server accepts it.
-			//Serialize into a raw element.
-			XmlSerializerNamespaces ns = new XmlSerializerNamespaces ();
-			ns.Add ("", "");
-			using (XmlWriter writer = XmlWriter.Create (stream, new XmlWriterSettings { OmitXmlDeclaration = true }))
-			{
-				serializer.Serialize (writer, data, ns);
-			}
-
-			#if DEBUG
-			//Debug code to capture what the xml looked like on serialization
-			using (StringWriter textWriter = new StringWriter ())
-			{
-				using (XmlWriter writer = XmlWriter.Create (textWriter, new XmlWriterSettings { OmitXmlDeclaration = true }))
-				{
-					serializer.Serialize (writer, data, ns);
-					var dataAsString = textWriter.ToString ();
-					Console.WriteLine (string.Format ("serializing {0}: {1}", typeof(T).Name, dataAsString));
-				}
-
-			}
-			#endif
-
-		}
-
-
-		private T Deserialize<T>(Stream stream)
-		{
-			//Reading the stream into a string is easier for debugging problems, think i'll just leave it in here.
-			string dataAsString;
-			using (StreamReader reader = new StreamReader (stream))
-			{
-				dataAsString = reader.ReadToEnd ();
-			}
-			#if DEBUG
-			//Debug code to capture what the xml looked like on deserialization
-			Console.WriteLine (string.Format ("deserializing {0}: {1}", typeof(T).Name, dataAsString));
-			#endif
-
-			T deserializedObject;
-			XmlSerializer serializer = new XmlSerializer (typeof(T));
-
-			//We have to read the xml as an element since we don't get a full xml file
-			using(XmlTextReader reader = new XmlTextReader(dataAsString, XmlNodeType.Element, null))
-			{
-				try
-				{
-					deserializedObject = (T)serializer.Deserialize (reader);
-				}
-				catch(Exception exc)
-				{
-					throw new DeserializeException ("Deserialize failed, see inner exception");
-				}
-			}
-			return deserializedObject;
-		}
     }
-
-	public class DeserializeException : Exception
-	{
-		public DeserializeException(string message):base(message)
-		{
-			
-		}
-	}
 
 
 	public class TokenRequest

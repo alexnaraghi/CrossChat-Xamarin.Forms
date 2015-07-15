@@ -51,7 +51,6 @@ namespace SharedSquawk.Client.Model.Managers
             _chatServiceProxy = chatServiceProxy;
             _accountManager = accountManager;
 			_accountManager.LoggedIn += OnLoggedIn;
-			_accountManager.LoggedOut += OnLoggedOut;
 
             //Messages = new ObservableCollection<Event>();
             OnlineUsers = new ObservableCollection<Profile>();
@@ -478,11 +477,6 @@ namespace SharedSquawk.Client.Model.Managers
 		{
 			CurrentUpdateRequestCount = 1;
 			UpdateObjectsReceivedCount = 0;
-		}
-
-		public void OnLoggedOut(object sender, EventArgs e)
-		{
-			_sessionGuid = null;
 		}
 
 		/// <summary>

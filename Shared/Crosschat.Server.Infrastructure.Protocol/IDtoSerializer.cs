@@ -1,9 +1,11 @@
+using System.IO;
+
 namespace SharedSquawk.Server.Infrastructure.Protocol
 {
     public interface IDtoSerializer
     {
-        byte[] Serialize<T>(T obj);
+		void Serialize<T> (T data, Stream stream);
 
-        T Deserialize<T>(byte[] bytes);
+		T Deserialize<T>(Stream stream);
     }
 }

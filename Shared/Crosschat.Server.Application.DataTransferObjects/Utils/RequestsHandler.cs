@@ -32,6 +32,7 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Utils
             {
                 _tasks[request.Token] = taskSource;
             }
+
 			try
 			{
             	action();

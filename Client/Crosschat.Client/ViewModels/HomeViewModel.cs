@@ -134,7 +134,7 @@ namespace SharedSquawk.Client.ViewModels
 		public async void OnLogout()
 		{
 			_appManager.AccountManager.Logout ();
-			await PopToRootAsync ();
+			await new LoginViewModel (_appManager).ShowModalAsync ();
 		}
 
 

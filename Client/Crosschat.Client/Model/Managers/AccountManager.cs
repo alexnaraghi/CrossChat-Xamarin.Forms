@@ -10,29 +10,22 @@ namespace SharedSquawk.Client.Model.Managers
 {
     public class AccountManager : ManagerBase
     {
-        private readonly IDeviceInfo _deviceInfo;
-        private readonly ProfileServiceProxy _profileServiceProxy;
         private readonly AuthenticationServiceProxy _authenticationServiceProxy;
         private readonly RegistrationServiceProxy _registrationServiceProxy;
 		private readonly ILoginServiceProxy _loginServiceProxy;
         private readonly IStorage _storage;
 		private LoginResponse _currentUser = null;
-        private bool _deviceInfoInitialized = false;
 
 		public event EventHandler LoggedIn = delegate { };
 		public event EventHandler LoggedOut = delegate { };
 
         public AccountManager(IStorage storage,
-            IDeviceInfo deviceInfo,
             ConnectionManager connectionManager,
-            ProfileServiceProxy profileServiceProxy,
 			RegistrationServiceProxy registrationServiceProxy,
             AuthenticationServiceProxy authenticationServiceProxy,
 			ILoginServiceProxy loginServiceProxy)
             : base(connectionManager)
         {
-            _deviceInfo = deviceInfo;
-            _profileServiceProxy = profileServiceProxy;
             _authenticationServiceProxy = authenticationServiceProxy;
             _registrationServiceProxy = registrationServiceProxy;
 			_loginServiceProxy = loginServiceProxy;
@@ -44,8 +37,6 @@ namespace SharedSquawk.Client.Model.Managers
 			get{return CurrentUser != null;}
 		}
 
-		//ALEXTEST
-        //yeah, I didn't create an entity representing User and let managers expose DTO instead. I'm lazy :(
 		public LoginResponse CurrentUser
         {
             get {
@@ -56,15 +47,6 @@ namespace SharedSquawk.Client.Model.Managers
                 _currentUser = value;
             }
         }
-
-		/*
-		//ALEXTEST
-        public bool IsRegistered
-        {
-			get { return true; return _storage.Get<bool>(); }
-            private set { _storage.Set(value); }
-        }
-		*/
 
 		//ALEXTEST
         public string AccountUsername
@@ -88,48 +70,8 @@ namespace SharedSquawk.Client.Model.Managers
 			private set { _ssid = value; }
 		}
 
-        public async Task<AuthenticationResponseType> ValidateAccount(string name, string password)
-        {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(password))
-                return AuthenticationResponseType.InvalidNameOrPassword;
-
-            await InitDeviceInfo();
-            await ConnectionManager.ConnectAsync();
-
-			AuthenticationResponse authResult;
-			try
-			{
-				authResult = await _authenticationServiceProxy.Authenticate(
-					new AuthenticationRequest { Huid = _deviceInfo.Huid, Name = name, Password = password });
-			}
-			catch(AggregateException ex)
-			{
-				throw ex.Flatten ();
-			}
-
-            if (authResult.Result == AuthenticationResponseType.Success)
-            {
-                AccountUsername = name;
-                AccountPassword = password;
-                //CurrentUser = authResult.User;
-                //IsRegistered = true;
-            }
-
-            return authResult.Result;
-        }
-
-        public async Task<AuthenticationResponseType> ValidateAccount()
-        {
-            //if (!IsRegistered)
-                return AuthenticationResponseType.InvalidNameOrPassword;
-            return await ValidateAccount(AccountUsername, AccountPassword);
-        }
-
 		public async Task<bool> Login(string username, string password)
 		{
-			//ALEXTEST
-			//await InitDeviceInfo();
-			//await ConnectionManager.ConnectAsync();
 			var result = await _loginServiceProxy.Login(
 				new LoginRequest
 				{
@@ -139,8 +81,6 @@ namespace SharedSquawk.Client.Model.Managers
 
 			if (result.RequestResult == true)
 			{
-				//ALEXTEST
-				//CurrentUser = result.Name;
 				CurrentUser = result;
 				AccountUsername = username;
 				AccountPassword = password;
@@ -173,56 +113,9 @@ namespace SharedSquawk.Client.Model.Managers
 
 		public void Logout()
 		{
-			//We don't really have to do anything to tell the server we logged out, just clear our data
-			CurrentUser = null;
+			//We don't really have to do anything to tell the server we logged out, just throw the message up
+			//to the application manager
 			LoggedOut (this, EventArgs.Empty);
 		}
-
-        public async Task<RegistrationResponseType> Register(string name, string password, int age, bool sex, string country, string platform)
-        {
-            await InitDeviceInfo();
-			//ALEXTEST
-            //await ConnectionManager.ConnectAsync();
-
-			RegistrationResponse result;
-			try
-			{
-				result = await _registrationServiceProxy.RegisterNewUser(
-					new RegistrationRequest
-					{
-						Age = age,
-						Name = name,
-						Password = password,
-						Platform = platform,
-						Sex = sex,
-						Country = country,
-						Huid = _deviceInfo.Huid,
-						PushUri = _deviceInfo.PushUri,
-					});
-				
-			}
-			catch(AggregateException ex)
-			{
-				throw ex.Flatten ();
-			}
-
-            if (result.Result == RegistrationResponseType.Success)
-            {
-                //IsRegistered = true;
-                //CurrentUser = result.User;
-                AccountUsername = name;
-                AccountPassword = password;
-            }
-
-            return result.Result;
-        }
-
-        private async Task InitDeviceInfo()
-        {
-            if (_deviceInfoInitialized)
-                return;
-            await _deviceInfo.InitAsync();
-            _deviceInfoInitialized = true;
-        }
     }
 }

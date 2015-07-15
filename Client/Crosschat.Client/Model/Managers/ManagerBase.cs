@@ -16,8 +16,6 @@ namespace SharedSquawk.Client.Model.Managers
             if (connectionManager != null)
             {
                 ConnectionManager = connectionManager;
-                ConnectionManager.DtoReceived += ConnectionManager_OnDtoReceived;
-                //ConnectionManager.RequestReceived += ConnectionManager_OnRequestReceived;
             }
         }
 
@@ -87,18 +85,5 @@ namespace SharedSquawk.Client.Model.Managers
             AutoMapper.CopyPropertyValues(dto, entity);
             return entity;
         }
-
-        private void ConnectionManager_OnDtoReceived(object sender, DtoEventArgs e)
-        {
-            OnUnknownDtoReceived(e.Dto);
-        }
-
-		/*
-        private async void ConnectionManager_OnRequestReceived(object sender, RequestEventArgs e)
-        {
-            var response = await OnRequest(e.Request);
-            ConnectionManager.SendResponse(response);
-        }
-        */
     }
 }

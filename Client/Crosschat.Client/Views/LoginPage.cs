@@ -5,7 +5,7 @@ using SharedSquawk.Client.Seedwork.Controls;
 using SharedSquawk.Client.Seedwork;
 using SharedSquawk.Client.Views.ValueConverters;
 
-namespace SharedSquawk.Client
+namespace SharedSquawk.Client.Views
 {
 	public class LoginPage : MvvmableContentPage
 	{

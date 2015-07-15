@@ -104,7 +104,6 @@
     <Compile Include="ViewModels\EventViewModel.cs" />
     <Compile Include="ViewModels\EventViewModelFactory.cs" />
     <Compile Include="ViewModels\InviteToAppViewModel.cs" />
-    <Compile Include="ViewModels\RegistrationViewModel.cs" />
     <Compile Include="Seedwork\ViewModelBase.cs" />
     <Compile Include="Seedwork\Extensions\NamedObservableCollection.cs" />
     <Compile Include="ViewModels\TextMessageViewModel.cs" />

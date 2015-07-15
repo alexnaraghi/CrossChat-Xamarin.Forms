@@ -5,7 +5,6 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
 {
     public class AuthenticationRequest : RequestBase
     {
-        public string Huid { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
     }

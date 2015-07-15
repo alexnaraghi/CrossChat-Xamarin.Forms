@@ -4,6 +4,7 @@ using SharedSquawk.Client.Model.Contracts;
 using SharedSquawk.Client.Model.Proxies;
 using SharedSquawk.Server.Application.DataTransferObjects.Utils;
 using SharedSquawk.Server.Infrastructure.Protocol;
+using System;
 
 namespace SharedSquawk.Client.Model.Managers
 {
@@ -11,41 +12,35 @@ namespace SharedSquawk.Client.Model.Managers
     /// Managers locator
     /// </summary>
     public class ApplicationManager
-    {        
+    {
+		private ITransportResource _transport;
+		private IStorage _storage;
+
         public ApplicationManager(
             ITransportResource transportResource,
-            IDtoSerializer dtoSerializer,
-            IStorage storage,
-            IDeviceInfo deviceInfo)
+            IStorage storage)
         {
-            //we don't have autofac so let's build the tree
-            var connectionManager = new ConnectionManager(transportResource, new RequestsHandler(), dtoSerializer);
-            
-			//ALEXTEST
-			#if ALEXMOCK
-			var loginServiceProxy = new SquawkLoginServiceProxy(connectionManager);
-			//var loginServiceProxy = new FakeLoginServiceProxy(connectionManager);
-			#else
-			var loginServiceProxy = new ??;
-			#endif
+			_transport = transportResource;
+			_storage = storage;
 
-            AccountManager = new AccountManager(storage, deviceInfo, connectionManager, 
-                new ProfileServiceProxy(connectionManager), 
-                new RegistrationServiceProxy(connectionManager), 
-                new AuthenticationServiceProxy(connectionManager),
-				loginServiceProxy);
-
-			//ALEXTEST
-			#if ALEXMOCK
-			var chatServiceProxy = new SquawkChatServiceProxy(connectionManager);
-			#else
-			var chatServiceProxy = new ChatServiceProxy(connectionManager);
-			#endif
-			ChatManager = new ChatManager(connectionManager, chatServiceProxy, AccountManager);
-            FriendsManager = new FriendsManager(connectionManager, new FriendsServiceProxy(connectionManager));
-            SearchManager = new SearchManager(connectionManager, new UsersSearchServiceProxy(connectionManager));
-            ConnectionManager = connectionManager;
+			Initialize ();
         }
+
+		private void Initialize()
+		{
+			//we don't have autofac so let's build the tree
+			var connectionManager = new ConnectionManager(_transport, new RequestsHandler());
+			var loginServiceProxy = new SquawkLoginServiceProxy(connectionManager);
+			AccountManager = new AccountManager(_storage, connectionManager,
+				new RegistrationServiceProxy(connectionManager), 
+				new AuthenticationServiceProxy(connectionManager),
+				loginServiceProxy);
+			AccountManager.LoggedOut += LoggedOut;
+			
+			var chatServiceProxy = new SquawkChatServiceProxy(connectionManager);
+			ChatManager = new ChatManager(connectionManager, chatServiceProxy, AccountManager);
+			ConnectionManager = connectionManager;
+		}
 
         public ConnectionManager ConnectionManager { get; private set; }
 
@@ -53,8 +48,11 @@ namespace SharedSquawk.Client.Model.Managers
 
         public ChatManager ChatManager { get; private set; }
 
-        public FriendsManager FriendsManager { get; private set; }
-
-        public SearchManager SearchManager { get; private set; }
+		public void LoggedOut(object sender, EventArgs args)
+		{
+			//Easiest way, just clear out all the stateful things and reinstantiate them.
+			//We can get more granular if we need later.
+			Initialize();
+		}
     }
 }

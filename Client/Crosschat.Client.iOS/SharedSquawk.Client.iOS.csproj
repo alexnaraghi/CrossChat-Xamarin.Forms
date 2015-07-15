@@ -144,9 +144,6 @@
     <Compile Include="Infrastructure\InvitationSender.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Infrastructure\ProtobufDtoSerializer.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Infrastructure\Storage.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -159,6 +156,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
     <Compile Include="Infrastructure\SquawkTransportResource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Infrastructure\DtoSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
