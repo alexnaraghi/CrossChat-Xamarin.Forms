@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using SharedSquawk.Client.Model;
 using System;
 using SharedSquawk.Client.Model.Entities;
+using SharedSquawk.Client.Model.Helpers;
 
 namespace SharedSquawk.Client.ViewModels
 {
@@ -125,6 +126,22 @@ namespace SharedSquawk.Client.ViewModels
 			}
 		}
 
+		public ICommand ViewProfileCommand
+		{
+			get { return new Command(OnViewProfile); }
+		}
+
+		private async void OnViewProfile()
+		{
+			var profile = new Profile ();
+			profile.IsMe = true;
+			profile.Details = new ProfileDetails ();
+			AutoMapper.CopyPropertyValues (_appManager.AccountManager.CurrentUser, profile);
+			AutoMapper.CopyPropertyValues (_appManager.AccountManager.CurrentUser, profile.Details);
+
+			var model = new UserDetailViewModel (_appManager, profile);
+			await model.ShowAsync ();
+		}
 
 		public ICommand LogoutCommand
 		{
@@ -141,7 +158,7 @@ namespace SharedSquawk.Client.ViewModels
 		#if DEBUG
 		public string User
 		{
-			get{ return "User : " + _appManager.AccountManager.CurrentUser.FirstName + " " + _appManager.AccountManager.CurrentUser.LastName; }
+			get{ return _appManager.AccountManager.CurrentUser.FirstName + " " + _appManager.AccountManager.CurrentUser.LastName; }
 		}
 
 		public string SSID

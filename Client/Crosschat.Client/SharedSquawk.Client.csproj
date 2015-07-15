@@ -68,7 +68,6 @@
     <Compile Include="Model\Contracts\IDeviceInfo.cs" />
     <Compile Include="Model\Contracts\IStorage.cs" />
     <Compile Include="Model\Contracts\ITransportResource.cs" />
-    <Compile Include="Model\CountriesRepository.cs" />
     <Compile Include="Model\Entities\Country.cs" />
     <Compile Include="Model\Contracts\IContactsRepository.cs" />
     <Compile Include="Model\Entities\Messages\BanNotificationEvent.cs" />
@@ -132,7 +131,6 @@
     <Compile Include="Model\Entities\ObserveableDictionary.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="Views\PublicRoomsPage.cs" />
-    <Compile Include="Model\PublicRoomsRepository.cs" />
     <Compile Include="Model\Entities\Room.cs" />
     <Compile Include="Model\Factories\RoomFactory.cs" />
     <Compile Include="Model\Entities\Messages\TypingMessage.cs" />
@@ -141,6 +139,11 @@
     <Compile Include="ViewModels\UserDetailViewModel.cs" />
     <Compile Include="Model\Entities\Profile.cs" />
     <Compile Include="Model\Entities\RoomData.cs" />
+    <Compile Include="Model\Repositories\CountriesRepository.cs" />
+    <Compile Include="Model\Repositories\PublicRoomsRepository.cs" />
+    <Compile Include="Model\Repositories\LanguagesRepository.cs" />
+    <Compile Include="Model\Entities\Language.cs" />
+    <Compile Include="Model\Entities\Locale.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Crosschat.Utils\SharedSquawk.Utils.csproj">
@@ -178,6 +181,7 @@
   <ItemGroup>
     <Folder Include="Model\Proxies\SquawkProxies\" />
     <Folder Include="Model\Factories\" />
+    <Folder Include="Model\Repositories\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xamarin.Forms.Core">

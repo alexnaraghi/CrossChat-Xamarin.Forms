@@ -14,7 +14,7 @@ namespace SharedSquawk.Client.ViewModels
         public UserViewModel(Profile profile)
         {
 			_profile = profile;
-			Name = profile.LastName + " " + profile.FirstName;
+			Name = profile.FirstName + " " + profile.LastName;
 			Description = string.Format("{0}, {1} years old, Country: {2}", profile.Gender.ToString(), profile.Age, profile.LocaleID);
         }
 

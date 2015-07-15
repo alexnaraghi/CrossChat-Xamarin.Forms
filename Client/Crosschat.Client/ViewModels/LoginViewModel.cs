@@ -30,6 +30,7 @@ namespace SharedSquawk.Client.ViewModels
 		{
 			if (CurrentViewModel == this)
 			{
+				_appManager.AccountManager.Logout ();
 				Notify ("Connection Error", "An error has occurred when trying to login.");
 			}
 			else

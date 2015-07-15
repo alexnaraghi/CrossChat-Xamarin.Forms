@@ -2,6 +2,7 @@
 using SharedSquawk.Client.Seedwork.Controls;
 using SharedSquawk.Client.Seedwork;
 using Xamarin.Forms;
+using SharedSquawk.Client.Views.ValueConverters;
 
 namespace SharedSquawk.Client.Views
 {
@@ -15,6 +16,9 @@ namespace SharedSquawk.Client.Views
 				FontAttributes = FontAttributes.Bold
 			};
 			nameLabel.SetBinding(Label.TextProperty, new Binding("Header"));
+
+			var genderLabel = new Label ();
+			genderLabel.SetBinding(Label.TextProperty, new Binding("GenderString"));
 
 			var localeLabel = new Label ();
 			localeLabel.SetBinding(Label.TextProperty, new Binding("LocaleDetails"));
@@ -45,6 +49,7 @@ namespace SharedSquawk.Client.Views
 				Children =
 				{
 					nameLabel,
+					genderLabel,
 					localeLabel,
 					knownLanguagesLabel,
 					practicingLanguagesLabel,
@@ -61,6 +66,7 @@ namespace SharedSquawk.Client.Views
 					chatButton
 				}
 			};
+			buttonLayout.SetBinding(StackLayout.IsVisibleProperty, new Binding("IsMe", BindingMode.OneWay, converter: new InverterConverter()));
 			Content = new StackLayout {
 				Children = {
 					scrollView,

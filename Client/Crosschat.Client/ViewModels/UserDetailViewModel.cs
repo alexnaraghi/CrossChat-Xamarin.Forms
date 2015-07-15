@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 using System;
+using SharedSquawk.Client.Model;
+using System.Linq;
 
 namespace SharedSquawk.Client.ViewModels
 {
@@ -29,6 +31,7 @@ namespace SharedSquawk.Client.ViewModels
 		private string knownLanguages;
 		private string practicingLanguages;
 		private Gender gender;
+		private bool isMe;
 
 		public UserDetailViewModel(ApplicationManager appManager, Profile profile)
         {
@@ -47,24 +50,42 @@ namespace SharedSquawk.Client.ViewModels
 
 		public string LocaleDetails
 		{
-			get { return string.Format ("{0}", L);}
+			get { return string.Format ("From · {0} {1}", L, CountriesRepository.Get(LocaleID));}
 		}
 
 		public string PracticingLanguagesDisplay {
-			get { return "Learns · " + PracticingLanguages; }
+			get 
+			{
+				var values = PracticingLanguages.Split ('|').Select (v => LanguagesRepository.Get(int.Parse (v)));
+				return "Learns · " + string.Join(", ", values);
+			}
 		}
 		public string KnownLanguagesDisplay {
-			get { return "Knows · " + KnownLanguages; }
+			get {
+				var values = KnownLanguages.Split ('|').Select (v => LanguagesRepository.Get(int.Parse (v)));
+				return "Knows · " + string.Join(", ", values);
+			}
 		}
 
 		public string UserPermissionsDisplay {
 			get 
 			{ 
 				StringBuilder sb = new StringBuilder ();
-				sb.Append("Exchange email messages? ").Append(xcm);
-				sb.Append("   Chat enabled? ").Append(xcc);
+				sb.Append("Exchange email messages? ").Append(xcm == 0 ? "Yes" : "No");
+				sb.Append("\nChat enabled? ").Append(xcc == 0 ? "Yes" : "No");
 				return sb.ToString ();
 			}
+		}
+			
+		public string GenderString
+		{
+			get{return "Gender: " + gender.ToString();}
+		}
+
+		public bool IsMe
+		{
+			get { return isMe; }
+			set { SetProperty(ref isMe, value); }
 		}
 
         public string Number
@@ -93,6 +114,7 @@ namespace SharedSquawk.Client.ViewModels
 			get{return gender;}
 			set{ SetProperty (ref gender, value); }
 		}
+
 		public string LastName {
 			get { return lastName; }
 			set { SetProperty(ref lastName, value); Raise ("Header");}
