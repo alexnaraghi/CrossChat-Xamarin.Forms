@@ -19,7 +19,7 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
     {
 		// ATTRIBUTES
 		[XmlAttribute("SSID")]
-		public long SSID  { get; set; }
+		public string SSID  { get; set; }
 
 		[XmlIgnore]
 		public bool RWorldIsOn { get; set; }

@@ -10,6 +10,7 @@ namespace SharedSquawk.Client.Views
     public class ChatPage : MvvmableContentPage
     {
 		private ChatListView _messageList;
+		private object _lastAdded;
 
         public ChatPage(ViewModelBase viewModel) : base(viewModel)
         {
@@ -33,7 +34,7 @@ namespace SharedSquawk.Client.Views
                 sendButton.TextColor = Color.White; 
             }
 
-            var inputBox = new Entry();
+			var inputBox = new SquawkEntry();
             inputBox.HorizontalOptions = LayoutOptions.FillAndExpand;
             inputBox.Keyboard = Keyboard.Chat;
             inputBox.Placeholder = "Type a message...";
@@ -42,16 +43,19 @@ namespace SharedSquawk.Client.Views
 			inputBox.SetBinding(Entry.IsEnabledProperty, new Binding("IsConnected", BindingMode.OneWay));
 
             _messageList = new ChatListView();
-            _messageList.VerticalOptions = LayoutOptions.FillAndExpand;
+			_messageList.VerticalOptions = LayoutOptions.FillAndExpand;
 			_messageList.SetBinding(ChatListView.ItemsSourceProperty, new Binding("MessageEvents"));
 			_messageList.SetBinding(ChatListView.IsVisibleProperty, new Binding("IsConnected", BindingMode.OneWay));
             _messageList.ItemTemplate = new DataTemplate(CreateMessageCell);
 			_messageList.ItemTapped += ItemTapped;
+			_messageList.HasUnevenRows = true;
+			_messageList.SeparatorVisibility = SeparatorVisibility.None;
 
 			var typingLabel = new Label();
-			typingLabel.FontSize = 12;
+			typingLabel.FontSize = 11;
 			typingLabel.TextColor = Color.Gray;
 			typingLabel.SetBinding(Label.TextProperty, new Binding("TypingEventsString", stringFormat:"  {0}"));
+			//typingLabel.SetBinding(Label.IsVisibleProperty, new Binding("AreTypingEvents"));
 
 			#region Error Message UI
 			var chatStatusLabel = new Label {
@@ -126,28 +130,25 @@ namespace SharedSquawk.Client.Views
 			requestLayout.SetBinding(StackLayout.IsVisibleProperty, new Binding("IsInRequestMode", BindingMode.OneWay));
 			#endregion
 
-            Content = new StackLayout
+			Content  = new StackLayout
                 {
                     Padding = Device.OnPlatform(new Thickness(6,6,6,6), new Thickness(0), new Thickness(0)),
                     Children =
                         {
-
-							//testButton,
-                            
-                            //headerLabel,
 							_messageList,
 							chatStatusLayout,
 							requestLayout,
 							typingLabel,
 							new StackLayout
 							{
+						
 								Children = {inputBox, sendButton},
 								Orientation = StackOrientation.Horizontal,
 								Padding = new Thickness(0, Device.OnPlatform(0, 20, 0),0,0),
-								VerticalOptions = LayoutOptions.End
+								//VerticalOptions = LayoutOptions.End
 							}
                         }
-                };
+					};
         }
 
         void ItemTapped (object sender, ItemTappedEventArgs e)
@@ -162,6 +163,7 @@ namespace SharedSquawk.Client.Views
 		{
 			if (lastItem != null)
 			{
+				_lastAdded = lastItem;
 				_messageList.ScrollTo (lastItem, ScrollToPosition.End, animated: false);
 			}
 		}

@@ -5,9 +5,9 @@ using SharedSquawk.Client.Views.ValueConverters;
 
 namespace SharedSquawk.Client.Views
 {
-    public class ActiveChatPage : MvvmableContentPage
+    public class ActiveChatsPage : MvvmableContentPage
     {
-		public ActiveChatPage(ViewModelBase viewModel) : base(viewModel)
+		public ActiveChatsPage(ViewModelBase viewModel) : base(viewModel)
 		{
 			var listView = new BindableListView
 			{

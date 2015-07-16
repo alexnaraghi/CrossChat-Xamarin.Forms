@@ -7,6 +7,7 @@ using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 using SharedSquawk.Server.Application.DataTransferObjects.Utils;
 using SharedSquawk.Server.Infrastructure.Protocol;
 using SharedSquawk.Utils.Tasking;
+using System.Net;
 
 namespace SharedSquawk.Client.Model.Proxies
 {
@@ -50,14 +51,37 @@ namespace SharedSquawk.Client.Model.Proxies
 				Interlocked.Increment(ref _lastToken);
 				request.Token = _lastToken;
 
-				response = _requestsHandler.WaitForResponse<TResponse>(request, () => _transport.SendData<TRequest, TResponse>(endpoint, request, request.Token));
-				if (response != null)
+				try
+				{
+					response = _requestsHandler.WaitForResponse<TResponse>(request, () => _transport.SendData<TRequest, TResponse>(endpoint, request, request.Token));
+				}
+				catch(AggregateException ex)
+				{
+					var flattened = ex.Flatten ();
+
+					if (flattened is WebException)
+					{
+						//Just eat web exceptions since we will try to send the request again.
+						//We will end up sending a connection drop if none of the requests
+						//get through successfully.
+					}
+					else
+					{
+						throw flattened;
+					}
+				}
+				catch(Exception ex)
+				{
+					int d = 0;
+				}
+
+				if (response.Result != null)
 				{
 					break;
 				}
 			}
 
-			if (response.Result == null)
+			if (response == null || response.Result == null)
 			{
 				ConnectionDropped ();
 			}

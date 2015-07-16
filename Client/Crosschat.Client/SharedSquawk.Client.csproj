@@ -126,7 +126,6 @@
     <Compile Include="Model\Proxies\SquawkProxies\SquawkChatServiceProxy.cs" />
     <Compile Include="Model\Helpers\ChatUpdateBuilder.cs" />
     <Compile Include="Model\Helpers\Timer.cs" />
-    <Compile Include="Views\ActiveChatPage.cs" />
     <Compile Include="Model\Entities\RoomCollection.cs" />
     <Compile Include="Model\Entities\ObserveableDictionary.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
@@ -144,6 +143,8 @@
     <Compile Include="Model\Repositories\LanguagesRepository.cs" />
     <Compile Include="Model\Entities\Language.cs" />
     <Compile Include="Model\Entities\Locale.cs" />
+    <Compile Include="Views\ActiveChatsPage.cs" />
+    <Compile Include="Views\Controls\SquawkEntry.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Crosschat.Utils\SharedSquawk.Utils.csproj">

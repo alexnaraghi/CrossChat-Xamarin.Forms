@@ -194,7 +194,11 @@ namespace SharedSquawk.Client.Model.Managers
 							//room, or disconnected entirely from the server.
 							if (update.DisconnectedUser.RoomId != null)
 							{
-								Rooms.SetStatus (update.DisconnectedUser.RoomId, RoomStatus.OtherUserLeft);
+								if (RoomFactory.IsUserRoom (update.DisconnectedUser.RoomId))
+								{
+									Rooms.SetStatus (update.DisconnectedUser.RoomId, RoomStatus.OtherUserLeft);
+							
+								}
 							}
 							else
 							{
@@ -205,10 +209,14 @@ namespace SharedSquawk.Client.Model.Managers
 						else if (update.FP != null)
 						{
 							var fp = update.FP;
-							Rooms.AddTypingEvent (fp.Room, new TypingEvent () {
-								UserName = GetUserFirstName (fp.UserId),
-								UserId = fp.UserId
-							});
+							//The server can send us duplicate typing events, only add one
+							if (!Rooms [fp.Room].TypingEvents.Any (t => (t as TypingEvent).UserId == fp.UserId))
+							{
+								Rooms.AddTypingEvent (fp.Room, new TypingEvent () {
+									UserName = GetUserFirstName (fp.UserId),
+									UserId = fp.UserId
+								});
+							}
 						}
 						else if (update.Message != null)
 						{

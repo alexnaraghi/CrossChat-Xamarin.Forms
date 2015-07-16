@@ -161,6 +161,8 @@
     <Compile Include="Infrastructure\DtoSerializer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CustomRenderers\KeyboardResizingContentPage.cs" />
+    <Compile Include="CustomRenderers\EntryRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Crosschat.Client\SharedSquawk.Client.csproj">

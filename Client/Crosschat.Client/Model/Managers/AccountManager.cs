@@ -63,8 +63,8 @@ namespace SharedSquawk.Client.Model.Managers
         }
 
 		//This is the current session id of the login
-		private long _ssid;
-		public long SSID
+		private string _ssid;
+		public string SSID
 		{
 			get { return _ssid; }
 			private set { _ssid = value; }

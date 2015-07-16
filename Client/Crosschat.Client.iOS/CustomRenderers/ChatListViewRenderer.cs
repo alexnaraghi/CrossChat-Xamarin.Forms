@@ -8,13 +8,13 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 
-[assembly: ExportRenderer(typeof(ChatListView), typeof(ChatListViewRenderer))]
+//[assembly: ExportRenderer(typeof(ChatListView), typeof(ChatListViewRenderer))]
 
 namespace SharedSquawk.Client.iOS.CustomRenderers
 {
     /// <summary>
     /// Thanks to MartinBooth for the example how to create DynamicRowHeightListViewRenderer
-    /// http://forums.xamarin.com/discussion/comment/56693#Comment_56693
+	/// http://forums.xamarin.com/discussion/comment/56693#Comment_56693
     /// </summary>
     public class ChatListViewRenderer : ListViewRenderer
     {

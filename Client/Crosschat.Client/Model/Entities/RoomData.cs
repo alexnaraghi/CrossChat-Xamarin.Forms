@@ -15,8 +15,8 @@ namespace SharedSquawk.Client.Model.Entities
 	{
 		private RoomStatus _status;
 		private Room _room;
-		private ObservableCollection<Event> _textMessages;
-		private ObservableCollection<Event> _typingEvents;
+		private ObservableCollection<TextMessage> _textMessages;
+		private ObservableCollection<TypingEvent> _typingEvents;
 
 		public RoomStatus Status { 
 			get { return _status; }
@@ -25,11 +25,11 @@ namespace SharedSquawk.Client.Model.Entities
 				SetProperty (ref _status, value); 
 			}
 		}
-		public ObservableCollection<Event> TextMessages{ 
+		public ObservableCollection<TextMessage> TextMessages{ 
 			get { return _textMessages; }
 			set{ SetProperty (ref _textMessages, value); }
 		}
-		public ObservableCollection<Event> TypingEvents{ 
+		public ObservableCollection<TypingEvent> TypingEvents{ 
 			get { return _typingEvents; }
 			set{ SetProperty (ref _typingEvents, value); }
 		}
@@ -44,8 +44,8 @@ namespace SharedSquawk.Client.Model.Entities
 		//room object
 		public RoomData(Room room)
 		{
-			TextMessages = new ObservableCollection<Event> ();
-			TypingEvents = new ObservableCollection<Event> ();
+			TextMessages = new ObservableCollection<TextMessage> ();
+			TypingEvents = new ObservableCollection<TypingEvent> ();
 			Room = room;
 			Status = RoomStatus.Waiting;
 		}

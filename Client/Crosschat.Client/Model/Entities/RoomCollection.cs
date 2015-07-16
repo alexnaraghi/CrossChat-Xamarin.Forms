@@ -12,7 +12,7 @@ namespace SharedSquawk.Client.Model.Entities
 {
 	public class RoomCollection : ObservableDictionary<string, RoomData>
 	{
-		public void AddTextMessage(string key, Event value)
+		public void AddTextMessage(string key, TextMessage value)
 		{
 			if (!ContainsKey (key))
 			{
@@ -22,7 +22,7 @@ namespace SharedSquawk.Client.Model.Entities
 			this [key].TextMessages.Add (value);
 		}
 
-		public void AddTextMessageRange(string key, IEnumerable<Event> values)
+		public void AddTextMessageRange(string key, IEnumerable<TextMessage> values)
 		{
 			if (!ContainsKey (key))
 			{
@@ -31,7 +31,7 @@ namespace SharedSquawk.Client.Model.Entities
 			this [key].TextMessages.AddRange (values);
 		}
 
-		public void RemoveTextMessage(string key, Event value)
+		public void RemoveTextMessage(string key, TextMessage value)
 		{
 			if (!ContainsKey (key))
 			{
@@ -51,7 +51,7 @@ namespace SharedSquawk.Client.Model.Entities
 			return this [key].TextMessages.Last();
 		}
 
-		public void AddTypingEvent(string key, Event value)
+		public void AddTypingEvent(string key, TypingEvent value)
 		{
 			if (!ContainsKey (key))
 			{

@@ -209,6 +209,13 @@ namespace SharedSquawk.Client.ViewModels
 			set 
 			{
 				SetProperty(ref _typingEventsString, value); 
+				Raise ("AreTypingEvents");
+			}
+		}
+		public bool AreTypingEvents {
+			get 
+			{
+				return !string.IsNullOrWhiteSpace (_typingEventsString);
 			}
 		}
 

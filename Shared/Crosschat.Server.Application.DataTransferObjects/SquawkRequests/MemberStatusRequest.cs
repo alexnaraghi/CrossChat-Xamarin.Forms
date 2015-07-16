@@ -9,7 +9,7 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
     public class MemberStatusRequest : RequestBase
     {
 		[XmlAttribute("SSID")]
-        public long SessionId { get; set; }
+        public string SessionId { get; set; }
 		[XmlAttribute("UID")]
 		public int UserId { get; set; }
     }

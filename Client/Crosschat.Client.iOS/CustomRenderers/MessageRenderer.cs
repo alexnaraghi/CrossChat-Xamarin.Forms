@@ -27,6 +27,7 @@ namespace SharedSquawk.Client.iOS.CustomRenderers
 					text = textVm.AuthorName + "· " + textVm.Text;
 				}
                 var chatBubble = new ChatBubble(!textVm.IsMine, text);
+				item.Height = chatBubble.GetHeight (tv, null);
                 return chatBubble.GetCell(tv);
             }
 			return base.GetCell(item, reuseableCell, tv);

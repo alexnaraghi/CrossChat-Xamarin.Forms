@@ -17,5 +17,12 @@ namespace SharedSquawk.Client
 		{
 			return creatorUserId + "-" + otherUserId;
 		}
+
+		public static bool IsUserRoom(string roomId)
+		{
+			//Any room that starts with these characters is a public room,
+			//not a user room
+			return !roomId.StartsWith ("CRE");
+		}
     }
 }

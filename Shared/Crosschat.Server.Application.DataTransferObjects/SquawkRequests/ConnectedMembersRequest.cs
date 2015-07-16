@@ -10,7 +10,7 @@ namespace SharedSquawk.Server.Application.DataTransferObjects.Requests
     public class ConnectedMembersRequest : RequestBase
     {
 		[XmlAttribute("SSID")]
-		public long SSID  { get; set; }
+		public string SSID  { get; set; }
 		[XmlAttribute("PLs")]
 		public string PracticingLanguages  { get; set; }
 		[XmlAttribute("KLs")]
