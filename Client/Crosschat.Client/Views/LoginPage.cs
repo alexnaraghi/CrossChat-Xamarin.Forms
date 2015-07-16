@@ -11,20 +11,31 @@ namespace SharedSquawk.Client.Views
 	{
 		public LoginPage(ViewModelBase viewModel) : base(viewModel)
 		{
-			this.BackgroundColor = Color.Yellow;
+			BackgroundColor = Styling.BackgroundYellow;
+			var fs = new FormattedString () {
+				Spans = {
+					new Span{ Text = "Shared", FontSize = 32, FontAttributes = FontAttributes.None },
+					new Span{ Text = "Squawk", FontSize = 32, FontAttributes = FontAttributes.Bold },
+				}
+			};
 			var header = new Label
 			{
-				Text = "Login",
-				Font = Font.BoldSystemFontOfSize(36),
+				FormattedText = fs,
 				HorizontalOptions = LayoutOptions.Center
+			};
+
+			var spacer = new BoxView () {
+				Color = Color.Transparent,
+				HeightRequest = 40
 			};
 
 			var button = new Button();
 			button.Text = "Login";
 			button.SetBinding(IsEnabledProperty, new Binding("IsBusy", converter: new InverterConverter()));
 			button.SetBinding(Button.CommandProperty, new Binding("LoginCommand"));
-			button.BackgroundColor = Color.Gray;
-			button.TextColor = Color.White;
+			button.FontSize = 20;
+			//button.BackgroundColor = Color.Gray;
+			//button.TextColor = Color.White;
 
 			var nameEntry = new Entry
 			{
@@ -43,17 +54,19 @@ namespace SharedSquawk.Client.Views
 
 
 			// Accomodate iPhone status bar.
-			Padding = new Thickness(10, Device.OnPlatform(iOS: 20, Android: 0, WinPhone: 0), 10, 5);
+			Padding = new Thickness(10, Device.OnPlatform(iOS: 20, Android: 0, WinPhone: 0), 10, 100);
 
 			Content = new StackLayout
 			{
 				Children =
 				{
 					header,
+					spacer,
 					nameEntry,
 					passwordEntry,
 					button
-				}
+				},
+				VerticalOptions = LayoutOptions.Center
 			};
 		}
 	}

@@ -15,7 +15,7 @@ namespace SharedSquawk.Client
 				DependencyService.Get<ITransportResource>(),
 				DependencyService.Get<IStorage>());
 
-			return new NavigationPage(new LoginPage(new LoginViewModel(applicationManager)));
+			return new LoginPage(new LoginViewModel(applicationManager));
         }
     }
 }

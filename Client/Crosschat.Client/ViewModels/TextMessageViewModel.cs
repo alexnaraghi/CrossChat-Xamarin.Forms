@@ -15,7 +15,7 @@ namespace SharedSquawk.Client.ViewModels
             //ImageId = textMessage.ImageId;
             if (ImageId.HasValue)
             {
-                ImageUrl = string.Format("http://{0}/cc/l/{1}.jpg", GlobalConfig.IpAddress, ImageId.Value);
+                //ImageUrl = string.Format("http://{0}/cc/l/{1}.jpg", GlobalConfig.IpAddress, ImageId.Value);
             }
         }
 

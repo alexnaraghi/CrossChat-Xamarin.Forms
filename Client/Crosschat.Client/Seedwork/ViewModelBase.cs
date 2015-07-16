@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using SharedSquawk.Client.Properties;
 using Xamarin.Forms;
+using SharedSquawk.Client.Views;
 
 namespace SharedSquawk.Client.Seedwork
 {
@@ -70,7 +71,11 @@ namespace SharedSquawk.Client.Seedwork
 			//auto-wiring VM with view like MvvmCross and Caliburn do
 			string viewModelName = "SharedSquawk.Client.Views." + GetType().Name.Replace("ViewModel", "") + "Page";
 			var page = Activator.CreateInstance(Type.GetType(viewModelName), this) as Page;
-			return _currentPage.Navigation.PushModalAsync(new NavigationPage(page){Title = page.Title, Icon = page.Icon});
+			var navPage = new SquawkNavigationPage (page);
+			navPage.BindingContext = page;
+			navPage.SetBinding (Page.TitleProperty, new Binding ("Title"));
+			navPage.SetBinding(Page.IconProperty, new Binding("Icon"));
+			return _currentPage.Navigation.PushModalAsync(navPage);
 		}
 
 		public Task PopToRootAsync()

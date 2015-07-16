@@ -2,11 +2,6 @@ namespace SharedSquawk.Server.Infrastructure
 {
     public static class GlobalConfig
     {
-		
-        public const string IpAddress = "ABOT.cloudapp.net"; //"23.97.209.133"
-        public const int Port = 3452;
-
-		//ALEXTEST
 		public const string ServiceBase = "http://sharedtalk.com/";
 		public const string Referer = "http://sharedtalk.com/SWFs3/Main.swf";
 		public const string RequestedWith = "ShockwaveFlash/17.0.0.188";

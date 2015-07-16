@@ -60,7 +60,8 @@ namespace SharedSquawk.Client.Views
 			#region Error Message UI
 			var chatStatusLabel = new Label {
 				HorizontalOptions = LayoutOptions.Center,
-				FontSize = 16
+				FontSize = 16,
+				TextColor = Color.Gray
 			};
 
 			chatStatusLabel.SetBinding(Label.TextProperty, new Binding("StatusText", BindingMode.OneWay));

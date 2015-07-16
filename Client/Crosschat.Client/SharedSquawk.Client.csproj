@@ -145,6 +145,8 @@
     <Compile Include="Model\Entities\Locale.cs" />
     <Compile Include="Views\ActiveChatsPage.cs" />
     <Compile Include="Views\Controls\SquawkEntry.cs" />
+    <Compile Include="Views\SquawkNavigationPage.cs" />
+    <Compile Include="Styling.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Crosschat.Utils\SharedSquawk.Utils.csproj">
