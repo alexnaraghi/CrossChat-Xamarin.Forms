@@ -82,7 +82,7 @@ namespace SharedSquawk.Client.ViewModels
 			get{return "Gender: " + gender.ToString();}
 		}
 
-		public bool IsMe
+		public bool HasChatOption
 		{
 			get { return isMe; }
 			set { SetProperty(ref isMe, value); }

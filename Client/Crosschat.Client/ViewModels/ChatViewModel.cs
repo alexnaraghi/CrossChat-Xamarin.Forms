@@ -11,6 +11,7 @@ using System.Linq;
 using SharedSquawk.Client.Views;
 using System.Text;
 using SharedSquawk.Client.Model.Entities;
+using SharedSquawk.Client.Model.Helpers;
 
 namespace SharedSquawk.Client.ViewModels
 {
@@ -289,6 +290,66 @@ namespace SharedSquawk.Client.ViewModels
 		{
 			_appManager.ChatManager.LeaveRoom (_roomData.Room.RoomId);
 			await PopAsync ();
+		}
+
+		private async void OnViewProfile()
+		{
+			if (_roomData.Room.UserId != null)
+			{
+				var profile = new Profile ();
+				profile.Details = new ProfileDetails ();
+				AutoMapper.CopyPropertyValues (_roomData.Room.UserId, profile);
+				AutoMapper.CopyPropertyValues (_roomData.Room.UserId, profile.Details);
+
+				var model = new UserDetailViewModel (_appManager, profile)
+				{
+					HasChatOption = false
+				};
+				await model.ShowAsync ();
+			}
+		}
+
+		public ICommand ContextOptionsCommand
+		{
+			get { return new Command(OnOpenContextOptions); }
+		}
+
+		private async void OnOpenContextOptions()
+		{
+			string[] buttons;
+
+			//Different context options depending if this is a user or group chat
+			if (_roomData.Room.IsUserChat)
+			{
+				buttons = new string[] {
+					"View Profile", "Leave Chat"
+				};
+			}
+			else
+			{
+				buttons = new string[] {
+					"See Members", "Leave Chat"
+				};
+			}
+
+			var chosen = await Action ("Options", "Cancel", "Block", buttons);
+			switch (chosen)
+			{
+			case "Block":
+				Notify("Error", "We haven't created this feature yet, stay tuned!");
+				break;
+			case "View Profile":
+				OnViewProfile();
+				break;
+			case "See Members":
+				Notify("Error", "We haven't created this feature yet, stay tuned!");
+				break;
+			case "Leave Chat":
+				OnLeaveRoom ();
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }

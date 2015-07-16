@@ -116,5 +116,13 @@ namespace SharedSquawk.Client.Seedwork
 			
             return _currentPage.DisplayAlert(title, text, "Ok");
         }
+
+		public Task<string> Action(string title, string cancel, string destruction, params string[] buttons)
+		{
+			if (_currentPage == null)
+				return Task<string>.FromResult("");
+
+			return _currentPage.DisplayActionSheet (title, cancel, destruction, buttons);
+		}
     }
 }

@@ -15,7 +15,15 @@ namespace SharedSquawk.Client.Views
         public ChatPage(ViewModelBase viewModel) : base(viewModel)
         {
 			SetBinding (ContentPage.TitleProperty, new Binding("RoomName"));
-            Icon = "chat.png";
+			Icon = Styling.ChatIcon;
+
+			var toolbarItem = new ToolbarItem {
+				Text = "Actions",
+				Icon = Styling.ToolbarIcon,
+				Order = ToolbarItemOrder.Primary
+			};
+			toolbarItem.SetBinding(ToolbarItem.CommandProperty, new Binding("ContextOptionsCommand")); 
+			ToolbarItems.Add(toolbarItem);
 
             var headerLabel = new Label();
             headerLabel.FontSize = 24;

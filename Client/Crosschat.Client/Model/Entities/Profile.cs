@@ -5,7 +5,6 @@ namespace SharedSquawk.Client.Model.Entities
 {
 	public class Profile
 	{
-		public bool IsMe{ get; set; }
 		public string PracticingLanguages  { get; set; }
 		public string KnownLanguages  { get; set; }
 		public int LocaleID  { get; set; }

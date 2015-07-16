@@ -36,14 +36,16 @@ namespace SharedSquawk.Client.Views
 				HorizontalOptions = LayoutOptions.FillAndExpand,
 				Children = 
 				{
+					new BoxView{HeightRequest = 20},
 					noItemsLabel
 				}
 			};
 			noItemsLayout.SetBinding(StackLayout.IsVisibleProperty, new Binding("HasConversations", BindingMode.OneWay, converter: new InverterConverter()));
 			
 
-			var contactsLoadingIndicator = new ActivityIndicator();
+			var contactsLoadingIndicator = new ActivityIndicator ();
 			contactsLoadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
+			contactsLoadingIndicator.SetBinding(ActivityIndicator.IsVisibleProperty, new Binding("IsBusy"));
 
 			Content = new StackLayout
 			{

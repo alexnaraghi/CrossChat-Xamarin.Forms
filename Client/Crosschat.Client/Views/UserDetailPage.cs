@@ -66,7 +66,7 @@ namespace SharedSquawk.Client.Views
 					chatButton
 				}
 			};
-			buttonLayout.SetBinding(StackLayout.IsVisibleProperty, new Binding("IsMe", BindingMode.OneWay, converter: new InverterConverter()));
+			buttonLayout.SetBinding(StackLayout.IsVisibleProperty, new Binding("HasChatOption", BindingMode.OneWay, converter: new InverterConverter()));
 			Content = new StackLayout {
 				Children = {
 					scrollView,

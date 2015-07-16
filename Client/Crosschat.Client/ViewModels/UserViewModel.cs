@@ -2,6 +2,7 @@
 using SharedSquawk.Server.Application.DataTransferObjects.Messages;
 using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 using SharedSquawk.Client.Model.Entities;
+using SharedSquawk.Client.Model;
 
 namespace SharedSquawk.Client.ViewModels
 {
@@ -15,7 +16,8 @@ namespace SharedSquawk.Client.ViewModels
         {
 			_profile = profile;
 			Name = profile.FirstName + " " + profile.LastName;
-			Description = string.Format("{0}, {1} years old, Country: {2}", profile.Gender.ToString(), profile.Age, profile.LocaleID);
+			Description = string.Format("{0}, {1} years old, {2}", 
+				profile.Gender.ToString(), profile.Age, CountriesRepository.Get(profile.LocaleID));
         }
 
         public string Description

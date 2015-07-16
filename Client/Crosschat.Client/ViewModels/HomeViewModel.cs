@@ -130,16 +130,16 @@ namespace SharedSquawk.Client.ViewModels
 		{
 			get { return new Command(OnViewProfile); }
 		}
-
 		private async void OnViewProfile()
 		{
 			var profile = new Profile ();
-			profile.IsMe = true;
 			profile.Details = new ProfileDetails ();
 			AutoMapper.CopyPropertyValues (_appManager.AccountManager.CurrentUser, profile);
 			AutoMapper.CopyPropertyValues (_appManager.AccountManager.CurrentUser, profile.Details);
 
-			var model = new UserDetailViewModel (_appManager, profile);
+			var model = new UserDetailViewModel (_appManager, profile) {
+				HasChatOption = false
+			};
 			await model.ShowAsync ();
 		}
 
