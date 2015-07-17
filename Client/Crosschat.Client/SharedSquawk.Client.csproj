@@ -100,7 +100,6 @@
     <Compile Include="Seedwork\Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="ViewModels\ContactViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
-    <Compile Include="ViewModels\EventViewModel.cs" />
     <Compile Include="ViewModels\EventViewModelFactory.cs" />
     <Compile Include="ViewModels\InviteToAppViewModel.cs" />
     <Compile Include="Seedwork\ViewModelBase.cs" />
@@ -148,6 +147,7 @@
     <Compile Include="Views\SquawkNavigationPage.cs" />
     <Compile Include="Styling.cs" />
     <Compile Include="ViewModels\ActiveChatViewModel.cs" />
+    <Compile Include="ViewModels\EventViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Crosschat.Utils\SharedSquawk.Utils.csproj">

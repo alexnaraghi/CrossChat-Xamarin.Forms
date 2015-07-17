@@ -10,7 +10,6 @@ namespace SharedSquawk.Client.Views
     public class ChatPage : MvvmableContentPage
     {
 		private ChatListView _messageList;
-		private object _lastAdded;
 
         public ChatPage(ViewModelBase viewModel) : base(viewModel)
         {
@@ -178,7 +177,6 @@ namespace SharedSquawk.Client.Views
 		{
 			if (lastItem != null)
 			{
-				_lastAdded = lastItem;
 				_messageList.ScrollTo (lastItem, ScrollToPosition.End, animated: false);
 			}
 		}

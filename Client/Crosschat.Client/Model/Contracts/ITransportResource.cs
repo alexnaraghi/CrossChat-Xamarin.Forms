@@ -6,10 +6,6 @@ namespace SharedSquawk.Client.Model.Contracts
 {
     public interface ITransportResource
     {
-        Task ConnectAsync();
-
-        Task DisconnectAsync();
-
 		event Action<ResponseBase> DataReceived;
 
 		void SendData<TRequest, TResponse>(TransportEndpoint endpoint, TRequest data, long token) 

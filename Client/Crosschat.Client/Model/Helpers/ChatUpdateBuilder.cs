@@ -13,7 +13,6 @@ namespace SharedSquawk.Client
 		private List<string> _enteredRooms;
 		private List<int> _enteredUserChatRequests;
 
-		private bool _isInstantiated;
 		public ChatUpdateBuilder ()
 		{
 			_request = new ChatUpdateRequest () {
@@ -40,8 +39,6 @@ namespace SharedSquawk.Client
 			_activeRooms.Clear ();
 			_enteredRooms.Clear ();
 			_enteredUserChatRequests.Clear ();
-
-			_isInstantiated = true;
 
 		}
 

@@ -308,7 +308,6 @@ namespace SharedSquawk.Client.Model.Managers
 								break;
 							default:
 								throw new NotSupportedException ("Chat reply is not known");
-								break;
 							}
 						}
 						else

@@ -4,7 +4,6 @@ using Xamarin.Forms;
 using System.Collections.Generic;
 using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 using SharedSquawk.Client.Model.Contracts;
-using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 
 namespace SharedSquawk.Client
 {

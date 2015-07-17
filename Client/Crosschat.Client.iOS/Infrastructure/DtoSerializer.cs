@@ -65,7 +65,7 @@ namespace SharedSquawk.Client.iOS.Infrastructure
 				{
 					deserializedObject = (T)serializer.Deserialize (reader);
 				}
-				catch(Exception exc)
+				catch(Exception)
 				{
 					throw new DeserializeException ("Deserialize failed, see inner exception");
 				}
