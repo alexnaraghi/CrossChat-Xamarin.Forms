@@ -18,24 +18,24 @@ namespace SharedSquawk.Client.Views
 					new Span{ Text = "Squawk", FontSize = 32, FontAttributes = FontAttributes.Bold },
 				}
 			};
+
 			var header = new Label
 			{
 				FormattedText = fs,
 				HorizontalOptions = LayoutOptions.Center
 			};
 
-			var spacer = new BoxView () {
-				Color = Color.Transparent,
-				HeightRequest = 40
-			};
+			var loginButton = new Button();
+			loginButton.Text = "Login";
+			loginButton.SetBinding(IsEnabledProperty, new Binding("IsBusy", converter: new InverterConverter()));
+			loginButton.SetBinding(Button.CommandProperty, new Binding("LoginCommand"));
+			loginButton.FontSize = 24;
 
-			var button = new Button();
-			button.Text = "Login";
-			button.SetBinding(IsEnabledProperty, new Binding("IsBusy", converter: new InverterConverter()));
-			button.SetBinding(Button.CommandProperty, new Binding("LoginCommand"));
-			button.FontSize = 20;
-			//button.BackgroundColor = Color.Gray;
-			//button.TextColor = Color.White;
+			var registerButton = new Button();
+			registerButton.FontAttributes = FontAttributes.Italic;
+			registerButton.Text = "Don't have an account?";
+			registerButton.SetBinding(Button.CommandProperty, new Binding("RegisterCommand"));
+			registerButton.FontSize = 12;
 
 			var nameEntry = new Entry
 			{
@@ -61,12 +61,20 @@ namespace SharedSquawk.Client.Views
 				Children =
 				{
 					header,
-					spacer,
-					nameEntry,
-					passwordEntry,
-					button
+					new StackLayout
+					{
+						Children =
+						{
+							nameEntry,
+							passwordEntry
+						}
+					},
+					loginButton,
+					registerButton
 				},
-				VerticalOptions = LayoutOptions.Center
+				VerticalOptions = LayoutOptions.Center,
+				Spacing = 30,
+				Padding = new Thickness(25, 80, 25, 0)
 			};
 		}
 	}

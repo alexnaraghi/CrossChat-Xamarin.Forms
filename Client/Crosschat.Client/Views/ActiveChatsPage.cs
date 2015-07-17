@@ -15,13 +15,14 @@ namespace SharedSquawk.Client.Views
 					{
 						var textCell = new TextCell();
 						textCell.SetBinding(TextCell.TextProperty, new Binding("Name"));
-						//textCell.SetBinding(TextCell.DetailProperty, new Binding("Description"));
+						textCell.SetBinding(TextCell.DetailProperty, new Binding("DescriptionText"));
 						return textCell;
-					})
+					}),
+				SeparatorVisibility = SeparatorVisibility.None
 			};
 
 			listView.SetBinding(ListView.ItemsSourceProperty, new Binding("ActiveChats"));
-			listView.SetBinding(BindableListView.ItemClickedCommandProperty, new Binding("SelectRoomCommand"));
+			listView.SetBinding(BindableListView.ItemClickedCommandProperty, new Binding("SelectActiveChatCommand"));
 			listView.SetBinding(ListView.IsVisibleProperty, new Binding("HasConversations", BindingMode.OneWay));
 				
 			var noItemsLabel = new Label {

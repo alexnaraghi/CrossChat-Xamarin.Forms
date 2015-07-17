@@ -254,7 +254,7 @@ namespace SharedSquawk.Client.Model.Managers
 							Rooms.SetStatus (room, RoomStatus.Connected);
 							Rooms.AddTextMessageRange (room, enteredRoom.RoomMessages.Select (r =>
 								new TextMessage () {
-								UserName = r.User.Name,
+								UserName = r.User.Name.Replace("·","").Trim(),  //strip weird appends from the server
 								Body = r.Message.Body,
 								UserId = null, //How can we get this?  only the first name is sent, so we can't resolve duplicate names
 								Timestamp = DateTime.Now

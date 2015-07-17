@@ -20,7 +20,7 @@ namespace SharedSquawk.Client.ViewModels
         private readonly IPhotoPicker _photoPicker;
         private ObservableCollection<UserViewModel> _users;
 		private ObservableCollection<Room> _publicRooms;
-		private ObservableCollection<Room> _activeChats;
+		private ObservableCollection<ActiveChatViewModel> _activeChats;
         //private ObservableCollection<EventViewModel> _events;
         private string _inputText;
         private string _subject;
@@ -33,7 +33,7 @@ namespace SharedSquawk.Client.ViewModels
             _eventViewModelFactory = new EventViewModelFactory();
             _photoPicker = DependencyService.Get<IPhotoPicker>();
 			_publicRooms = new ObservableCollection<Room> ();
-			_activeChats = new ObservableCollection<Room> ();
+			_activeChats = new ObservableCollection<ActiveChatViewModel> ();
             LoadData();
         }
 
@@ -44,7 +44,7 @@ namespace SharedSquawk.Client.ViewModels
             Subject = _appManager.ChatManager.Subject;
 
             _appManager.ChatManager.OnlineUsers.SynchronizeWith(Users, u => new UserViewModel(u));
-			_appManager.ChatManager.Rooms.SynchronizeWith(ActiveChats, r => r.Room, s => s.Room.RoomId, d => d.RoomId);
+			_appManager.ChatManager.Rooms.SynchronizeWith(ActiveChats, r => new ActiveChatViewModel(_appManager, r), s => s.Room.RoomId, d => d.RoomId);
 			//_appManager.ChatManager.Messages.SynchronizeWith(Events, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.CurrentUser.UserId));
             IsBusy = false;
 
@@ -68,7 +68,7 @@ namespace SharedSquawk.Client.ViewModels
 			set { SetProperty(ref _publicRooms, value); }
 		}
 
-		public ObservableCollection<Room> ActiveChats
+		public ObservableCollection<ActiveChatViewModel> ActiveChats
 		{
 			get { return _activeChats; }
 			set { SetProperty(ref _activeChats, value); }
@@ -86,6 +86,21 @@ namespace SharedSquawk.Client.ViewModels
 			get { return ActiveChats.Count > 0; }
 		}
 
+		public ICommand SelectActiveChatCommand
+		{
+			get { return new Command(OnSelectActiveChat); }
+		}
+
+		private async void OnSelectActiveChat(object roomArg)
+		{
+			var activeChat = roomArg as ActiveChatViewModel;
+			if (activeChat == null)
+			{
+				throw new Exception ("Selected item was not an active chat");
+			}
+			var model = new ChatViewModel (_appManager, activeChat.RoomData);
+			await model.ShowAsync ();
+		}
 
 		public ICommand SelectRoomCommand
 		{
@@ -121,7 +136,9 @@ namespace SharedSquawk.Client.ViewModels
 			if (user.UserId != _appManager.AccountManager.CurrentUser.UserId)
 			{
 				var fullMember = await _appManager.ChatManager.GetMemberDetails (user.UserId);
-				var model = new UserDetailViewModel (_appManager, fullMember);
+				var model = new UserDetailViewModel (_appManager, fullMember) {
+					HasChatOption = true
+				};
 				await model.ShowAsync ();
 			}
 		}

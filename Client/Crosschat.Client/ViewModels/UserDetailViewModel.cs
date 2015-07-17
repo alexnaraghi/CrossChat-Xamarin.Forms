@@ -31,7 +31,7 @@ namespace SharedSquawk.Client.ViewModels
 		private string knownLanguages;
 		private string practicingLanguages;
 		private Gender gender;
-		private bool isMe;
+		private bool hasChatOption;
 
 		public UserDetailViewModel(ApplicationManager appManager, Profile profile)
         {
@@ -84,8 +84,8 @@ namespace SharedSquawk.Client.ViewModels
 
 		public bool HasChatOption
 		{
-			get { return isMe; }
-			set { SetProperty(ref isMe, value); }
+			get { return hasChatOption; }
+			set { SetProperty(ref hasChatOption, value); }
 		}
 
         public string Number

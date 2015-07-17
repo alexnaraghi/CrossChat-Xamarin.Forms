@@ -16,7 +16,8 @@ namespace SharedSquawk.Client.Views
                             textCell.SetBinding(TextCell.TextProperty, new Binding("Name"));
                             //textCell.SetBinding(TextCell.DetailProperty, new Binding("Description"));
                             return textCell;
-                        })
+                        }),
+					SeparatorVisibility = SeparatorVisibility.None
                 };
 
             listView.SetBinding(ListView.ItemsSourceProperty, new Binding("PublicRooms"));

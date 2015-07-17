@@ -147,6 +147,7 @@
     <Compile Include="Views\Controls\SquawkEntry.cs" />
     <Compile Include="Views\SquawkNavigationPage.cs" />
     <Compile Include="Styling.cs" />
+    <Compile Include="ViewModels\ActiveChatViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Crosschat.Utils\SharedSquawk.Utils.csproj">

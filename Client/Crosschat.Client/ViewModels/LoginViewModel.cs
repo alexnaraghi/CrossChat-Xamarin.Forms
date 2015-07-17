@@ -88,5 +88,17 @@ namespace SharedSquawk.Client.ViewModels
                 }
             }
         }
+
+		public ICommand RegisterCommand
+		{
+			get { return new Command(OnRegister); }
+		}
+
+		private async void OnRegister()
+		{
+			await Notify ("Registration", "Please visit www.SharedTalk.com to create an account to use " +
+			"with this app, or to retrieve a lost password.  This app cannot be used to register new " +
+			"accounts for the website at this time.");
+		}
     }
 }

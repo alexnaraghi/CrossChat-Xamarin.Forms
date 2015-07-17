@@ -12,6 +12,7 @@ using SharedSquawk.Client.Views;
 using System.Text;
 using SharedSquawk.Client.Model.Entities;
 using SharedSquawk.Client.Model.Helpers;
+using System.Threading.Tasks;
 
 namespace SharedSquawk.Client.ViewModels
 {
@@ -281,27 +282,18 @@ namespace SharedSquawk.Client.ViewModels
 			await PopAsync ();
 		}
 
-		public ICommand LeaveRoomCommand
-		{
-			get{ return new Command (OnLeaveRoom); }
-		}
-
-		private async void OnLeaveRoom()
+		private async Task OnLeaveRoom()
 		{
 			_appManager.ChatManager.LeaveRoom (_roomData.Room.RoomId);
 			await PopAsync ();
 		}
 
-		private async void OnViewProfile()
+		private async Task OnViewProfile()
 		{
 			if (_roomData.Room.UserId != null)
 			{
-				var profile = new Profile ();
-				profile.Details = new ProfileDetails ();
-				AutoMapper.CopyPropertyValues (_roomData.Room.UserId, profile);
-				AutoMapper.CopyPropertyValues (_roomData.Room.UserId, profile.Details);
-
-				var model = new UserDetailViewModel (_appManager, profile)
+				var fullMember = await _appManager.ChatManager.GetMemberDetails (_roomData.Room.UserId.Value);
+				var model = new UserDetailViewModel (_appManager, fullMember)
 				{
 					HasChatOption = false
 				};
@@ -339,13 +331,13 @@ namespace SharedSquawk.Client.ViewModels
 				Notify("Error", "We haven't created this feature yet, stay tuned!");
 				break;
 			case "View Profile":
-				OnViewProfile();
+				await OnViewProfile();
 				break;
 			case "See Members":
 				Notify("Error", "We haven't created this feature yet, stay tuned!");
 				break;
 			case "Leave Chat":
-				OnLeaveRoom ();
+				await OnLeaveRoom ();
 				break;
 			default:
 				break;
