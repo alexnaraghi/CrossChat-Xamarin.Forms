@@ -11,7 +11,7 @@ namespace SharedSquawk.Client.Views
 			var aboutLabel = new Label()
 			{
 				HorizontalOptions = LayoutOptions.Center,
-				FontSize = 14,
+				FontSize = Styling.Sized(14),
 				Text = "SharedSquawk is an app to practice your language skills and meet users " +
 					"all over the world.  Talk with people from the www.SharedTalk.com community.  " +
 					"\n\nThis app has no affiliation with Rosetta Stone or the www.SharedTalk.com website.\n\n" +
@@ -27,21 +27,25 @@ namespace SharedSquawk.Client.Views
 			var userLabel = new Label()
 			{
 				HorizontalOptions = LayoutOptions.Center,
-				FontSize = 18
+				FontSize = Styling.Sized(18)
 			};
 			userLabel.SetBinding(Label.TextProperty, new Binding("User"));
 
 
-			var profileButton = new Button();
+			var profileButton = new Button(){
+				FontSize = Styling.Sized (18)
+			};
 			profileButton.Text = "Profile";
 			profileButton.SetBinding(Button.CommandProperty, new Binding("ViewProfileCommand"));
 
-            var logoutButton = new Button();
+			var logoutButton = new Button(){
+				FontSize = Styling.Sized (18)
+			};
 			logoutButton.Text = "Logout";
 			logoutButton.SetBinding(Button.CommandProperty, new Binding("LogoutCommand"));
 
 			// Accomodate iPhone status bar.
-			Padding = new Thickness (25, Device.OnPlatform (iOS: 5, Android: 0, WinPhone: 0), 25, 5);
+			Padding = new Thickness (Styling.Sized(25), 0, Styling.Sized(25), Styling.Sized(5));
 
 			Content = new StackLayout {
 				Children = {
@@ -55,10 +59,10 @@ namespace SharedSquawk.Client.Views
 						},
 						Orientation = StackOrientation.Horizontal,
 						HorizontalOptions = LayoutOptions.CenterAndExpand,
-						Spacing = 15
+						Spacing = Styling.Sized(20)
 					}
 				},
-				Spacing = 10,
+				Spacing = Styling.Sized(10),
 				VerticalOptions = LayoutOptions.CenterAndExpand
 			};
 		}

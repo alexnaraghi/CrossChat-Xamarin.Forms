@@ -103,7 +103,7 @@ namespace SharedSquawk.Client.ViewModels
 				message = GetLastMessageString();
 				break;
 			case RoomStatus.OtherUserLeft:
-				message = "User has left";
+				message = "User has left.";
 				break;
 			case RoomStatus.OtherUserDeclined:
 				message = "The user declined your chat";

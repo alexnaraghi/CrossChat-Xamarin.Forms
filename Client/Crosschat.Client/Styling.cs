@@ -15,6 +15,14 @@ namespace SharedSquawk.Client
 		public static string SettingsIcon {get{return "settings.png";}}
 		public static string ToolbarIcon {get{return "popup.png";}}
 
+		public static int Sized(int fontSize)
+		{
+			if (Device.Idiom == TargetIdiom.Tablet)
+			{
+				return fontSize * 2;
+			}
+			return fontSize;
+		}
 	}
 }
 

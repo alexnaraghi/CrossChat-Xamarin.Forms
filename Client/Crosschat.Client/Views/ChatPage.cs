@@ -26,7 +26,7 @@ namespace SharedSquawk.Client.Views
 			ToolbarItems.Add(toolbarItem);
 
             var headerLabel = new Label();
-            headerLabel.FontSize = 24;
+			headerLabel.FontSize = Styling.Sized(24);
             headerLabel.TextColor = Device.OnPlatform(Color.Green, Color.Yellow, Color.Yellow);
             headerLabel.SetBinding(Label.TextProperty, new Binding("Subject", stringFormat:"  {0}"));
 
@@ -34,7 +34,7 @@ namespace SharedSquawk.Client.Views
             sendButton.Text = " Send ";
             sendButton.VerticalOptions = LayoutOptions.EndAndExpand;
             sendButton.SetBinding(Button.CommandProperty, new Binding("SendMessageCommand"));
-			sendButton.SetBinding(Button.IsEnabledProperty, new Binding("IsConnected", BindingMode.OneWay));
+			sendButton.SetBinding(Button.IsEnabledProperty, new Binding("IsInConnectedMode", BindingMode.OneWay));
             if (Device.OS == TargetPlatform.WinPhone)
             {
                 sendButton.BackgroundColor = Color.Green;
@@ -48,19 +48,19 @@ namespace SharedSquawk.Client.Views
             inputBox.Placeholder = "Type a message...";
             inputBox.HeightRequest = 30;
             inputBox.SetBinding(Entry.TextProperty, new Binding("InputText", BindingMode.TwoWay));
-			inputBox.SetBinding(Entry.IsEnabledProperty, new Binding("IsConnected", BindingMode.OneWay));
+			inputBox.SetBinding(Entry.IsEnabledProperty, new Binding("IsInConnectedMode", BindingMode.OneWay));
 
             _messageList = new ChatListView();
 			_messageList.VerticalOptions = LayoutOptions.FillAndExpand;
 			_messageList.SetBinding(ChatListView.ItemsSourceProperty, new Binding("MessageEvents"));
-			_messageList.SetBinding(ChatListView.IsVisibleProperty, new Binding("IsConnected", BindingMode.OneWay));
             _messageList.ItemTemplate = new DataTemplate(CreateMessageCell);
 			_messageList.ItemTapped += ItemTapped;
 			_messageList.HasUnevenRows = true;
 			_messageList.SeparatorVisibility = SeparatorVisibility.None;
+			_messageList.SetBinding(Entry.IsEnabledProperty, new Binding("IsInRequestMode", BindingMode.OneWay, converter: new InverterConverter()));
 
 			var typingLabel = new Label();
-			typingLabel.FontSize = 11;
+			typingLabel.FontSize = Styling.Sized(11);
 			typingLabel.TextColor = Color.Gray;
 			typingLabel.SetBinding(Label.TextProperty, new Binding("TypingEventsString", stringFormat:"  {0}"));
 			//typingLabel.SetBinding(Label.IsVisibleProperty, new Binding("AreTypingEvents"));
@@ -88,11 +88,13 @@ namespace SharedSquawk.Client.Views
 			#region Request UI
 			var requestLabel = new Label {
 				HorizontalOptions = LayoutOptions.Center,
-				FontSize = 16,
+				FontSize = Styling.Sized(16),
 				Text = "This user wants to chat!  What would you like to do?"
 			};
 
-			var acceptButton = new Button();
+			var acceptButton = new Button(){
+				FontSize = Styling.Sized(14)
+			};
 			acceptButton.Text = "Accept";
 			acceptButton.SetBinding(Button.CommandProperty, new Binding("AcceptChatCommand"));
 			if (Device.OS == TargetPlatform.WinPhone)
@@ -102,7 +104,9 @@ namespace SharedSquawk.Client.Views
 				acceptButton.TextColor = Color.White; 
 			}
 
-			var declineButton = new Button();
+			var declineButton = new Button(){
+				FontSize = Styling.Sized(14)
+			};
 			declineButton.Text = "Decline";
 			declineButton.SetBinding(Button.CommandProperty, new Binding("DeclineChatCommand"));
 			if (Device.OS == TargetPlatform.WinPhone)
@@ -114,6 +118,7 @@ namespace SharedSquawk.Client.Views
 
 			var ignoreButton = new Button();
 			{
+				ignoreButton.FontSize = Styling.Sized(14);
 				ignoreButton.Text = "Ignore";
 				ignoreButton.SetBinding(Button.CommandProperty, new Binding("LeaveRoomCommand"));
 				if (Device.OS == TargetPlatform.WinPhone)
@@ -126,8 +131,9 @@ namespace SharedSquawk.Client.Views
 
 			var requestLayout = new StackLayout
 			{
-				VerticalOptions = LayoutOptions.FillAndExpand,
+				VerticalOptions = LayoutOptions.CenterAndExpand,
 				HorizontalOptions = LayoutOptions.FillAndExpand,
+				Spacing = 15,
 				Children = 
 				{
 					requestLabel,

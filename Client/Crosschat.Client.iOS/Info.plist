@@ -22,11 +22,11 @@
 	</array>
 	<key>MinimumOSVersion</key>
 	<string>6.0</string>
-	<key>CFBundleDisplayName</key>
-	<string>SharedSquawk.Client</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.SharedSquawk.Client</string>
+	<string>com.Squawk.SharedSquawk</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
+	<key>CFBundleDisplayName</key>
+	<string>SharedSquawk</string>
 </dict>
 </plist>
