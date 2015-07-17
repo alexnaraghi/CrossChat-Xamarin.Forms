@@ -54,6 +54,9 @@
     <AssemblyName>FormsTemplateiOS</AssemblyName>
     <IpaPackageName>
     </IpaPackageName>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchArch>ARMv7</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -188,9 +191,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
-    <Reference Include="protobuf-net">
-      <HintPath>..\..\packages\protobuf-net.2.0.0.668\lib\portable-sl4+net40+wp7+windows8\protobuf-net.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Forms.Platform.iOS.Classic">
       <HintPath>..\..\packages\Xamarin.Forms.1.4.3.6376\lib\MonoTouch10\Xamarin.Forms.Platform.iOS.Classic.dll</HintPath>
     </Reference>
@@ -205,21 +205,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="group.png" />
-    <BundleResource Include="popup.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="chat.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="empty_contact.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="grey.png" />
-    <BundleResource Include="settings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="green.png" />
+    <BundleResource Include="Resources\Default-568h%402x.png" />
+    <BundleResource Include="Resources\popup.png" />
+    <BundleResource Include="Resources\settings.png" />
+    <BundleResource Include="Resources\group.png" />
+    <BundleResource Include="Resources\green.png" />
+    <BundleResource Include="Resources\chat.png" />
+    <BundleResource Include="Resources\empty_contact.jpg" />
+    <BundleResource Include="Resources\grey.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.1.4.1.6349\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.1.4.1.6349\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
@@ -230,4 +223,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\Xamarin.Forms.1.4.1.6349\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.1.4.1.6349\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets'))" />
   </Target>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
 </Project>
