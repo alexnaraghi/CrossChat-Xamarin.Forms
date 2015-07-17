@@ -12,6 +12,11 @@ namespace SharedSquawk.Client.Views
 			};
             usersCountLabel.SetBinding(Label.TextProperty, new Binding("Users.Count", stringFormat: "     {0} users online"));
             
+			var filterEntry = new Entry () {
+				Placeholder = "Filter...",
+			};
+			filterEntry.SetBinding (Entry.TextProperty, new Binding ("FilterText"));
+
             var listView = new BindableListView
                 {
                     ItemTemplate = new DataTemplate(() =>
@@ -29,7 +34,7 @@ namespace SharedSquawk.Client.Views
                         })
                 };
 
-            listView.SetBinding(ListView.ItemsSourceProperty, new Binding("Users"));
+			listView.SetBinding(ListView.ItemsSourceProperty, new Binding("UsersDisplay"));
 			listView.SetBinding(BindableListView.ItemClickedCommandProperty, new Binding("SelectUserCommand"));
 
 			var contactsLoadingIndicator = new ActivityIndicator ();
@@ -41,6 +46,7 @@ namespace SharedSquawk.Client.Views
 					new StackLayout {Children = 
 						{
 							usersCountLabel,
+							filterEntry,
 							contactsLoadingIndicator
 						},
 						BackgroundColor = Styling.SubheaderYellow,
