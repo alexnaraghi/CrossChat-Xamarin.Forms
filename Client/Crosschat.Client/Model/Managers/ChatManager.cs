@@ -201,7 +201,7 @@ namespace SharedSquawk.Client.Model.Managers
 							//room, or disconnected entirely from the server.
 							if (update.DisconnectedUser.RoomId != null)
 							{
-								if (RoomFactory.IsUserRoom (update.DisconnectedUser.RoomId))
+								if (Rooms.ContainsKey(update.DisconnectedUser.RoomId) && RoomFactory.IsUserRoom (update.DisconnectedUser.RoomId))
 								{
 									Rooms.SetStatus (update.DisconnectedUser.RoomId, RoomStatus.OtherUserLeft);
 							
@@ -217,7 +217,7 @@ namespace SharedSquawk.Client.Model.Managers
 						{
 							var fp = update.FP;
 							//The server can send us duplicate typing events, only add one
-							if (!Rooms [fp.Room].TypingEvents.Any (t => (t as TypingEvent).UserId == fp.UserId))
+							if (Rooms.ContainsKey(fp.Room) && !Rooms [fp.Room].TypingEvents.Any (t => (t as TypingEvent).UserId == fp.UserId))
 							{
 								Rooms.AddTypingEvent (fp.Room, new TypingEvent () {
 									UserName = GetUserFirstName (fp.UserId),
@@ -241,6 +241,7 @@ namespace SharedSquawk.Client.Model.Managers
 //								Rooms.AddTextMessage (room, lastMessage);
 //							}
 //							else
+							if(Rooms.ContainsKey(room))
 							{
 								//BUG: Sometimes we are getting some users that whose names we aren't sure about...
 								//Need to investigate this.
@@ -258,14 +259,17 @@ namespace SharedSquawk.Client.Model.Managers
 							var enteredRoom = update.EnteredRoom;
 							var room = update.EnteredRoom.Room;
 
-							Rooms.SetStatus (room, RoomStatus.Connected);
-							Rooms.AddTextMessageRange (room, enteredRoom.RoomMessages.Select (r =>
-								new TextMessage () {
-								UserName = r.User.Name.Replace("·","").Trim(),  //strip weird appends from the server
-								Body = r.Message.Body,
-								UserId = null, //How can we get this?  only the first name is sent, so we can't resolve duplicate names
-								Timestamp = DateTime.Now
-							}));
+							if(Rooms.ContainsKey(room))
+							{
+								Rooms.SetStatus (room, RoomStatus.Connected);
+								Rooms.AddTextMessageRange (room, enteredRoom.RoomMessages.Select (r =>
+									new TextMessage () {
+									UserName = r.User.Name.Replace("·","").Trim(),  //strip weird appends from the server
+									Body = r.Message.Body,
+									UserId = null, //How can we get this?  only the first name is sent, so we can't resolve duplicate names
+									Timestamp = DateTime.Now
+								}));
+							}
 											
 						}
 						else if (update.UserChatRequest != null)
