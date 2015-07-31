@@ -158,6 +158,8 @@ namespace SharedSquawk.Client.ViewModels
 
 		protected override void OnShown ()
 		{
+			base.OnShown ();
+
 			//Scroll to the bottom of the list whenever we get a new message
 			//Future idea: scroll to bottom only when the user is already at the bottom, so they can browse messages easier.
 			MessageEvents.CollectionChanged += (s, e) =>
@@ -168,18 +170,23 @@ namespace SharedSquawk.Client.ViewModels
 				}
 			};
 
-			ScrollToBottom ();
-			base.OnShown ();
+			//HACK: Hmmm, one more hack for scrolling.  We need the page to scroll when it first appears, AFTER the cells are created.
+			//Can't find any other way to make that happen right now other than wait.
+			Task.Run(async delegate
+			{
+				await Task.Delay(TimeSpan.FromMilliseconds(33));
+				ScrollToBottom ();
+			}).Start();
 		}
 
 		//note this does technically break the mvvm pattern, but I can't think of a less intrusive way to do this.
 		//Simple code wins over conformant code here
-		void ScrollToBottom ()
+		public void ScrollToBottom ()
 		{
 			var chatPage = _currentPage as ChatPage;
 			if( chatPage != null && MessageEvents.Count > 0)
 			{
-				chatPage.OnItemAdded(MessageEvents.Last());
+				chatPage.OnItemAdded(MessageEvents.Last(), MessageEvents.Count);
 			}
 		}
 
@@ -319,23 +326,26 @@ namespace SharedSquawk.Client.ViewModels
 
 		private async void OnOpenContextOptions()
 		{
+			//TODO: add the missing features
 			string[] buttons;
 
 			//Different context options depending if this is a user or group chat
 			if (_roomData.Room.IsUserChat)
 			{
 				buttons = new string[] {
-					"View Profile", "Leave Chat"
+					"View Profile", 
+					"Leave Chat"
 				};
 			}
 			else
 			{
 				buttons = new string[] {
-					"See Members", "Leave Chat"
+					//"See Members", 
+					"Leave Chat"
 				};
 			}
 
-			var chosen = await Action ("Options", "Cancel", "Block", buttons);
+			var chosen = await Action ("Options", "Cancel", null/*"Block"*/, buttons);
 			switch (chosen)
 			{
 			case "Block":

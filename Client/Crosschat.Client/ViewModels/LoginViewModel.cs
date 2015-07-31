@@ -60,7 +60,7 @@ namespace SharedSquawk.Client.ViewModels
 
 		public ICommand LoginCommand
         {
-            get { return new Command(OnLogin); }
+			get { return new Command(OnLogin); }
         }
 
 		private async void OnLogin()

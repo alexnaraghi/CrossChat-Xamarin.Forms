@@ -145,24 +145,25 @@ namespace SharedSquawk.Client.Views
 			#endregion
 
 			Content  = new StackLayout
+            {
+                Padding = Device.OnPlatform(new Thickness(6,6,6,6), new Thickness(0), new Thickness(0)),
+                Children =
                 {
-                    Padding = Device.OnPlatform(new Thickness(6,6,6,6), new Thickness(0), new Thickness(0)),
-                    Children =
-                        {
-							_messageList,
-							chatStatusLayout,
-							requestLayout,
-							typingLabel,
-							new StackLayout
-							{
-						
-								Children = {inputBox, sendButton},
-								Orientation = StackOrientation.Horizontal,
-								Padding = new Thickness(0, Device.OnPlatform(0, 20, 0),0,0),
-								//VerticalOptions = LayoutOptions.End
-							}
-                        }
-					};
+					_messageList,
+					chatStatusLayout,
+					requestLayout,
+					typingLabel,
+					new StackLayout
+					{
+				
+						Children = {inputBox, sendButton},
+						Orientation = StackOrientation.Horizontal,
+						Padding = new Thickness(0, Device.OnPlatform(0, 20, 0),0,0),
+						//VerticalOptions = LayoutOptions.End
+					}
+                }
+			};
+
         }
 
         void ItemTapped (object sender, ItemTappedEventArgs e)
@@ -173,14 +174,15 @@ namespace SharedSquawk.Client.Views
 			((ListView)sender).SelectedItem = null; // de-select the row
         }
 
-		public void OnItemAdded(object lastItem)
+		public void OnItemAdded(object lastItem, int count)
 		{
-			#if IOS
 			if (lastItem != null)
 			{
-				_messageList.ScrollTo (lastItem, ScrollToPosition.End, animated: false);
+				Xamarin.Forms.Device.BeginInvokeOnMainThread (()=>{
+					_messageList.ScrollToRow (count, animated: true);
+					//_messageList.ScrollTo (lastItem, ScrollToPosition.End, animated: false);
+				});
 			}
-			#endif
 		}
 
         private Cell CreateMessageCell()
@@ -214,6 +216,7 @@ namespace SharedSquawk.Client.Views
                 {
                     View = stack
                 };
+
             return view;
         }
     }
