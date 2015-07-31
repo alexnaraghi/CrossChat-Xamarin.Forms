@@ -34,5 +34,15 @@ namespace SharedSquawk
                 return source;
             return source.Remove(maxLength - 1);
         }
+
+		public static bool ContainsIgnoreCase(this string source, string toCheck)
+		{
+			return source.IndexOf(toCheck, StringComparison.CurrentCultureIgnoreCase) >= 0;
+		}
+
+		public static bool Contains(this string source, string toCheck, StringComparison comp)
+		{
+			return source.IndexOf(toCheck, comp) >= 0;
+		}
     }
 }

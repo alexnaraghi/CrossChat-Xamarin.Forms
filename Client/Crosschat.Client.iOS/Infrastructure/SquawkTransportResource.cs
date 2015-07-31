@@ -19,53 +19,18 @@ namespace SharedSquawk.Client.iOS.Infrastructure
     public class 
 		SquawkTransportResource: ITransportResource
     {
-        private bool _isConnected;
-        private const int BufferSize = 8 * 1024;
-        private bool _triedConnect = false;
-
         public event Action ConnectionError = delegate { };
 		public event Action<ResponseBase> DataReceived = delegate { };
-        public event Action ConnectionStateChanged = delegate { };
 		private DtoSerializer _serializer;
 
 		public SquawkTransportResource()
 		{
 			_serializer = new DtoSerializer ();	
 		}
-        
-        public async Task ConnectAsync()
-        {
-            IsConnected = true;
-        }
 
-		public bool IsConnected
-		{
-			//ALEXTEST
-			get { return true;
-				//return _isConnected; 
-			}
-			private set
-			{
-				if (_isConnected != value)
-				{
-					ConnectionStateChanged();
-				}
-				_isConnected = value;
-			}
-		}
-
-        public async void DropConnection()
+        public void DropConnection()
         {
             ConnectionError();
-        }
-
-        private void StartListening()
-        {
-        }
-
-        public Task DisconnectAsync()
-        {
-            return Task.FromResult(false);
         }
 
 		public void SendData<TRequest, TResponse>(TransportEndpoint endpoint, TRequest data, long token) 
@@ -95,7 +60,7 @@ namespace SharedSquawk.Client.iOS.Infrastructure
 			{
 				request.BeginGetResponse(new AsyncCallback(OnDataReceived<TResponse>), new TokenRequest {Request = request, Token = token});
 			}
-			catch (Exception exc)
+			catch (Exception)
 			{
 				DropConnection();
 			}
@@ -114,7 +79,7 @@ namespace SharedSquawk.Client.iOS.Infrastructure
 				response = request.EndGetResponse (ar) as HttpWebResponse;
 				responseObject = _serializer.Deserialize<T> (response.GetResponseStream());
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
 				responseObject = Activator.CreateInstance<ResponseBase> ();
 				responseObject.Error = CommonErrors.Unknown;
@@ -124,7 +89,6 @@ namespace SharedSquawk.Client.iOS.Infrastructure
 			responseObject.Token = token;
 			DataReceived(responseObject);
 		}
-
     }
 
 

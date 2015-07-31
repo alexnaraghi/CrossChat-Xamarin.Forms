@@ -328,13 +328,13 @@ namespace SharedSquawk.Client.ViewModels
 			switch (chosen)
 			{
 			case "Block":
-				Notify("Error", "We haven't created this feature yet, stay tuned!");
+				await Notify("Error", "We haven't created this feature yet, stay tuned!");
 				break;
 			case "View Profile":
 				await OnViewProfile();
 				break;
 			case "See Members":
-				Notify("Error", "We haven't created this feature yet, stay tuned!");
+				await Notify("Error", "We haven't created this feature yet, stay tuned!");
 				break;
 			case "Leave Chat":
 				await OnLeaveRoom ();

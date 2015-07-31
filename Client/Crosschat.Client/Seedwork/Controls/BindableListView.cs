@@ -30,11 +30,11 @@ namespace SharedSquawk.Client.Seedwork.Controls
             listView.ItemsSource = newvalue;
             if (newvalue is INotifyCollectionChanged)
             {
-                ((INotifyCollectionChanged) newvalue).CollectionChanged += async (s, e) =>
+                ((INotifyCollectionChanged) newvalue).CollectionChanged += (s, e) =>
                 {
                     if (e.Action == NotifyCollectionChangedAction.Add)
                     {
-                        var item = listView.ItemsSource.OfType<object>().FirstOrDefault();
+                        listView.ItemsSource.OfType<object>().FirstOrDefault();
                         listView.Layout(listView.Bounds);
                     }
                 };

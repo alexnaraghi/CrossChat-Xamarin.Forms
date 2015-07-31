@@ -10,9 +10,7 @@ namespace SharedSquawk.Client.Model.Managers
 {
     public class AccountManager : ManagerBase
     {
-        private readonly AuthenticationServiceProxy _authenticationServiceProxy;
-        private readonly RegistrationServiceProxy _registrationServiceProxy;
-		private readonly ILoginServiceProxy _loginServiceProxy;
+        private readonly ILoginServiceProxy _loginServiceProxy;
         private readonly IStorage _storage;
 		private LoginResponse _currentUser = null;
 
@@ -26,8 +24,6 @@ namespace SharedSquawk.Client.Model.Managers
 			ILoginServiceProxy loginServiceProxy)
             : base(connectionManager)
         {
-            _authenticationServiceProxy = authenticationServiceProxy;
-            _registrationServiceProxy = registrationServiceProxy;
 			_loginServiceProxy = loginServiceProxy;
             _storage = storage;
         }

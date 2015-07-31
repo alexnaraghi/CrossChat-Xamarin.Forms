@@ -28,7 +28,7 @@ namespace SharedSquawk.Client.Views
             var header = new Label
                 {
                     Text = "Registration",
-                    Font = Font.BoldSystemFontOfSize(36),
+                    FontSize = 36,
                     HorizontalOptions = LayoutOptions.Center
                 };
 

@@ -11,9 +11,7 @@ namespace SharedSquawk.Client.Views
 {
     public class SplashscreenPage : ContentPage
     {
-		private static ApplicationManager _applicationManager;
-
-        public SplashscreenPage()
+		public SplashscreenPage()
         {
             Title = "";
 
@@ -26,7 +24,7 @@ namespace SharedSquawk.Client.Views
                                 {
                                     Text = "Connecting...", 
                                     HorizontalOptions = LayoutOptions.CenterAndExpand,
-                                    Font = Font.BoldSystemFontOfSize(24),
+                                    FontSize = 24,
                                 },
                             new ActivityIndicator 
                                 {
@@ -59,19 +57,8 @@ namespace SharedSquawk.Client.Views
 
         protected override async void OnAppearing()
         {
-            AuthenticationResponseType result;
-            try
-            {
-                //result = await _applicationManager.AccountManager.ValidateAccount();
-            }
-            catch (System.Exception)
-            {
-                DisplayAlert(";(", "Server is not available", "Ok", null);
-                return;
-            }
-            
 			//ALEXTEST
-			await Navigation.PushAsync(new LoginPage(new LoginViewModel(_applicationManager)));
+			//await Navigation.PushAsync(new LoginPage(new LoginViewModel(_applicationManager)));
 
 			/*
 			if(true)

@@ -26,7 +26,7 @@ namespace SharedSquawk.Client.ViewModels
         }
 
 		//The login page defines what will occur on the connection dropping
-		public void OnConnectionLost()
+		public async void OnConnectionLost()
 		{
 			if (CurrentViewModel == this)
 			{
@@ -35,7 +35,7 @@ namespace SharedSquawk.Client.ViewModels
 			}
 			else
 			{
-				Logout ();
+				await Logout ();
 			}
 		}
 
@@ -72,8 +72,6 @@ namespace SharedSquawk.Client.ViewModels
             }
             else
             {
-                string platform = Device.OnPlatform("iOS", "Android", "WP8") + (Device.Idiom == TargetIdiom.Tablet ? " Tablet" : "");
-
                 IsBusy = true;
 				var	registrationResult = await _appManager.AccountManager.Login(Name, Password);
                 IsBusy = false;

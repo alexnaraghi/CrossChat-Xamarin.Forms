@@ -18,7 +18,6 @@ namespace SharedSquawk.Client.ViewModels
 		private RoomData _roomData;
 		private RoomStatus _roomStatus;
 		private ObservableCollection<TextMessage> _messages;
-		private string _descriptionText;
 
 		public ActiveChatViewModel (ApplicationManager manager, RoomData roomData)
 		{

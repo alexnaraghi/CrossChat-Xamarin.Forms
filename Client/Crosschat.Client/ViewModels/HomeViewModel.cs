@@ -10,28 +10,27 @@ using SharedSquawk.Client.Model;
 using System;
 using SharedSquawk.Client.Model.Entities;
 using SharedSquawk.Client.Model.Helpers;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SharedSquawk.Client.ViewModels
 {
     public class HomeViewModel : ViewModelBase
     {
         private readonly ApplicationManager _appManager;
-        private readonly EventViewModelFactory _eventViewModelFactory;
-        private readonly IPhotoPicker _photoPicker;
         private ObservableCollection<UserViewModel> _users;
 		private ObservableCollection<Room> _publicRooms;
 		private ObservableCollection<ActiveChatViewModel> _activeChats;
-        //private ObservableCollection<EventViewModel> _events;
-        private string _inputText;
         private string _subject;
+
+		//The users display allows use to order the text
+		private IOrderedEnumerable<UserViewModel> _usersDisplay;
+		private string _filterText;
 
         public HomeViewModel(ApplicationManager appManager)
         {
             _appManager = appManager;
             Users = new ObservableCollection<UserViewModel>();
-            //Events = new ObservableCollection<EventViewModel>();
-            _eventViewModelFactory = new EventViewModelFactory();
-            _photoPicker = DependencyService.Get<IPhotoPicker>();
 			_publicRooms = new ObservableCollection<Room> ();
 			_activeChats = new ObservableCollection<ActiveChatViewModel> ();
             LoadData();
@@ -42,25 +41,36 @@ namespace SharedSquawk.Client.ViewModels
             IsBusy = true;
             await _appManager.ChatManager.ReloadUsers();
             Subject = _appManager.ChatManager.Subject;
+			_filterText = string.Empty;
 
-            _appManager.ChatManager.OnlineUsers.SynchronizeWith(Users, u => new UserViewModel(u));
+			_appManager.ChatManager.OnlineUsers.SynchronizeWith(Users, u => new UserViewModel(u), s => s.UserId, d => d.UserId);
 			_appManager.ChatManager.Rooms.SynchronizeWith(ActiveChats, r => new ActiveChatViewModel(_appManager, r), s => s.Room.RoomId, d => d.RoomId);
-			//_appManager.ChatManager.Messages.SynchronizeWith(Events, i => _eventViewModelFactory.Get(i, _appManager.AccountManager.CurrentUser.UserId));
-            IsBusy = false;
 
 			PublicRooms.AddRange (PublicRoomsRepository.GetAll ());
+			IsBusy = false;
 
 			//Link our bool
 			ActiveChats.CollectionChanged += (sender, e) => {
 				Raise ("HasConversations");
 			};
+
+			Users.CollectionChanged += (sender, e) => {
+				OnFilterUsers(); //Trigger the filter step whenever the user list gets updated
+			};
         }
 
         public ObservableCollection<UserViewModel> Users
         {
-            get { return _users; }
-            set { SetProperty(ref _users, value); }
+			get { return _users; }
+			set { SetProperty(ref _users, value);
+			}
         }
+
+		public IOrderedEnumerable<UserViewModel> UsersDisplay
+		{
+			get{ return _usersDisplay; }
+			set{ SetProperty (ref _usersDisplay, value); }
+		}
 
 		public ObservableCollection<Room> PublicRooms
 		{
@@ -73,7 +83,6 @@ namespace SharedSquawk.Client.ViewModels
 			get { return _activeChats; }
 			set { SetProperty(ref _activeChats, value); }
 		}
-
 
         public string Subject
         {
@@ -171,12 +180,35 @@ namespace SharedSquawk.Client.ViewModels
 			await new LoginViewModel (_appManager).ShowModalAsync ();
 		}
 
+		public string FilterText
+		{
+			get {
+				return _filterText;
+			}
+			set {
+				SetProperty (ref _filterText, value);
+				OnFilterUsers ();
+			}
+		}
+		public ICommand FilterUsersCommand
+		{
+			get { return new Command (OnFilterUsers); }
+		}
 
-		#if DEBUG
+		public async void OnFilterUsers()
+		{
+			IsBusy = true;
+			UsersDisplay = await Task.Run (() => _users.Where (u => u.Name.ContainsIgnoreCase(FilterText) ||
+				u.Description.ContainsIgnoreCase(FilterText))
+				.OrderBy(u => u.Name));
+			IsBusy = false;
+		}
+
 		public string User
 		{
 			get{ return _appManager.AccountManager.CurrentUser.FirstName + " " + _appManager.AccountManager.CurrentUser.LastName; }
 		}
+		#if DEBUG
 
 		public string SSID
 		{
@@ -240,13 +272,6 @@ namespace SharedSquawk.Client.ViewModels
 		}
 		*/
 
-		/*
-		public string InputText
-		{
-			get { return _inputText; }
-			set { SetProperty(ref _inputText, value); }
-		}
-		*/
 
 
 		/*
