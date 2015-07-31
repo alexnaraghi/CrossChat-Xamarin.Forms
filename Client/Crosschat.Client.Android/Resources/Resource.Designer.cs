@@ -51,10 +51,31 @@ namespace SharedSquawk.Client.Droid
 			public const int bubble_yellow = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int empty_contact = 2130837506;
+			public const int chat = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public const int Icon = 2130837507;
+			public const int empty_contact = 2130837507;
+			
+			// aapt resource value: 0x7f020004
+			public const int green = 2130837508;
+			
+			// aapt resource value: 0x7f020005
+			public const int grey = 2130837509;
+			
+			// aapt resource value: 0x7f020006
+			public const int group = 2130837510;
+			
+			// aapt resource value: 0x7f020007
+			public const int Icon = 2130837511;
+			
+			// aapt resource value: 0x7f020008
+			public const int monoandroidsplash = 2130837512;
+			
+			// aapt resource value: 0x7f020009
+			public const int popup = 2130837513;
+			
+			// aapt resource value: 0x7f02000a
+			public const int settings = 2130837514;
 			
 			static Drawable()
 			{
@@ -69,20 +90,20 @@ namespace SharedSquawk.Client.Droid
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f040003
-			public const int image = 2130968579;
+			// aapt resource value: 0x7f050003
+			public const int image = 2131034115;
 			
-			// aapt resource value: 0x7f040004
-			public const int message = 2130968580;
+			// aapt resource value: 0x7f050004
+			public const int message = 2131034116;
 			
-			// aapt resource value: 0x7f040002
-			public const int nick = 2130968578;
+			// aapt resource value: 0x7f050002
+			public const int nick = 2131034114;
 			
-			// aapt resource value: 0x7f040001
-			public const int nicknameAndTimeWrapper = 2130968577;
+			// aapt resource value: 0x7f050001
+			public const int nicknameAndTimeWrapper = 2131034113;
 			
-			// aapt resource value: 0x7f040000
-			public const int wrapper = 2130968576;
+			// aapt resource value: 0x7f050000
+			public const int wrapper = 2131034112;
 			
 			static Id()
 			{
@@ -115,6 +136,22 @@ namespace SharedSquawk.Client.Droid
 			}
 			
 			private Layout()
+			{
+			}
+		}
+		
+		public partial class Style
+		{
+			
+			// aapt resource value: 0x7f040000
+			public const int Mono_Android_Theme_Splash = 2130968576;
+			
+			static Style()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Style()
 			{
 			}
 		}

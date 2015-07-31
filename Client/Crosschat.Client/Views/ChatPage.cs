@@ -175,10 +175,12 @@ namespace SharedSquawk.Client.Views
 
 		public void OnItemAdded(object lastItem)
 		{
+			#if IOS
 			if (lastItem != null)
 			{
 				_messageList.ScrollTo (lastItem, ScrollToPosition.End, animated: false);
 			}
+			#endif
 		}
 
         private Cell CreateMessageCell()

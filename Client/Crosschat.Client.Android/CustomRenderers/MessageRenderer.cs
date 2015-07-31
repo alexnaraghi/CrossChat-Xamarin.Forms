@@ -19,45 +19,23 @@ namespace SharedSquawk.Client.Droid.CustomRenderers
     {
         protected override View GetCellCore(Cell item, View convertView, ViewGroup parent, Context context)
         {
+			//This needs to go first, Xamarin bug - https://forums.xamarin.com/discussion/35736/possible-bug-in-newer-versions-of-xamarin-forms-listview
+			var retval = base.GetCellCore(item, convertView, parent, context);
+
             var inflatorservice = (LayoutInflater)Forms.Context.GetSystemService(Android.Content.Context.LayoutInflaterService);
             var dataContext = item.BindingContext as EventViewModel;
 
             var textMsgVm = dataContext as TextMessageViewModel;
+
             if (textMsgVm != null)
             {
-                if (textMsgVm.ImageId.HasValue)
-                {
-                    var template = (LinearLayout)inflatorservice.Inflate(textMsgVm.IsMine ? Resource.Layout.image_item_owner : Resource.Layout.image_item_opponent, null, false);
-                    //template.FindViewById<TextView>(Resource.Id.timestamp).Text = textMsgVm.Timestamp.ToString("HH:mm");
-                    template.FindViewById<TextView>(Resource.Id.nick).Text = textMsgVm.IsMine ? "Me:" : textMsgVm.AuthorName + ":";
-                    template.FindViewById<ImageView>(Resource.Id.image).SetImageBitmap(GetImageBitmapFromUrl(textMsgVm.ImageUrl));
-                    return template;
-                }
-                else
-                {
-                    var template = (LinearLayout)inflatorservice.Inflate(textMsgVm.IsMine ? Resource.Layout.message_item_owner : Resource.Layout.message_item_opponent, null, false);
-                    //template.FindViewById<TextView>(Resource.Id.timestamp).Text = textMsgVm.Timestamp.ToString("HH:mm");
-                    template.FindViewById<TextView>(Resource.Id.nick).Text = textMsgVm.IsMine ? "Me:" : textMsgVm.AuthorName + ":";
-                    template.FindViewById<TextView>(Resource.Id.message).Text = textMsgVm.Text;
-                    return template;
-                }
+				var template = (LinearLayout)inflatorservice.Inflate(textMsgVm.IsMine ? Resource.Layout.message_item_owner : Resource.Layout.message_item_opponent, null, false);
+				//template.FindViewById<TextView>(Resource.Id.timestamp).Text = textMsgVm.Timestamp.ToString("HH:mm");
+				template.FindViewById<TextView>(Resource.Id.nick).Text = textMsgVm.IsMine ? "Me" : textMsgVm.AuthorName;
+				template.FindViewById<TextView>(Resource.Id.message).Text = textMsgVm.Text;
+				return template;
             }
-
-            return base.GetCellCore(item, convertView, parent, context);
-        }
-
-        private Bitmap GetImageBitmapFromUrl(string url)
-        {
-            Bitmap imageBitmap = null;
-            using (var webClient = new WebClient())
-            {
-                var imageBytes = webClient.DownloadData(url);
-                if (imageBytes != null && imageBytes.Length > 0)
-                {
-                    imageBitmap = BitmapFactory.DecodeByteArray(imageBytes, 0, imageBytes.Length);
-                }
-            }
-            return imageBitmap;
+			return retval;
         }
     }
 }

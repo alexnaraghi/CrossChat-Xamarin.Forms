@@ -120,7 +120,14 @@ namespace SharedSquawk.Client.Model.Managers
 				Profile userProfile = new Profile ();
 				AutoMapper.CopyPropertyValues (user, userProfile);
 				OnlineUsers.Add(userProfile);
-				UserDirectory.Add (userProfile.UserId, userProfile);
+				if (!UserDirectory.ContainsKey (userProfile.UserId)) 
+				{
+					UserDirectory.Add (userProfile.UserId, userProfile);
+				} 
+				else 
+				{
+					UserDirectory [userProfile.UserId] = userProfile;
+				}
 			}
 
 			//Get our first update immediately, then start spinning

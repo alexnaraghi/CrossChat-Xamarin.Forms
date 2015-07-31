@@ -282,6 +282,17 @@ namespace SharedSquawk.Client.ViewModels
 			await PopAsync ();
 		}
 
+		public ICommand LeaveRoomCommand
+		{
+			get{ return new Command (OnLeaveRoomCommand); }
+		}
+
+		private async void OnLeaveRoomCommand()
+		{
+			_appManager.ChatManager.LeaveRoom (_roomData.Room.RoomId);
+			await PopAsync ();
+		}
+
 		private async Task OnLeaveRoom()
 		{
 			_appManager.ChatManager.LeaveRoom (_roomData.Room.RoomId);

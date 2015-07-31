@@ -119,15 +119,19 @@
     <AndroidResource Include="Resources\layout\message_item_owner.axml" />
     <AndroidResource Include="Resources\layout\image_item_opponent.axml" />
     <AndroidResource Include="Resources\layout\image_item_owner.axml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\Icon.png" />
+    <AndroidResource Include="Resources\Drawable\bubble_green.9.png" />
+    <AndroidResource Include="Resources\Drawable\bubble_yellow.9.png" />
+    <AndroidResource Include="Resources\Drawable\chat.png" />
     <AndroidResource Include="Resources\Drawable\empty_contact.jpg" />
+    <AndroidResource Include="Resources\Drawable\green.png" />
+    <AndroidResource Include="Resources\Drawable\grey.png" />
+    <AndroidResource Include="Resources\Drawable\group.png" />
+    <AndroidResource Include="Resources\Drawable\Icon.png" />
+    <AndroidResource Include="Resources\Drawable\popup.png" />
+    <AndroidResource Include="Resources\Drawable\settings.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml" />
-    <AndroidResource Include="Resources\Drawable\bubble_green.9.png" />
-    <AndroidResource Include="Resources\Drawable\bubble_yellow.9.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
@@ -162,5 +166,8 @@
       <Project>{3B0CEA1F-3936-4BB0-9889-D7C14617FD6D}</Project>
       <Name>SharedSquawk.Utils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Drawable\" />
   </ItemGroup>
 </Project>
