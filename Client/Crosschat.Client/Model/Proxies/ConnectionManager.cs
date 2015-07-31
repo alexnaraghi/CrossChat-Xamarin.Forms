@@ -39,7 +39,8 @@ namespace SharedSquawk.Client.Model.Proxies
 		internal Task<TResponse> SendRequestAndWaitResponse<TRequest, TResponse>(TRequest request)
 			where TRequest : RequestBase
 			where TResponse : ResponseBase
-        {
+		{
+
 			var endpoint = EndpointFinder.Get (request.GetType ());
 
 			Task<TResponse> response = null;
@@ -50,7 +51,6 @@ namespace SharedSquawk.Client.Model.Proxies
 			{
 				Interlocked.Increment(ref _lastToken);
 				request.Token = _lastToken;
-
 				try
 				{
 					response = _requestsHandler.WaitForResponse<TResponse>(request, () => _transport.SendData<TRequest, TResponse>(endpoint, request, request.Token));
@@ -68,6 +68,9 @@ namespace SharedSquawk.Client.Model.Proxies
 			if (response == null || response.Result == null)
 			{
 				ConnectionDropped ();
+				#if DEBUG
+				System.Diagnostics.Debug.WriteLine("Response failed, connection dropped.");
+				#endif
 			}
 			return response;
         }

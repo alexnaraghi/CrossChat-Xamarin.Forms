@@ -18,7 +18,6 @@ namespace SharedSquawk.Client.Droid.Infrastructure
     {
         private bool _isConnected;
         private const int BufferSize = 8 * 1024;
-        private bool _triedConnect = false;
 
         public event Action ConnectionError = delegate { };
 		public event Action<ResponseBase> DataReceived = delegate { };
@@ -92,7 +91,7 @@ namespace SharedSquawk.Client.Droid.Infrastructure
 			{
 				request.BeginGetResponse(new AsyncCallback(OnDataReceived<TResponse>), new TokenRequest {Request = request, Token = token});
 			}
-			catch (Exception exc)
+			catch (Exception)
 			{
 				DropConnection();
 			}
@@ -111,7 +110,7 @@ namespace SharedSquawk.Client.Droid.Infrastructure
 				response = request.EndGetResponse (ar) as HttpWebResponse;
 				responseObject = _serializer.Deserialize<T> (response.GetResponseStream());
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
 				responseObject = Activator.CreateInstance<ResponseBase> ();
 				responseObject.Error = CommonErrors.Unknown;
@@ -123,7 +122,6 @@ namespace SharedSquawk.Client.Droid.Infrastructure
 		}
 
     }
-
 
 	public class TokenRequest
 	{

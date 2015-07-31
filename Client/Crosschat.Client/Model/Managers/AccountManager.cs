@@ -113,6 +113,7 @@ namespace SharedSquawk.Client.Model.Managers
 
 		public void Logout()
 		{
+			this.CurrentUser = null;
 			//We don't really have to do anything to tell the server we logged out, just throw the message up
 			//to the application manager
 			LoggedOut (this, EventArgs.Empty);
