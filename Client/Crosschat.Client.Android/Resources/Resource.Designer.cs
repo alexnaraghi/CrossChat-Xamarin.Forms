@@ -144,7 +144,10 @@ namespace SharedSquawk.Client.Droid
 		{
 			
 			// aapt resource value: 0x7f040000
-			public const int Mono_Android_Theme_Splash = 2130968576;
+			public const int CustomTheme = 2130968576;
+			
+			// aapt resource value: 0x7f040001
+			public const int Mono_Android_Theme_Splash = 2130968577;
 			
 			static Style()
 			{

@@ -6,7 +6,7 @@ using Xamarin.Forms.Platform.Android;
 
 namespace SharedSquawk.Client.Droid
 {
-    [Activity(Label = "SharedSquawk", MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait)]
+	[Activity(Label = "SharedSquawk", MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait, Theme = "@style/CustomTheme")]
     public class MainActivity : AndroidActivity
     {
         protected override void OnCreate(Bundle bundle)

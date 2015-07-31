@@ -142,6 +142,7 @@
     <AndroidResource Include="Resources\Drawable\Icon.png" />
     <AndroidResource Include="Resources\Drawable\popup.png" />
     <AndroidResource Include="Resources\Drawable\settings.png" />
+    <AndroidResource Include="Resources\values\Styles.xml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml" />
@@ -182,5 +183,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Drawable\" />
+    <Folder Include="Resources\values\" />
   </ItemGroup>
 </Project>
