@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-
+using Xamarin;
 using Xamarin.Forms.Platform.Android;
 
 namespace SharedSquawk.Client.Droid
@@ -11,6 +11,7 @@ namespace SharedSquawk.Client.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
+			Insights.Initialize(Credentials.InsightsKey, this);
             base.OnCreate(bundle);
             Xamarin.Forms.Forms.Init(this, bundle);
             SetPage(App.GetMainPage());

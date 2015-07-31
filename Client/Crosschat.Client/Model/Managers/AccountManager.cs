@@ -5,6 +5,7 @@ using SharedSquawk.Server.Application.DataTransferObjects.Enums;
 using SharedSquawk.Server.Application.DataTransferObjects.Messages;
 using SharedSquawk.Server.Application.DataTransferObjects.Requests;
 using System;
+using Xamarin;
 
 namespace SharedSquawk.Client.Model.Managers
 {
@@ -81,10 +82,12 @@ namespace SharedSquawk.Client.Model.Managers
 			}
 
 			CurrentUser = result;
-			AccountUsername = username;
-			AccountPassword = password;
+			AccountUsername = result.Username;
+			AccountPassword = result.Password;
 			SSID = result.SSID;
 
+			//Log a user login
+			Insights.Identify(result.Username, Insights.Traits.Name, result.FirstName + " " + result.LastName);
 
 			//Do we need to look out for this member status result?
 			MemberStatusResponse memberStatusResult;
