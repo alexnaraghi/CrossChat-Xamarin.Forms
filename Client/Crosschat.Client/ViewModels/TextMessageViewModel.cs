@@ -11,7 +11,7 @@ namespace SharedSquawk.Client.ViewModels
 			AuthorName = textMessage.UserName;
             Text = textMessage.Body;
             Timestamp = textMessage.Timestamp;
-			IsMine = textMessage.UserId.HasValue ? textMessage.UserId.Value == currentUserId : false;
+			IsMine = textMessage.UserId.HasValue && textMessage.UserId.Value == currentUserId;
         }
 
         public bool IsMine { get; set; }
