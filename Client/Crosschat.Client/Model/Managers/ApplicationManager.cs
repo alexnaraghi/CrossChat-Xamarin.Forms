@@ -16,10 +16,12 @@ namespace SharedSquawk.Client.Model.Managers
 
         public ApplicationManager(
             ITransportResource transportResource,
-            IStorage storage)
+            IStorage storage,
+			IDeviceInfo deviceInfo)
         {
 			_transport = transportResource;
 			_storage = storage;
+			DeviceInfo = deviceInfo;
 
 			Initialize ();
         }
@@ -45,6 +47,8 @@ namespace SharedSquawk.Client.Model.Managers
         public AccountManager AccountManager { get; private set; }
 
         public ChatManager ChatManager { get; private set; }
+
+		public IDeviceInfo DeviceInfo { get; private set; }
 
 		public void LoggedOut(object sender, EventArgs args)
 		{

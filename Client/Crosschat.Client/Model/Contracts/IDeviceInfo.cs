@@ -9,5 +9,7 @@ namespace SharedSquawk.Client.Model.Contracts
         string Huid { get; }
 
         string PushUri { get; }
+
+		string Version { get; }
     }
 }

@@ -44,6 +44,12 @@ namespace SharedSquawk.Client.Views
 			logoutButton.Text = "Logout";
 			logoutButton.SetBinding(Button.CommandProperty, new Binding("LogoutCommand"));
 
+			var versionButton = new Button(){
+				FontSize = Styling.Sized (10),
+				BackgroundColor = Color.Transparent
+			};
+			versionButton.SetBinding(Button.TextProperty, new Binding("Version"));
+
 			// Accomodate iPhone status bar.
 			Padding = new Thickness (Styling.Sized(25), 0, Styling.Sized(25), Styling.Sized(5));
 
@@ -60,7 +66,8 @@ namespace SharedSquawk.Client.Views
 						Orientation = StackOrientation.Horizontal,
 						HorizontalOptions = LayoutOptions.CenterAndExpand,
 						Spacing = Styling.Sized(20)
-					}
+					},
+					versionButton
 				},
 				Spacing = Styling.Sized(10),
 				VerticalOptions = LayoutOptions.CenterAndExpand

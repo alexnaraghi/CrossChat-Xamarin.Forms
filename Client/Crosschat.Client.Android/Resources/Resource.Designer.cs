@@ -69,13 +69,10 @@ namespace SharedSquawk.Client.Droid
 			public const int Icon = 2130837511;
 			
 			// aapt resource value: 0x7f020008
-			public const int monoandroidsplash = 2130837512;
+			public const int popup = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public const int popup = 2130837513;
-			
-			// aapt resource value: 0x7f02000a
-			public const int settings = 2130837514;
+			public const int settings = 2130837513;
 			
 			static Drawable()
 			{
@@ -145,9 +142,6 @@ namespace SharedSquawk.Client.Droid
 			
 			// aapt resource value: 0x7f040000
 			public const int CustomTheme = 2130968576;
-			
-			// aapt resource value: 0x7f040001
-			public const int Mono_Android_Theme_Splash = 2130968577;
 			
 			static Style()
 			{

@@ -208,6 +208,12 @@ namespace SharedSquawk.Client.ViewModels
 		{
 			get{ return _appManager.AccountManager.CurrentUser.FirstName + " " + _appManager.AccountManager.CurrentUser.LastName; }
 		}
+
+		public string Version
+		{
+			get{ return "v" + _appManager.DeviceInfo.Version; }
+		}
+
 		#if DEBUG
 
 		public string SSID

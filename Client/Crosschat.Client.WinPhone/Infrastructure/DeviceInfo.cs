@@ -16,5 +16,12 @@ namespace SharedSquawk.Client.WinPhone.Infrastructure
 
         public string Huid { get { return "TODO:HUID"; }}
         public string PushUri { get; private set; }
+
+		public string Version {
+			get 
+			{
+				return "TODO: version";
+			}
+		}
     }
 }

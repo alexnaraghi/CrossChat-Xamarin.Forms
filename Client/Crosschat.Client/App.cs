@@ -13,7 +13,8 @@ namespace SharedSquawk.Client
         {
 			ApplicationManager applicationManager = new ApplicationManager(
 				DependencyService.Get<ITransportResource>(),
-				DependencyService.Get<IStorage>());
+				DependencyService.Get<IStorage>(),
+				DependencyService.Get<IDeviceInfo>());
 
 			return new LoginPage(new LoginViewModel(applicationManager));
         }
