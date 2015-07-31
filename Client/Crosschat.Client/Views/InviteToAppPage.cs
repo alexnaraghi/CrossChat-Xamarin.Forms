@@ -10,10 +10,10 @@ namespace SharedSquawk.Client.Views
         {
             Title = "Contacts";
 
-            var contactsCountLabel = new Label();
+			var contactsCountLabel = new SquawkLabel();
             contactsCountLabel.SetBinding(Label.TextProperty, new Binding("Contacts.Count", stringFormat: "{0} contacts."));
 
-            var tipLabel = new Label();
+			var tipLabel = new SquawkLabel();
             tipLabel.Text = "Select a contact to send an invitation";
 
             var listView = new BindableListView

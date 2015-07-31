@@ -11,52 +11,53 @@ namespace SharedSquawk.Client.Views
 		public UserDetailPage (ViewModelBase viewModel) : base (viewModel)
 		{
 			Title = "Details";
-			var nameLabel = new Label () {
+			var nameLabel = new SquawkLabel () {
 				FontSize = Styling.Sized (20),
 				FontAttributes = FontAttributes.Bold
 			};
-			nameLabel.SetBinding (Label.TextProperty, new Binding ("Header"));
+			nameLabel.SetBinding (SquawkLabel.TextProperty, new Binding ("Header"));
 
-			var genderLabel = new Label () {
+			var genderLabel = new SquawkLabel () {
 				FontSize = Styling.Sized (14)
 			};
-			genderLabel.SetBinding (Label.TextProperty, new Binding ("GenderString"));
+			genderLabel.SetBinding (SquawkLabel.TextProperty, new Binding ("GenderString"));
 
-			var localeLabel = new Label () {
+			var localeLabel = new SquawkLabel () {
 				FontSize = Styling.Sized (14)
 			};
-			localeLabel.SetBinding (Label.TextProperty, new Binding ("LocaleDetails"));
+			localeLabel.SetBinding (SquawkLabel.TextProperty, new Binding ("LocaleDetails"));
 
-			var knownLanguagesLabel = new Label () {
+			var knownLanguagesLabel = new SquawkLabel () {
 				FontSize = Styling.Sized (14)
 			};
 			knownLanguagesLabel.SetBinding (Label.TextProperty, new Binding ("KnownLanguagesDisplay"));
 
-			var practicingLanguagesLabel = new Label () {
+			var practicingLanguagesLabel = new SquawkLabel () {
 				FontSize = Styling.Sized (14)
 			};
-			practicingLanguagesLabel.SetBinding (Label.TextProperty, new Binding ("PracticingLanguagesDisplay"));
+			practicingLanguagesLabel.SetBinding (SquawkLabel.TextProperty, new Binding ("PracticingLanguagesDisplay"));
 
-			var userPermissionsLabel = new Label () {
+			var userPermissionsLabel = new SquawkLabel () {
 				TextColor = Color.Gray,
 				FontSize = Styling.Sized (12)
 			};
-			userPermissionsLabel.SetBinding (Label.TextProperty, new Binding ("UserPermissionsDisplay"));
+			userPermissionsLabel.SetBinding (SquawkLabel.TextProperty, new Binding ("UserPermissionsDisplay"));
 
 			var spacer = new BoxView () {
 				Color = Color.Transparent,
 				HeightRequest = Styling.Sized (10)
 			};
 
-			var descriptionLabel = new Label () {
+			var descriptionLabel = new SquawkLabel () {
 				FontSize = Styling.Sized (14)
 			};
-			descriptionLabel.SetBinding (Label.TextProperty, new Binding ("Description"));
+			descriptionLabel.SetBinding (SquawkLabel.TextProperty, new Binding ("Description"));
 
 			var chatButton = new Button () {
 				Text = "Start Chat",
 				HeightRequest = 40,
-				FontSize = Styling.Sized (14)
+				FontSize = Styling.Sized (14),
+				VerticalOptions = LayoutOptions.Center
 			};
 			chatButton.SetBinding (Button.CommandProperty, new Binding ("SelectChatCommand"));
 
@@ -80,18 +81,30 @@ namespace SharedSquawk.Client.Views
 			var buttonLayout = new StackLayout {	
 				Children = {
 					chatButton,
-					new BoxView{ HeightRequest = 1, Color = Color.Transparent }
+					new BoxView{ HeightRequest = Device.OnPlatform(iOS: 1, Android: 0, WinPhone: 0), Color = Color.Transparent }
 				},
-				BackgroundColor = Styling.FooterColor
+				BackgroundColor = Styling.FooterColor,
+				Padding = new Thickness(5, 0)
 			};
 			buttonLayout.SetBinding (StackLayout.IsVisibleProperty, new Binding ("HasChatOption", BindingMode.OneWay));
-			Content = new StackLayout {
-				Children = {
-					scrollView,
-					buttonLayout
+
+			Grid grid = new Grid () {
+				VerticalOptions = LayoutOptions.FillAndExpand,
+				RowDefinitions = 
+				{
+					new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+					new RowDefinition { Height = GridLength.Auto }
 				},
-				VerticalOptions = LayoutOptions.FillAndExpand
+				ColumnDefinitions = 
+				{
+					new ColumnDefinition { Width = GridLength.Auto }
+				}
 			};
+			grid.Children.Add (scrollView, 0, 0);
+			grid.Children.Add (buttonLayout, 0, 1);
+
+			Content = grid;
+
 		}
 	}
 }

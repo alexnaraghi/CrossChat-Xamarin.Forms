@@ -8,11 +8,11 @@ namespace SharedSquawk.Client.Views
     {
         public OnlineUsersPage(ViewModelBase viewModel) : base(viewModel)
         {
-			var usersCountLabel = new Label () {
+			var usersCountLabel = new SquawkLabel () {
 			};
             usersCountLabel.SetBinding(Label.TextProperty, new Binding("Users.Count", stringFormat: "     {0} users online"));
             
-			var filterEntry = new Entry () {
+			var filterEntry = new SquawkEntry () {
 				Placeholder = "Filter...",
 			};
 			filterEntry.SetBinding (Entry.TextProperty, new Binding ("FilterText"));

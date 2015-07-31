@@ -19,10 +19,11 @@ namespace SharedSquawk.Client.Views
 				}
 			};
 
-			var header = new Label
+			var header = new SquawkLabel
 			{
 				FormattedText = fs,
-				HorizontalOptions = LayoutOptions.Center
+				HorizontalOptions = LayoutOptions.Center,
+				TextColor = Styling.BlackText
 			};
 
 			var loginButton = new Button();
@@ -37,14 +38,14 @@ namespace SharedSquawk.Client.Views
 			registerButton.SetBinding(Button.CommandProperty, new Binding("RegisterCommand"));
 			registerButton.FontSize = 12;
 
-			var nameEntry = new Entry
+			var nameEntry = new SquawkEntry
 			{
 				Keyboard = Keyboard.Text,
 				Placeholder = "Username",
 			};
 			nameEntry.SetBinding(Entry.TextProperty, new Binding("Name", BindingMode.TwoWay));
 
-			var passwordEntry = new Entry
+			var passwordEntry = new SquawkEntry
 			{
 				Keyboard = Keyboard.Text,
 				IsPassword = true,

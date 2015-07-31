@@ -14,6 +14,7 @@ namespace SharedSquawk.Client.Views
                         {
 						var textCell = new TextCell();
                             textCell.SetBinding(TextCell.TextProperty, new Binding("Name"));
+							textCell.TextColor = Styling.BlackText;
                             //textCell.SetBinding(TextCell.DetailProperty, new Binding("Description"));
                             return textCell;
                         }),

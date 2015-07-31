@@ -24,7 +24,7 @@ namespace SharedSquawk.Client.Views
 			toolbarItem.SetBinding(ToolbarItem.CommandProperty, new Binding("ContextOptionsCommand")); 
 			ToolbarItems.Add(toolbarItem);
 
-            var headerLabel = new Label();
+			var headerLabel = new SquawkLabel();
 			headerLabel.FontSize = Styling.Sized(24);
             headerLabel.TextColor = Device.OnPlatform(Color.Green, Color.Yellow, Color.Yellow);
             headerLabel.SetBinding(Label.TextProperty, new Binding("Subject", stringFormat:"  {0}"));
@@ -58,14 +58,14 @@ namespace SharedSquawk.Client.Views
 			_messageList.SeparatorVisibility = SeparatorVisibility.None;
 			_messageList.SetBinding(Entry.IsEnabledProperty, new Binding("IsInRequestMode", BindingMode.OneWay, converter: new InverterConverter()));
 
-			var typingLabel = new Label();
+			var typingLabel = new SquawkLabel();
 			typingLabel.FontSize = Styling.Sized(11);
 			typingLabel.TextColor = Color.Gray;
 			typingLabel.SetBinding(Label.TextProperty, new Binding("TypingEventsString", stringFormat:"  {0}"));
 			//typingLabel.SetBinding(Label.IsVisibleProperty, new Binding("AreTypingEvents"));
 
 			#region Error Message UI
-			var chatStatusLabel = new Label {
+			var chatStatusLabel = new SquawkLabel {
 				HorizontalOptions = LayoutOptions.Center,
 				FontSize = 16,
 				TextColor = Color.Gray
@@ -85,7 +85,7 @@ namespace SharedSquawk.Client.Views
 			#endregion
 
 			#region Request UI
-			var requestLabel = new Label {
+			var requestLabel = new SquawkLabel {
 				HorizontalOptions = LayoutOptions.Center,
 				FontSize = Styling.Sized(16),
 				Text = "This user wants to chat!  What would you like to do?"
@@ -185,18 +185,18 @@ namespace SharedSquawk.Client.Views
 
         private Cell CreateMessageCell()
         {
-            var timestampLabel = new Label();
-            timestampLabel.SetBinding(Label.TextProperty, new Binding("Timestamp", stringFormat: "[{0:HH:mm}]"));
+			var timestampLabel = new SquawkLabel();
+			timestampLabel.SetBinding(SquawkLabel.TextProperty, new Binding("Timestamp", stringFormat: "[{0:HH:mm}]"));
             timestampLabel.TextColor = Color.Silver;
 			timestampLabel.FontSize = 14;
 
-            var authorLabel = new Label();
-            authorLabel.SetBinding(Label.TextProperty, new Binding("AuthorName", stringFormat: "{0}: "));
-            authorLabel.TextColor = Device.OnPlatform(Color.Blue, Color.Yellow, Color.Yellow);
+			var authorLabel = new SquawkLabel();
+			authorLabel.SetBinding(SquawkLabel.TextProperty, new Binding("AuthorName", stringFormat: "{0}: "));
+            authorLabel.TextColor = Device.OnPlatform(Color.White, Color.Yellow, Color.Yellow);
 			authorLabel.FontSize = 14;
 
-            var messageLabel = new Label();
-            messageLabel.SetBinding(Label.TextProperty, new Binding("Text"));
+			var messageLabel = new SquawkLabel();
+			messageLabel.SetBinding(SquawkLabel.TextProperty, new Binding("Text"));
 			messageLabel.FontSize = 14;
 
             var stack = new StackLayout

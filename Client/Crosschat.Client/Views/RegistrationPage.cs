@@ -25,7 +25,7 @@ namespace SharedSquawk.Client.Views
             agePicker.SetBinding(BindablePicker.ItemsSourceProperty, new Binding("Ages"));
             agePicker.SetBinding(BindablePicker.SelectedItemProperty, new Binding("SelectedAge", BindingMode.TwoWay));
 
-            var header = new Label
+			var header = new SquawkLabel
                 {
                     Text = "Registration",
                     FontSize = 36,

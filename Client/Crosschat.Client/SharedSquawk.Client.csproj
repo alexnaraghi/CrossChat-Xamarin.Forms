@@ -148,6 +148,7 @@
     <Compile Include="Styling.cs" />
     <Compile Include="ViewModels\ActiveChatViewModel.cs" />
     <Compile Include="ViewModels\EventViewModel.cs" />
+    <Compile Include="Views\Controls\SquawkLabel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\Crosschat.Utils\SharedSquawk.Utils.csproj">

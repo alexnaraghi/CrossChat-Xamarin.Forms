@@ -7,6 +7,8 @@ namespace SharedSquawk.Client
 	{
 		public SquawkEntry () : base()
 		{
+			BackgroundColor = Styling.EntryBackgroundColor;
+			TextColor = Styling.EntryTextColor;
 		}
 	}
 }

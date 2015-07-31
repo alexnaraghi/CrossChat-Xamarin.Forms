@@ -8,6 +8,7 @@ namespace SharedSquawk.Client.Views
 		public SquawkNavigationPage (Page root) : base(root)
 		{
 			BarBackgroundColor = Styling.HeaderYellow;
+			BarTextColor = Styling.BlackText;
 		}
 	}
 }

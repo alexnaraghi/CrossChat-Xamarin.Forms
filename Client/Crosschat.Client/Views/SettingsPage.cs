@@ -8,7 +8,7 @@ namespace SharedSquawk.Client.Views
     {
         public SettingsPage(ViewModelBase viewModel) : base(viewModel)
         {
-			var aboutLabel = new Label()
+			var aboutLabel = new SquawkLabel()
 			{
 				HorizontalOptions = LayoutOptions.Center,
 				FontSize = Styling.Sized(14),
@@ -24,7 +24,7 @@ namespace SharedSquawk.Client.Views
 				HeightRequest = 1
 			};
 
-			var userLabel = new Label()
+			var userLabel = new SquawkLabel()
 			{
 				HorizontalOptions = LayoutOptions.Center,
 				FontSize = Styling.Sized(18)

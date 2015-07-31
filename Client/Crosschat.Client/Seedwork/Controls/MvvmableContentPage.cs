@@ -11,6 +11,7 @@ namespace SharedSquawk.Client.Seedwork.Controls
             _viewModel = viewModel;
             BindingContext = viewModel;
             Title = "SharedSquawk";
+			BackgroundColor = Styling.BackgroundColor;
         }
 
         protected override void OnAppearing()

@@ -20,7 +20,7 @@ namespace SharedSquawk.Client.Views
                     VerticalOptions = LayoutOptions.Center,
                     Children =
                         {
-                            new Label
+							new SquawkLabel
                                 {
                                     Text = "Connecting...", 
                                     HorizontalOptions = LayoutOptions.CenterAndExpand,
