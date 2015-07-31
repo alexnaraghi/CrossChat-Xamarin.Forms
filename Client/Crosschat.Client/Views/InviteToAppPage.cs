@@ -38,14 +38,14 @@ namespace SharedSquawk.Client.Views
             listView.SetBinding(ListView.ItemsSourceProperty, new Binding("GroupedContacts"));
             listView.SetBinding(BindableListView.ItemClickedCommandProperty, new Binding("ContactSelectedCommand"));
 
-            var contactsLoadingIndicator = new ActivityIndicator();
-            contactsLoadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
+            var loadingIndicator = new ActivityIndicator();
+            loadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
 
             Content = new StackLayout
                 {
                     Children =
                         {
-                            contactsLoadingIndicator,
+                            loadingIndicator,
                             contactsCountLabel,
                             tipLabel,
                             listView

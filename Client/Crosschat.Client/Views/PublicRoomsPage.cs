@@ -24,15 +24,15 @@ namespace SharedSquawk.Client.Views
             listView.SetBinding(ListView.ItemsSourceProperty, new Binding("PublicRooms"));
             listView.SetBinding(BindableListView.ItemClickedCommandProperty, new Binding("SelectRoomCommand"));
 
-			var contactsLoadingIndicator = new ActivityIndicator ();
-            contactsLoadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
-			contactsLoadingIndicator.SetBinding(ActivityIndicator.IsVisibleProperty, new Binding("IsBusy"));
+			var loadingIndicator = new ActivityIndicator ();
+            loadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
+			loadingIndicator.SetBinding(ActivityIndicator.IsVisibleProperty, new Binding("IsBusy"));
 
             Content = new StackLayout
             {
                 Children =
                         {
-                            contactsLoadingIndicator,
+                            loadingIndicator,
                             listView
                         }
             };

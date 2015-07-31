@@ -68,7 +68,7 @@ namespace SharedSquawk.Client.ViewModels
             if (string.IsNullOrEmpty(Name) || 
                 string.IsNullOrEmpty(Password))
             {
-                await Notify("Invalid data", "Please, fill all the fields");
+                await Notify("Invalid data", "Please, fill all the fields.");
             }
             else
             {

@@ -57,6 +57,10 @@ namespace SharedSquawk.Client.Views
 			// Accomodate iPhone status bar.
 			Padding = new Thickness(10, Device.OnPlatform(iOS: 20, Android: 0, WinPhone: 0), 10, 100);
 
+			var loadingIndicator = new ActivityIndicator ();
+			loadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
+			loadingIndicator.SetBinding(ActivityIndicator.IsVisibleProperty, new Binding("IsBusy"));
+
 			Content = new StackLayout
 			{
 				Children =
@@ -71,6 +75,7 @@ namespace SharedSquawk.Client.Views
 						}
 					},
 					loginButton,
+					loadingIndicator,
 					registerButton
 				},
 				VerticalOptions = LayoutOptions.Center,

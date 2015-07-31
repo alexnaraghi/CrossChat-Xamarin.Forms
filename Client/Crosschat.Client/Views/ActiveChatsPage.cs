@@ -44,15 +44,15 @@ namespace SharedSquawk.Client.Views
 			noItemsLayout.SetBinding(StackLayout.IsVisibleProperty, new Binding("HasConversations", BindingMode.OneWay, converter: new InverterConverter()));
 			
 
-			var contactsLoadingIndicator = new ActivityIndicator ();
-			contactsLoadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
-			contactsLoadingIndicator.SetBinding(ActivityIndicator.IsVisibleProperty, new Binding("IsBusy"));
+			var loadingIndicator = new ActivityIndicator ();
+			loadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
+			loadingIndicator.SetBinding(ActivityIndicator.IsVisibleProperty, new Binding("IsBusy"));
 
 			Content = new StackLayout
 			{
 				Children =
 				{
-					contactsLoadingIndicator,
+					loadingIndicator,
 					listView,
 					noItemsLayout
 				}

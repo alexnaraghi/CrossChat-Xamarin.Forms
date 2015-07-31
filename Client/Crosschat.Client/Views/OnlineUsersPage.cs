@@ -37,9 +37,9 @@ namespace SharedSquawk.Client.Views
 			listView.SetBinding(ListView.ItemsSourceProperty, new Binding("UsersDisplay"));
 			listView.SetBinding(BindableListView.ItemClickedCommandProperty, new Binding("SelectUserCommand"));
 
-			var contactsLoadingIndicator = new ActivityIndicator ();
-			contactsLoadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
-			contactsLoadingIndicator.SetBinding(ActivityIndicator.IsVisibleProperty, new Binding("IsBusy"));
+			var loadingIndicator = new ActivityIndicator ();
+			loadingIndicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("IsBusy"));
+			loadingIndicator.SetBinding(ActivityIndicator.IsVisibleProperty, new Binding("IsBusy"));
 
 			Content = new StackLayout {
 				Children = {
@@ -47,7 +47,7 @@ namespace SharedSquawk.Client.Views
 						{
 							usersCountLabel,
 							filterEntry,
-							contactsLoadingIndicator
+							loadingIndicator
 						},
 						BackgroundColor = Styling.SubheaderYellow,
 						Padding = new Thickness(3)
