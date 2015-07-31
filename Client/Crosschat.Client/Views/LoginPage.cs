@@ -74,8 +74,8 @@ namespace SharedSquawk.Client.Views
 							passwordEntry
 						}
 					},
-					loginButton,
 					loadingIndicator,
+					loginButton,
 					registerButton
 				},
 				VerticalOptions = LayoutOptions.Center,

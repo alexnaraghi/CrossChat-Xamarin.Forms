@@ -60,7 +60,7 @@ namespace SharedSquawk.Client.ViewModels
 
 		public ICommand LoginCommand
         {
-			get { return new Command(OnLogin); }
+			get { return new Command(() => Task.Factory.StartNew(OnLogin)); }
         }
 
 		private async void OnLogin()
@@ -68,22 +68,25 @@ namespace SharedSquawk.Client.ViewModels
             if (string.IsNullOrEmpty(Name) || 
                 string.IsNullOrEmpty(Password))
             {
-                await Notify("Invalid data", "Please, fill all the fields.");
+				Device.BeginInvokeOnMainThread(()=> Notify("Invalid data", "Please, fill all the fields."));
             }
             else
             {
-                IsBusy = true;
+				Device.BeginInvokeOnMainThread(()=>IsBusy = true);
 				var	registrationResult = await _appManager.AccountManager.Login(Name, Password);
-                IsBusy = false;
+				Device.BeginInvokeOnMainThread (async () =>
+				{
+					IsBusy = false;
 
-                if (registrationResult == true)
-                {
-					await new HomeViewModel(_appManager).ShowModalAsyncWithNavPage();
-                }
-                else if (registrationResult == false)
-                {
-                    await Notify("Error", "Failed to login.");
-                }
+		            if (registrationResult == true)
+		            {
+						await new HomeViewModel(_appManager).ShowModalAsyncWithNavPage();
+		            }
+		            else if (registrationResult == false)
+		            {
+		                await Notify("Error", "Failed to login.");
+		            }
+				});
             }
         }
 
