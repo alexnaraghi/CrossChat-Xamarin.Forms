@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedSquawk.Client", "Clie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedSquawk.Client.iOS", "Client\Crosschat.Client.iOS\SharedSquawk.Client.iOS.csproj", "{52743AE7-E6F5-4AB6-B21A-61B57C3F8C8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosschat.Client.Android", "Client\Crosschat.Client.Android\Crosschat.Client.Android.csproj", "{CCB8E0FE-478C-4A29-A39E-98DCE66BA5CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedSquawk.Client.Android", "Client\Crosschat.Client.Android\SharedSquawk.Client.Android.csproj", "{CCB8E0FE-478C-4A29-A39E-98DCE66BA5CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crosschat.Client.WinPhone", "Client\Crosschat.Client.WinPhone\Crosschat.Client.WinPhone.csproj", "{58BC252C-7DE9-4CB0-9B50-F01F8CD51730}"
 EndProject
