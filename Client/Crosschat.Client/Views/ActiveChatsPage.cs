@@ -13,10 +13,13 @@ namespace SharedSquawk.Client.Views
 			{
 				ItemTemplate = new DataTemplate(() =>
 					{
-						var textCell = new TextCell();
-						textCell.SetBinding(TextCell.TextProperty, new Binding("Name"));
-						textCell.SetBinding(TextCell.DetailProperty, new Binding("DescriptionText"));
-						return textCell;
+						var imageCell = new ImageCell();
+						imageCell.SetBinding(ImageCell.TextProperty, new Binding("Name"));
+						imageCell.SetBinding(ImageCell.DetailProperty, new Binding("DescriptionText"));
+						imageCell.SetBinding(ImageCell.ImageSourceProperty, new Binding("Image"));
+						imageCell.TextColor = Styling.CellTitleColor;
+						imageCell.DetailColor = Styling.CellDetailColor;
+						return imageCell;
 					}),
 				SeparatorVisibility = SeparatorVisibility.None
 			};

@@ -51,28 +51,19 @@ namespace SharedSquawk.Client.Droid
 			public const int bubble_yellow = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int chat = 2130837506;
+			public const int Icon = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public const int empty_contact = 2130837507;
+			public const int menu = 2130837507;
 			
 			// aapt resource value: 0x7f020004
-			public const int green = 2130837508;
+			public const int user = 2130837508;
 			
 			// aapt resource value: 0x7f020005
-			public const int grey = 2130837509;
+			public const int users = 2130837509;
 			
 			// aapt resource value: 0x7f020006
-			public const int group = 2130837510;
-			
-			// aapt resource value: 0x7f020007
-			public const int Icon = 2130837511;
-			
-			// aapt resource value: 0x7f020008
-			public const int popup = 2130837512;
-			
-			// aapt resource value: 0x7f020009
-			public const int settings = 2130837513;
+			public const int v_card = 2130837510;
 			
 			static Drawable()
 			{

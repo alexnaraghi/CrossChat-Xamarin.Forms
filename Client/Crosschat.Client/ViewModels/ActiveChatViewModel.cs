@@ -73,6 +73,21 @@ namespace SharedSquawk.Client.ViewModels
 			get{ return _roomData; }
 		}
 
+		public string Image
+		{
+			get
+			{
+				if (RoomFactory.IsUserRoom (RoomId))
+				{
+					return Styling.IndividualIcon;
+				}
+				else
+				{
+					return Styling.RoomIcon;
+				}
+			}
+		}
+
 		public string DescriptionText
 		{
 			get

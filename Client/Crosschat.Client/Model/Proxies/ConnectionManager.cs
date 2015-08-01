@@ -69,7 +69,7 @@ namespace SharedSquawk.Client.Model.Proxies
 			{
 				ConnectionDropped ();
 				#if DEBUG
-				Debug.WriteLine("Response failed, connection dropped.");
+				System.Diagnostics.Debug.WriteLine("Response failed, connection dropped.");
 				#endif
 			}
 			return response;

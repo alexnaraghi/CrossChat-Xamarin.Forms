@@ -23,13 +23,12 @@ namespace SharedSquawk.Client.Views
                         {
                             var imageCell = new ImageCell
                                 {
-                                    ImageSource = Device.OnPlatform(
-                                        ImageSource.FromFile("empty_contact.jpg"),
-                                        ImageSource.FromFile("empty_contact.jpg"),
-                                        ImageSource.FromFile("Assets/empty_contact.jpg")),
+									ImageSource = Styling.ContactIcon
                                 };
                             imageCell.SetBinding(TextCell.TextProperty, new Binding("Name"));
                             imageCell.SetBinding(TextCell.DetailProperty, new Binding("Description"));
+							imageCell.TextColor = Styling.CellTitleColor;
+							imageCell.DetailColor = Styling.CellDetailColor;
                             return imageCell;
                         })
                 };

@@ -189,7 +189,7 @@ namespace SharedSquawk.Client.Views
         {
 			var timestampLabel = new SquawkLabel();
 			timestampLabel.SetBinding(SquawkLabel.TextProperty, new Binding("Timestamp", stringFormat: "[{0:HH:mm}]"));
-            timestampLabel.TextColor = Color.Silver;
+			timestampLabel.TextColor = Styling.CellDetailColor;
 			timestampLabel.FontSize = 14;
 
 			var authorLabel = new SquawkLabel();
